@@ -35,12 +35,12 @@ const Home = () => {
           <Text as="p" size={5} mt={5} mb={6}>
             You can find me on{' '}
             <Link href="https://twitter.com/peduarte" target="_blank" rel="noopener" variant="ghost">
-              <VisuallyHidden>Github</VisuallyHidden>
+              <VisuallyHidden>Twitter</VisuallyHidden>
               <TwitterIcon arial-hidden />
             </Link>{' '}
             or{' '}
             <Link href="https://github.com/peduarte" target="_blank" rel="noopener" variant="ghost">
-              <VisuallyHidden>Twitter</VisuallyHidden>
+              <VisuallyHidden>GitHub</VisuallyHidden>
               <GithubIcon aria-hidden />
             </Link>
           </Text>
