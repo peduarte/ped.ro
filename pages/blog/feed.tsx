@@ -12,7 +12,7 @@ export default class Rss extends React.Component {
     res.setHeader('Content-Type', 'text/xml');
     res.write(
       makeRssXml({
-        baseUrl: 'https://ped.ro/blog',
+        baseUrl: 'https://ped.ro',
         title: 'Pedro Duarte — Blog',
         description: 'Recent articles from the ped.ro blog.',
         frontMatters: blogPosts,
