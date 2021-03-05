@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { parseISO, format } from 'date-fns';
 import { Container, Text, Box, Link, Divider, Badge, Tooltip } from '@peduarte/wallop-system';
 import { FrontMatter } from '../types';
-import TitleAndMetaTags from '../components/TitleAndMetaTags';
+import TitleAndMetaTags from '@components/TitleAndMetaTags';
 
 export default (frontMatter: FrontMatter) => {
   return ({ children }) => {
@@ -43,7 +43,8 @@ export default (frontMatter: FrontMatter) => {
           </Text>
 
           <Text as="time" mt={1} mx="auto" size={2} sx={{ fontFamily: 'mono', color: 'gray' }}>
-            {format(parseISO(frontMatter.publishedAt), 'MMMM dd, yyyy')} — {frontMatter.readingTime.text}
+            {format(parseISO(frontMatter.publishedAt), 'MMMM dd, yyyy')} —{' '}
+            {frontMatter.readingTime.text}
           </Text>
 
           <Box my={5}>{children}</Box>
@@ -53,7 +54,12 @@ export default (frontMatter: FrontMatter) => {
           <Box mb={5}>
             <Text as="p" size={4}>
               Share this post on{' '}
-              <Link href={twitterShare} target="_blank" title="Share this post on Twitter" variant="twitter">
+              <Link
+                href={twitterShare}
+                target="_blank"
+                title="Share this post on Twitter"
+                variant="twitter"
+              >
                 Twitter
               </Link>
             </Text>

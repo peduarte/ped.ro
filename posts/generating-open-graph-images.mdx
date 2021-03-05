@@ -3,13 +3,6 @@ title: 'Dynamically generating social images'
 publishedAt: '2020-05-12'
 ---
 
-import { CardPlayground } from '../../../components/CardPlayground';
-import microlink from './microlink.png';
-const title = 'Designing in code is the future.';
-const api = 'https://i.microlink.io/';
-const cardUrl = `https://cards.microlink.io/?preset=pedro&title=${title}`;
-const image = `${api}${encodeURIComponent(cardUrl)}`;
-
 Inspired by [Chris Biscardi](https://twitter.com/chrisbiscardi), [Joel Hooks](https://twitter.com/jhooks), [Shawn Wang](https://twitter.com/swyx), and others, I, too, wanted to dynamically generate social images for my blog posts.
 
 But the thought of creating an image generation API was daunting to me. Cloudinary, Lambdas, Chromium are cool, but I wanted something more straightforward.
@@ -24,7 +17,9 @@ Microlink Cards works like this:
 2. Define your dynamic queries
 3. Add the generated URL to your `meta` tag, providing the right queries
 
-<Image src={microlink}>A screen shot of Microlink Cards showing my template</Image>
+<Image src="/posts/generating-open-graph-images/microlink.png" width="3104" height="2024">
+  A screen shot of Microlink Cards showing my template
+</Image>
 
 ## Building my template
 

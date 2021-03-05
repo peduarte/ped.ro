@@ -79,7 +79,11 @@ export function CardPlayground(props) {
         <Image
           src={image}
           alt={title}
-          sx={{ maxWidth: '100%', verticalAlign: 'middle', boxShadow: '5px 3px 10px 10px rgba(0, 0, 0, 0.05)' }}
+          sx={{
+            maxWidth: '100%',
+            verticalAlign: 'middle',
+            boxShadow: '5px 3px 10px 10px rgba(0, 0, 0, 0.05)',
+          }}
         />
       </AspectRatio>
 

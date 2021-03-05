@@ -4,7 +4,6 @@ import { theme } from '@peduarte/wallop-system';
 export const prismTheme = css`
   code[class*='language-'],
   pre[class*='language-'] {
-
     white-space: pre;
     word-spacing: normal;
     word-break: normal;
@@ -13,10 +12,10 @@ export const prismTheme = css`
     hyphens: none;
 
     text-align: left;
-		padding: 0;
-		margin: 0;
-		border-radius: inherit;
-		font-family: inherit;
+    padding: 0;
+    margin: 0;
+    border-radius: inherit;
+    font-family: inherit;
   }
 
   .token.comment,
@@ -28,8 +27,7 @@ export const prismTheme = css`
 
   .token.punctuation {
     /* color: #999; */
-		color: ${theme.colors.gray};
-
+    color: ${theme.colors.gray};
   }
 
   .token.namespace {
@@ -44,7 +42,7 @@ export const prismTheme = css`
   .token.symbol,
   .token.deleted {
     /* color: #905; */
-		/* color: ${theme.colors.gray}; */
+    /* color: ${theme.colors.gray}; */
   }
 
   .token.selector,
@@ -54,7 +52,7 @@ export const prismTheme = css`
   .token.builtin,
   .token.inserted {
     /* color: #690; */
-		/* color: ${theme.colors.gray}; */
+    /* color: ${theme.colors.gray}; */
   }
 
   .token.operator,
@@ -96,8 +94,12 @@ export const prismTheme = css`
     cursor: help;
   }
 
- /* Line highlighting via https://github.com/j0lv3r4/mdx-prism */
- .mdx-marker {
+	[data-highlight-line="false"] {
+    opacity: 0.4
+  }
+
+  /* Line highlighting via https://github.com/j0lv3r4/mdx-prism */
+  .mdx-marker {
     /* Reset padding originally set in app.tsx */
     margin-left: -${theme.space[3]};
     margin-right: -${theme.space[3]};
@@ -107,11 +109,10 @@ export const prismTheme = css`
     background-color: #222;
     box-shadow: inset 2px 0px 0 0px ${theme.colors.blue};
 
-		display: block;
+    display: block;
 
-		* {
-			background-color: #222;
-
-		}
+    * {
+      background-color: #222;
+    }
   }
 `;

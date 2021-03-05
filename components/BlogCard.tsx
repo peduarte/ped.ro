@@ -4,10 +4,10 @@ import { parseISO, format } from 'date-fns';
 import { Link, Text, Box, Badge, Tooltip } from '@peduarte/wallop-system';
 import { FrontMatter } from '../types';
 
-export const BlogCard = ({ frontMatter }: { frontMatter: FrontMatter }) => {
+export const BlogCard = ({ frontMatter, slug }: { frontMatter: FrontMatter; slug: string }) => {
   return (
     <Box mt={4}>
-      <NextLink href={frontMatter.id} passHref>
+      <NextLink href={`blog/${slug}`} passHref>
         <Link
           aria-label={`Read ${frontMatter.title}`}
           variant="ghost"

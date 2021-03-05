@@ -1,11 +1,11 @@
 import React from 'react';
 import { Container, Box, Text, Link, VisuallyHidden } from '@peduarte/wallop-system';
-import { blogPosts } from '../utils/blogPosts';
 import { FrontMatter } from '../types';
-import TitleAndMetaTags from '../components/TitleAndMetaTags';
-import { BlogCard } from '../components/BlogCard';
+import TitleAndMetaTags from '@components/TitleAndMetaTags';
+import { BlogCard } from '@components/BlogCard';
+import { getAllPosts } from '@lib/mdx';
 
-const Home = () => {
+export default function Home({ posts }) {
   return (
     <>
       <TitleAndMetaTags />
@@ -17,7 +17,8 @@ const Home = () => {
           </Text>
 
           <Text as="h2" size={5}>
-            I'm a UI developer interested in design systems, jamstack, user/dev experience and under engineering.
+            I'm a UI developer interested in design systems, jamstack, user/dev experience and under
+            engineering.
           </Text>
 
           <Text as="p" size={5} mt={5}>
@@ -29,12 +30,18 @@ const Home = () => {
           </Text>
 
           <Text as="p" size={5} mt={5}>
-            I was born in Brazil, raised in the UK and now living in Barcelona with my little family.
+            I was born in Brazil, raised in the UK and now living in Barcelona with my little
+            family.
           </Text>
 
           <Text as="p" size={5} mt={5} mb={6}>
             You can find me on{' '}
-            <Link href="https://twitter.com/peduarte" target="_blank" rel="noopener" variant="ghost">
+            <Link
+              href="https://twitter.com/peduarte"
+              target="_blank"
+              rel="noopener"
+              variant="ghost"
+            >
               <VisuallyHidden>Github</VisuallyHidden>
               <TwitterIcon arial-hidden />
             </Link>{' '}
@@ -54,9 +61,9 @@ const Home = () => {
           </Text>
 
           <ul style={{ listStyle: 'none', paddingLeft: 0 }}>
-            {blogPosts.map((post: FrontMatter) => (
+            {posts.map((post) => (
               <li key={post.title}>
-                <BlogCard frontMatter={post} />
+                <BlogCard key={post.data.title} slug={post.slug} frontMatter={post.data} />
               </li>
             ))}
           </ul>
@@ -64,9 +71,7 @@ const Home = () => {
       </Box>
     </>
   );
-};
-
-export default Home;
+}
 
 const TwitterIcon = (props) => {
   return (
@@ -86,3 +91,9 @@ const GithubIcon = (props) => {
     </svg>
   );
 };
+
+export function getStaticProps() {
+  const posts = getAllPosts();
+
+  return { props: { posts } };
+}

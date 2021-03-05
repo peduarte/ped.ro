@@ -28,7 +28,7 @@ Redesigning and rebuilding a new website for such a large organisation is not an
 
 To build the UI in the most appropriate way, I wanted to _really_ understand the design. The first thing I did was sit down and go through all the designs with [Kyle Wheeler](https://uk.linkedin.com/in/kyle-wheeler-a7a1a717) — the lead designer of the project.
 
-![](https://cdn-images-1.medium.com/max/3632/1*d0JLSTbUedU91wQlgJuBzg.jpeg)
+<img src="/posts/building-the-ui-for-the-times/wall.jpeg" width="1816" height="1054" />
 
 We printed and annotated the designs, creating a common language between design and tech. This would help us communicate better and establish consistency through our components.
 
@@ -84,11 +84,29 @@ There are two different ways to use a Component:
 
 In the following snippets, I share the Dust.js uiComponent Helper
 
-<iframe src="https://medium.com/media/153f19ab43149791cc11062c63f6e30c" frameborder="0"></iframe>
+```js
+/**
+ * Function to render a ui component
+ * @param  params - any available parameters allowed
+ * @param  params.name
+ * @return {partial}
+ */
+dust.helpers.uiComponent = function (chunk, context, bodies, params) {
+  var name = context.resolve(params.name);
+  return chunk.partial('components/' + name + '/' + name, context, params);
+};
+```
 
 Here’s is an example of including components as HTML and via the Dust.js Helper:
 
-<iframe src="https://medium.com/media/68120fafccf6710276711cd407bb8957" frameborder="0"></iframe>
+```liquid
+<div>
+  <h2 class="Headline Headline--m">News headline</h2>
+  {@uiComponent name="byline" text="Tim Shipman, Political Editor" /};
+  {@uiComponent name="dip" text="First paragraph of news content will go here..." /};
+  {@uiComponent name="link" text="Read full story" modifider="primary" /};
+</div>
+```
 
 Having a uiComponent Helper is great because it ensures that every instance of each component will be using the exact same markup. Furthermore it creates a single source of truth for each component and if we need to update the markup, we only need to update one file.
 
@@ -100,18 +118,22 @@ I wanted to share with you some of the CSS structure we utilised and the approac
 
 For the CSS naming convention we are using [SUIT CSS](https://github.com/suitcss/suit/blob/master/doc/naming-conventions.md). Here are some examples of SUIT CSS syntax:
 
-    ComponentName
-    ComponentName--modifierName
-    ComponentName-descendentName
+```
+ComponentName
+ComponentName--modifierName
+ComponentName-descendentName
 
-    is-*
-    u-*
+is-*
+u-*
+```
 
 We have also slightly extended it to support the following classes:
 
-    has-*
-    no-*
-    js-*
+```
+has-*
+no-*
+js-*
+```
 
 ### **Breakpoints**
 
@@ -121,15 +143,84 @@ As we decided to use [Susy 2](http://susy.oddbird.net/) to power our grid system
 
 Below is a snippet of our breakpoints:
 
-<iframe src="https://medium.com/media/74c477a82f46921ae8b8245db0accf93" frameborder="0"></iframe>
+```scss
+// Defining breakpoints
+$bp-medium: 768px !default;
+$bp-wide: 1024px !default;
+
+// Defining container widths
+$container-medium: 860px !default;
+$container-wide: 1024px !default;
+```
 
 And here is an example of our Susy settings:
 
-<iframe src="https://medium.com/media/aa7262d2c97017087702e1b985c86303" frameborder="0"></iframe>
+```scss
+// Defining grid columns
+$g-small: 6 !default;
+$g-wide: 12 !default;
+
+// http://susydocs.oddbird.net/en/latest/settings/
+$susy: (
+  columns: $g-small,
+  gutter-position: inside,
+  gutters: 0,
+  global-box-sizing: border-box,
+  debug: (
+    image: hide,
+    color: rgba(blue, 0.1),
+  ),
+  use-custom: (
+    box-sizing: false,
+  ),
+);
+
+$susy-medium: $container-medium $g-wide (0) inside;
+$susy-wide: $container-wide $g-wide (0) inside;
+```
 
 We also created some helper mixins to help us use the mixins easily and efficiently. Below is an example of our breakpoint settings:
 
-<iframe src="https://medium.com/media/49b67f4d9fe7ecc98305ef2cc87e53f9" frameborder="0"></iframe>
+```scss
+// Defining media query helpers
+// Aliases for susy-breakpoint
+// http://susydocs.oddbird.net/en/latest/toolkit/#breakpoint
+@mixin medium {
+  @include susy-breakpoint($bp-medium, $susy-medium) {
+    @content;
+  }
+}
+
+@mixin to-medium {
+  @include susy-breakpoint(0 ($bp-medium - 1), $susy-small) {
+    @content;
+  }
+}
+
+@mixin medium-only {
+  @include susy-breakpoint($bp-medium($bp-wide - 1), $susy-medium) {
+    @content;
+  }
+}
+
+@mixin wide {
+  @include susy-breakpoint($bp-wide, $susy-wide) {
+    @content;
+  }
+}
+
+@mixin to-wide {
+  @include susy-breakpoint(0 ($bp-wide - 1), $susy-wide) {
+    @content;
+  }
+}
+
+@mixin wide-only {
+  @include susy-breakpoint($bp-wide($bp-huge - 1), $susy-wide) {
+    @content;
+  }
+}
+```
 
 ### **Grid**
 
@@ -141,8 +232,39 @@ The grid is pretty straight forward, it’s 6 columns on mobile and 12 columns o
 
 Here is a demo usage:
 
-<iframe src="https://medium.com/media/04a21ae579ec6ad39f03767052ae45f6" frameborder="0"></iframe>
-<iframe src="https://medium.com/media/1cf2ba443e0be63b44a7bb16f22d23ed" frameborder="0"></iframe>
+```scss
+@mixin tt-span($pattern) {
+  width: span($pattern);
+
+  // For no flex browsers...
+  .#{$no-flex} & {
+    float: left;
+  }
+}
+```
+
+```scss
+/**
+ * dummy-module.scss
+ *
+ * This example shows a module which spans:
+ * 3 columns on mobile (mobile first approach)
+ * 4 columns on tablet
+ * 3 columns on desktop
+ */
+
+.DummyModule {
+  @include tt-span(3);
+
+  @include medium {
+    @include tt-span(4);
+  }
+
+  @include wide {
+    @include tt-span(3);
+  }
+}
+```
 
 ### **Slices and Slice Items**
 
@@ -156,15 +278,54 @@ The homepage of The Times is essentially a combination of different Slices. We c
 
 Below is an example of how Slices and Slice Items look like in their simplest form.
 
-![Examples of Slices and Slice Items in their simplest form](https://cdn-images-1.medium.com/max/4528/1*ooOW0msIBUrZ4WeFI-p5Bw.jpeg)_Examples of Slices and Slice Items in their simplest form_
+<img src="/posts/building-the-ui-for-the-times/slices.jpeg" width="2264" height="2000" />
 
 Using the pattern above meant we could have a consistent structure for all the slice items and a very simple approach.
 
 The code below demonstrates how to replicate the **first Slice** (*NL1 + T2) *from the design above into code:
 
-<iframe src="https://medium.com/media/19b878e49a1a1b965004cc3ff5226bb1" frameborder="0"></iframe>
-<iframe src="https://medium.com/media/f0f9969d2d1fa5fd4a6c5e8f8db8f9e3" frameborder="0"></iframe>
-<iframe src="https://medium.com/media/4479efa3d238320bf5aa9c42d7e9fedc" frameborder="0"></iframe>
+```html
+<div class="Slice">
+  <div class="Item NL1"></div>
+  <div class="Item T2"></div>
+</div>
+```
+
+```scss
+/**
+*
+* NL1 Module
+*
+**/
+
+.NL1 {
+  @include medium {
+    @include tt-span(9);
+  }
+
+  @include wide {
+    @include tt-span(10);
+  }
+}
+```
+
+```scss
+/**
+*
+* T2 Module
+*
+**/
+
+.T-2 {
+  @include medium {
+    @include tt-span(3);
+  }
+
+  @include wide {
+    @include tt-span(2);
+  }
+}
+```
 
 As mentioned above in the **Grid** section, it consists of 12 columns for Medium and Wide breakpoints. With that in mind, all we need to do in the CSS is to specify how many columns each Slice Item spans, bearing in mind the addition of the columns must equal 12.
 
@@ -180,7 +341,7 @@ Wide breakpoint = 2 columns
 
 For mobile both modules span 100%. Here’s a GIF illustrating the final result:
 
-![](https://cdn-images-1.medium.com/max/4528/1*fkS7hpnNh54Oe2ekbrRzWg.gif)
+<img src="/posts/building-the-ui-for-the-times/slices-gif.gif" width="2264" height="1500" />
 
 ## Refactor
 
@@ -204,9 +365,13 @@ Overall, the approach used in this project is extremely simple. What makes it po
 
 And finally, here are some screenshots of the live [version](http://beta.thetimes.co.uk):
 
-![](https://cdn-images-1.medium.com/max/5200/1*YpIH8k89NssxmYWorSKjBA.jpeg)
+<img src="/posts/building-the-ui-for-the-times/homepage.jpeg" width="2600" height="1569" />
 
-![](https://cdn-images-1.medium.com/max/5240/1*l0z798CGIu0ZrSpnaVXPyw.jpeg)
+<img
+  src="/posts/building-the-ui-for-the-times/homepage-responsive.jpeg"
+  width="2620"
+  height="1604"
+/>
 
 Thanks for reading. Find me on [Twitter](https://twitter.com/peduarte) 🐤
 
