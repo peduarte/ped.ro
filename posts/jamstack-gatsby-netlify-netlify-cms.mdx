@@ -67,9 +67,29 @@ I created a file called [postcodes.json](https://github.com/peduarte/dona-rita-w
 
 [Here’s source code](https://github.com/peduarte/dona-rita-website/blob/master/src/data/postcodes.json) for the JSON file and [here’s the source code](https://github.com/peduarte/dona-rita-website/blob/master/src/pages/buy.js#L35-L41) for the Buy page.
 
-![Postcode JSON file](https://cdn-images-1.medium.com/max/2976/1*RdyIu4xXNVB7LNS51p2fHQ.png)_Postcode JSON file_
+```json
+// postcodes.json
+[
+  {
+    "allowed": ["E1", "E11", "E12", "E14"]
+  }
+]
+```
 
-![Querying postocodes with GraphQL](https://cdn-images-1.medium.com/max/2976/1*18sWSQBIXn1_vmDUEOR4VA.png)_Querying postocodes with GraphQL_
+```js
+// buy.js
+export const pageQuery = query`
+	query BuyPageQuery {
+		allPostcodesJson {
+			edges {
+				node {
+					allowed
+				}
+			}
+		}
+	}
+`;
+```
 
 **#protip:** Gatsby has a [really nice tutorial](https://www.gatsbyjs.org/tutorial/part-four/) to help understand its data layer. Definitely worth a read.
 
@@ -87,7 +107,7 @@ When a new Pull Request is created, Netlify automatically generates a [Deploy Pr
 
 When the PR gets merged to the master branch, then Netlify triggers the production deployment. I’ve turned on [Slack Notification](https://www.netlify.com/blog/2016/07/18/shiny-slack-notifications-from-netlify/), so everyone in the team knows when a new production deployment has happened 🎉
 
-![Dona Rita Slack showing Netlify’s notifications](https://cdn-images-1.medium.com/max/4864/1*JoxGvcyy6ShE1CWOlx1Clw.png)_Dona Rita Slack showing Netlify’s notifications_
+<Image src="/posts/jamstack-gatsby-netlify-netlify-cms/slack.png" width="2432" height="1548" />
 
 ## Adding Netlify CMS
 
@@ -101,7 +121,30 @@ I also created a [configuration](https://www.netlifycms.org/docs/configuration-o
 
 You can see the source for Netlify config [here](https://github.com/peduarte/dona-rita-website/blob/master/static/admin/config.yml).
 
-![Netlify CMS configuration](https://cdn-images-1.medium.com/max/2976/1*rvx1jcZ0vDQaXN2xeYy2oA.png)_Netlify CMS configuration_
+```yaml
+# config.yml
+backend:
+  name: git-gateway
+  branch: master
+
+publish_mode: editorial_workflow
+
+media_folder: static/img
+public_folder: /img
+
+collections:
+  - name: 'shops'
+    label: 'Shop'
+    folder: 'src/pages/shops'
+    create: true
+    slug: '{{name}}' # this will be filename
+    fields:
+      - { label: 'Name', name: 'name', widget: 'string' }
+      - { label: 'Area', name: 'area', widget: 'string' }
+      - { label: 'Address', name: 'address', widget: 'string' }
+      - { label: 'Postcode', name: 'postcode', widget: 'string' }
+      - { label: 'Outcode', name: 'outcode', widget: 'string' }
+```
 
 If you’re interested in adding a CMS to your static site, I’d definitely recommend using Netlify CMS. You can read [the docs here](https://www.netlifycms.org/docs).
 
