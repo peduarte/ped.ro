@@ -4,6 +4,8 @@ import renderToString from 'next-mdx-remote/render-to-string';
 import hydrate from 'next-mdx-remote/hydrate';
 import { getAllPosts, getPostBySlug } from '@lib/mdx';
 import remarkCode from '@lib/remark-code';
+import rehypeCode from '@lib/rehype-code';
+import reypeHighlight from '@lib/rehype-highlight';
 import { parseISO, format } from 'date-fns';
 import { Container, Text, Box, Link, Divider, Badge, Tooltip } from '@peduarte/wallop-system';
 import TitleAndMetaTags from '@components/TitleAndMetaTags';
@@ -95,7 +97,8 @@ export async function getStaticProps(context) {
   const mdxContent = await renderToString(content, {
     components,
     mdxOptions: {
-      remarkPlugins: [remarkCode],
+      // remarkPlugins: [remarkCode],
+      rehypePlugins: [reypeHighlight, rehypeCode],
     },
   });
 

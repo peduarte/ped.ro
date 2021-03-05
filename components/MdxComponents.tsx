@@ -97,7 +97,7 @@ export const components = {
       {...props}
     />
   ),
-  code: ({ className, children, ...props }) => {
+  pre: (props) => {
     return (
       <Wallop.Box
         mx={[-4, 0]}
@@ -120,9 +120,7 @@ export const components = {
           },
         }}
       >
-        <pre className={className}>
-          <code className={className} {...props} dangerouslySetInnerHTML={{ __html: children }} />
-        </pre>
+        <pre {...props} />
       </Wallop.Box>
     );
   },

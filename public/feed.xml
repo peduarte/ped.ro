@@ -4,7 +4,7 @@
         <description><![CDATA[Recent articles from the Pedro's blog.]]></description>
         <link>https://ped.ro</link>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Fri, 05 Mar 2021 14:24:36 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 05 Mar 2021 16:20:08 GMT</lastBuildDate>
         <atom:link href="https://ped.ro/feed.xml" rel="self" type="application/rss+xml"/>
         <item>
             <title><![CDATA[Building the UI for The Times]]></title>
@@ -19,16 +19,16 @@
             <pubDate>Fri, 10 Apr 2020 00:00:00 GMT</pubDate>
         </item>
         <item>
-            <title><![CDATA[JAMstack with Gatsby, Netlify and Netlify CMS?]]></title>
-            <link>https://ped.ro/blog/jamstack-gatsby-netlify-netlify-cms</link>
-            <guid isPermaLink="true">https://ped.ro/blog/jamstack-gatsby-netlify-netlify-cms</guid>
-            <pubDate>Thu, 01 Feb 2018 00:00:00 GMT</pubDate>
-        </item>
-        <item>
             <title><![CDATA[Dynamically generating social images]]></title>
             <link>https://ped.ro/blog/generating-open-graph-images</link>
             <guid isPermaLink="true">https://ped.ro/blog/generating-open-graph-images</guid>
             <pubDate>Tue, 12 May 2020 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[JAMstack with Gatsby, Netlify and Netlify CMS?]]></title>
+            <link>https://ped.ro/blog/jamstack-gatsby-netlify-netlify-cms</link>
+            <guid isPermaLink="true">https://ped.ro/blog/jamstack-gatsby-netlify-netlify-cms</guid>
+            <pubDate>Thu, 01 Feb 2018 00:00:00 GMT</pubDate>
         </item>
         <item>
             <title><![CDATA[Starting a food business from scratch]]></title>
@@ -43,16 +43,16 @@
             <pubDate>Thu, 09 Apr 2020 00:00:00 GMT</pubDate>
         </item>
         <item>
-            <title><![CDATA[WTF is JAMstack?]]></title>
-            <link>https://ped.ro/blog/wtf-is-jamstack</link>
-            <guid isPermaLink="true">https://ped.ro/blog/wtf-is-jamstack</guid>
-            <pubDate>Thu, 07 Feb 2019 00:00:00 GMT</pubDate>
-        </item>
-        <item>
             <title><![CDATA[Website refresh 2020]]></title>
             <link>https://ped.ro/blog/website-refresh-2020</link>
             <guid isPermaLink="true">https://ped.ro/blog/website-refresh-2020</guid>
             <pubDate>Wed, 01 Apr 2020 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[WTF is JAMstack?]]></title>
+            <link>https://ped.ro/blog/wtf-is-jamstack</link>
+            <guid isPermaLink="true">https://ped.ro/blog/wtf-is-jamstack</guid>
+            <pubDate>Thu, 07 Feb 2019 00:00:00 GMT</pubDate>
         </item>
     </channel>
 </rss>
