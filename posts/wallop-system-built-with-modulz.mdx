@@ -3,13 +3,6 @@ title: 'Wallop System, built with Modulz'
 publishedAt: '2020-04-09'
 ---
 
-import createDS from './create-a-new-design-system.mp4';
-import dsSettings from './design-system-settings-screen.mp4';
-import tokens from './editor-tokens.mp4';
-import styling from './editor-styling.mp4';
-import publishing from './design-system-publish.mp4';
-import styleGyide from './style-guide.mp4';
-
 I've often thought about creating a design system for myself. Something I could rely on for my personal website and projects. The thought of being able to build consistent user interfaces using my own system was exciting.
 
 I had never gotten round to it, though. It always seemed too big a job and I had too many questions:
@@ -34,37 +27,37 @@ In this section, I'll go through how I created, styled and published Wallop Syst
 
 First step was to create a new Design System in Modulz.
 
-<video src={createDS} />
+<video src="/posts/wallop-system-built-with-modulz/create-a-new-design-system.mp4" />
 
 ### Updating settings
 
 On the design system settings page, I can update the name, style guide subdomain and manage team members - good for collabs.
 
-<video src={dsSettings} />
+<video src="/posts/wallop-system-built-with-modulz/design-system-settings-screen.mp4" />
 
 ### Configuring tokens
 
 On the editor screen, I have access to tokens. Here I can add, remove or update tokens, from colors to font families.
 
-<video src={tokens} />
+<video src="/posts/wallop-system-built-with-modulz/editor-tokens.mp4" />
 
 ### Styling components
 
 On the editor screen, I can start consuming my tokens and applying them to components. I can also create and manage variants - super powerful!
 
-<video src={styling} />
+<video src="/posts/wallop-system-built-with-modulz/editor-styling.mp4" />
 
 ### Publishing
 
 On the publish screen, I can publish my design system to npm. I can also select between a major or minor version and add release notes. Have a look at Wallop System [on npm](https://www.npmjs.com/package/@peduarte/wallop-system/).
 
-<video src={publishing} />
+<video src="/posts/wallop-system-built-with-modulz/design-system-publish.mp4" />
 
 ### Style guide
 
 A documented style guide is auto generated. This will serve as documentation for anyone wishing to use my design system. Have a look at Wallop System's [style guide](https://style-guide-develop.now.sh/live?sg=VJWEuVXytSNI91xSdD4).
 
-<video src={styleGyide} />
+<video src="/posts/wallop-system-built-with-modulz/style-guide.mp4" />
 
 ---
 
@@ -110,7 +103,7 @@ import { Box, Text } from '@peduarte/wallop-system';
 
 All components support `margin`, `padding` and `sx` props. I can use these to start laying out components on the page:
 
-```jsx{4,5}
+```jsx hihlight=4,5
 import { Box, Text } from '@peduarte/wallop-system';
 
 () => (
@@ -124,7 +117,7 @@ import { Box, Text } from '@peduarte/wallop-system';
 
 If I want to change a value based on breakpoint, I can use the responsive syntax, like this:
 
-```jsx{4}
+```jsx highlight=4
 import { Box, Text } from '@peduarte/wallop-system';
 
 () => (
@@ -142,7 +135,7 @@ This API is inspired by [Styled System](https://styled-system.com/) and [Theme U
 
 All the variants created in Modulz are available here too. Obviously. And I can use them like this:
 
-```jsx{5}
+```jsx highlight=5
 import { Box, Text } from '@peduarte/wallop-system';
 
 () => (

@@ -95,7 +95,7 @@ export const prismTheme = css`
   }
 
   .line-faded {
-    opacity: 0.3;
+    /* opacity: 0.3; */
   }
 
   .line-highlighted {
@@ -106,5 +106,10 @@ export const prismTheme = css`
 
     background-color: #222;
     box-shadow: inset 2px 0px 0 0px ${theme.colors.blue};
+  }
+
+  [data-highlight] {
+    border-radius: 3px;
+    background-color: #222;
   }
 `;

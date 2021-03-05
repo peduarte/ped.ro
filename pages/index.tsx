@@ -43,7 +43,7 @@ export default function Home({ posts }) {
               variant="ghost"
             >
               <VisuallyHidden>Github</VisuallyHidden>
-              <TwitterIcon arial-hidden />
+              <TwitterIcon aria-hidden />
             </Link>{' '}
             or{' '}
             <Link href="https://github.com/peduarte" target="_blank" rel="noopener" variant="ghost">
