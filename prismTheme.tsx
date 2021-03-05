@@ -94,28 +94,11 @@ export const prismTheme = css`
     cursor: help;
   }
 
-  [data-highlight-line='false'] {
-    opacity: 0.4;
+  .line-faded {
+    opacity: 0.3;
   }
 
-  [data-highlight] {
-    border-radius: 3px;
-    background-color: rgba(0, 0, 0, 0.8);
-    box-shadow: 3px 0 0 0 black, -3px 0 0 0 black;
-  }
-
-  .highlight-start ~ :not(.highlight-end):not(.highlight-end ~ *) {
-    background-color: red;
-  }
-
-  .highlight-start,
-  .highlight-end {
-    display: none;
-  }
-
-  /* Line highlighting via https://github.com/j0lv3r4/mdx-prism */
-  .mdx-marker {
-    /* Reset padding originally set in app.tsx */
+  .line-highlighted {
     margin-left: -${theme.space[3]};
     margin-right: -${theme.space[3]};
     padding-left: ${theme.space[3]};
@@ -123,11 +106,5 @@ export const prismTheme = css`
 
     background-color: #222;
     box-shadow: inset 2px 0px 0 0px ${theme.colors.blue};
-
-    display: block;
-
-    * {
-      /* background-color: #222; */
-    }
   }
 `;

@@ -97,6 +97,9 @@ export const components = {
       {...props}
     />
   ),
+  code: ({ className, children }) => {
+    return <code className={className} children={children} />;
+  },
   pre: (props) => {
     return (
       <Wallop.Box
