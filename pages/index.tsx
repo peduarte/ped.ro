@@ -1,6 +1,5 @@
 import React from 'react';
 import { Container, Box, Text, Link, VisuallyHidden } from '@peduarte/wallop-system';
-import { FrontMatter } from '../types';
 import TitleAndMetaTags from '@components/TitleAndMetaTags';
 import { BlogCard } from '@components/BlogCard';
 import { getAllPosts } from '@lib/mdx';
@@ -63,7 +62,7 @@ export default function Home({ posts }) {
           <ul style={{ listStyle: 'none', paddingLeft: 0 }}>
             {posts.map((post) => (
               <li key={post.title}>
-                <BlogCard key={post.data.title} slug={post.slug} frontMatter={post.data} />
+                <BlogCard key={post.data.title} slug={post.slug} data={post.data} />
               </li>
             ))}
           </ul>

@@ -4,7 +4,7 @@
         <description><![CDATA[Recent articles from the Pedro's blog.]]></description>
         <link>https://ped.ro</link>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Fri, 05 Mar 2021 21:54:08 GMT</lastBuildDate>
+        <lastBuildDate>Sat, 06 Mar 2021 08:15:20 GMT</lastBuildDate>
         <atom:link href="https://ped.ro/feed.xml" rel="self" type="application/rss+xml"/>
         <item>
             <title><![CDATA[Building the UI for The Times]]></title>
@@ -31,12 +31,6 @@
             <pubDate>Thu, 01 Feb 2018 00:00:00 GMT</pubDate>
         </item>
         <item>
-            <title><![CDATA[Starting a food business from scratch]]></title>
-            <link>https://ped.ro/blog/starting-food-business-from-scratch</link>
-            <guid isPermaLink="true">https://ped.ro/blog/starting-food-business-from-scratch</guid>
-            <pubDate>Tue, 16 May 2017 00:00:00 GMT</pubDate>
-        </item>
-        <item>
             <title><![CDATA[Wallop System, built with Modulz]]></title>
             <link>https://ped.ro/blog/wallop-system-built-with-modulz</link>
             <guid isPermaLink="true">https://ped.ro/blog/wallop-system-built-with-modulz</guid>
@@ -53,6 +47,12 @@
             <link>https://ped.ro/blog/wtf-is-jamstack</link>
             <guid isPermaLink="true">https://ped.ro/blog/wtf-is-jamstack</guid>
             <pubDate>Thu, 07 Feb 2019 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Starting a food business from scratch]]></title>
+            <link>https://ped.ro/blog/starting-food-business-from-scratch</link>
+            <guid isPermaLink="true">https://ped.ro/blog/starting-food-business-from-scratch</guid>
+            <pubDate>Tue, 16 May 2017 00:00:00 GMT</pubDate>
         </item>
     </channel>
 </rss>

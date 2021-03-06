@@ -1,13 +1,12 @@
 import React from 'react';
 import NextLink from 'next/link';
 import { Container, Box, Text, Link } from '@peduarte/wallop-system';
-// import { blogPosts } from '@lib/blogPosts';
-// import { FrontMatter } from '../../types';
 import TitleAndMetaTags from '@components/TitleAndMetaTags';
 import { BlogCard } from '@components/BlogCard';
 import { getAllPosts } from '@lib/mdx';
+import type { Post } from 'types/post';
 
-export default function Blog({ posts, ...props }) {
+export default function Blog({ posts }: { posts: Post[] }) {
   return (
     <Box>
       <TitleAndMetaTags description="Blog articles about design systems, jamstack and design–dev collaboration." />
@@ -28,7 +27,7 @@ export default function Blog({ posts, ...props }) {
         </Text>
 
         {posts.map((post) => (
-          <BlogCard key={post.data.title} slug={post.slug} frontMatter={post.data} />
+          <BlogCard key={post.data.title} slug={post.slug} data={post.data} />
         ))}
       </Container>
     </Box>

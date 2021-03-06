@@ -2,14 +2,14 @@ import React from 'react';
 import NextLink from 'next/link';
 import { parseISO, format } from 'date-fns';
 import { Link, Text, Box, Badge, Tooltip } from '@peduarte/wallop-system';
-import { FrontMatter } from '../types';
+import type { Post } from 'types/post';
 
-export const BlogCard = ({ frontMatter, slug }: { frontMatter: FrontMatter; slug: string }) => {
+export const BlogCard = ({ data, slug }: Post) => {
   return (
     <Box mt={4}>
       <NextLink href={`blog/${slug}`} passHref>
         <Link
-          aria-label={`Read ${frontMatter.title}`}
+          aria-label={`Read ${data.title}`}
           variant="ghost"
           sx={{
             display: 'inline-block',
@@ -17,8 +17,8 @@ export const BlogCard = ({ frontMatter, slug }: { frontMatter: FrontMatter; slug
           }}
         >
           <Text size={4}>
-            {frontMatter.title}{' '}
-            {frontMatter.draft && (
+            {data.title}{' '}
+            {data.draft && (
               <Tooltip label="This article is work in progress" side="top" align="center">
                 <Badge variant="white" ml={1} mt="-1px">
                   Draft
@@ -35,7 +35,7 @@ export const BlogCard = ({ frontMatter, slug }: { frontMatter: FrontMatter; slug
               color: 'gray',
             }}
           >
-            {format(parseISO(frontMatter.publishedAt), 'MMMM "yy')}
+            {format(parseISO(data.publishedAt), 'MMMM "yy')}
           </Text>
         </Link>
       </NextLink>

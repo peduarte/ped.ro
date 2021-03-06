@@ -3,24 +3,15 @@ import NextLink from 'next/link';
 import renderToString from 'next-mdx-remote/render-to-string';
 import hydrate from 'next-mdx-remote/hydrate';
 import { getAllPosts, getPostBySlug } from '@lib/mdx';
-import remarkCode from '@lib/remark-code';
 import rehypeCode from '@lib/rehype-code';
 import reypeHighlight from '@lib/rehype-highlight';
 import { parseISO, format } from 'date-fns';
 import { Container, Text, Box, Link, Divider, Badge, Tooltip } from '@peduarte/wallop-system';
 import TitleAndMetaTags from '@components/TitleAndMetaTags';
-import { FrontMatter } from '../../types';
 import { components } from '@components/MdxComponents';
+import type { Post } from 'types/post';
 
-export default function PostPage({
-  data,
-  source,
-  slug,
-}: {
-  data: FrontMatter;
-  source: any;
-  slug: string;
-}) {
+export default function PostPage({ data, source, slug }: Post) {
   const content = hydrate(source, { components });
 
   const twitterShare = `
@@ -97,7 +88,6 @@ export async function getStaticProps(context) {
   const mdxContent = await renderToString(content, {
     components,
     mdxOptions: {
-      // remarkPlugins: [remarkCode],
       rehypePlugins: [reypeHighlight, rehypeCode],
     },
   });
