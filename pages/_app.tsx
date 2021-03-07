@@ -1,42 +1,16 @@
 import React from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import { createGlobalStyle } from 'styled-components';
-import { WallopProvider, Flex, Box, theme } from '@peduarte/wallop-system';
-import { prismTheme } from '../prismTheme';
 import { useAnalytics } from '@lib/analytics';
 import { Footer } from '@components/Footer';
-
-// Create global CSS for syntax highlighting
-export const GlobalStyles = createGlobalStyle(
-  {
-    body: {
-      backgroundColor: theme.colors.black,
-      color: theme.colors.white,
-      fontFamily: theme.fonts.sans,
-      margin: 0,
-    },
-
-    ul: {
-      paddingLeft: theme.space[4],
-    },
-
-    figure: { margin: 0 },
-
-    svg: { display: 'inline-block', verticalAlign: 'middle' },
-
-    '&::selection': {
-      backgroundColor: 'hsla(52, 100%, 49%, 0.99)',
-      color: 'black',
-    },
-  },
-  prismTheme
-);
+import { globalStyles } from '@styles/global';
+import { box } from '@styles/box';
 
 function App({ Component, pageProps }: AppProps) {
+  globalStyles();
   useAnalytics();
   return (
-    <WallopProvider>
+    <>
       <Head>
         <title>Pedro Duarte</title>
         <link rel="icon" href="/favicon.png" />
@@ -51,16 +25,14 @@ function App({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
-      <GlobalStyles />
-
-      <Flex sx={{ minHeight: '100vh', flexDirection: 'column' }}>
-        <Box sx={{ flex: 1 }}>
+      <div className={box({ displayy: 'flex', minHeight: '100vh', flexDirection: 'column' })}>
+        <div className={box({ flex: 1 })}>
           <Component {...pageProps} />
-        </Box>
+        </div>
 
         <Footer />
-      </Flex>
-    </WallopProvider>
+      </div>
+    </>
   );
 }
 

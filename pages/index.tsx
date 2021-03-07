@@ -1,73 +1,167 @@
 import React from 'react';
-import { Container, Box, Text, Link, VisuallyHidden } from '@peduarte/wallop-system';
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import TitleAndMetaTags from '@components/TitleAndMetaTags';
 import { BlogCard } from '@components/BlogCard';
+import { box } from '@styles/box';
 import { getAllPosts } from '@lib/mdx';
+import { text } from '@styles/text';
+import { container } from '@styles/container';
+import { link } from '@styles/link';
 
 export default function Home({ posts }) {
   return (
     <>
       <TitleAndMetaTags />
 
-      <Box sx={{ bg: 'white', color: 'black' }}>
-        <Container mx={[4, 5, 6]} py={[4, 5]}>
-          <Text as="h1" size={2} mb={[5, 6]} weight="medium" sx={{ textTransform: 'uppercase' }}>
-            Pedro <Text sx={{ color: 'gray' }}>Duarte</Text>
-          </Text>
+      <div className={box({ bc: '$white', color: '$black' })}>
+        <div
+          className={container({
+            css: {
+              mx: '$4',
+              py: '$4',
+              when: {
+                bp1: {
+                  mx: '$5',
+                  py: '$5',
+                },
+                bp2: {
+                  mx: '$6',
+                },
+              },
+            },
+          })}
+        >
+          <h1
+            className={text({
+              size: '2',
+              css: {
+                mb: '$5',
+                textTransform: 'uppercase',
+                when: {
+                  bp1: {
+                    mb: '$6',
+                  },
+                },
+              },
+            })}
+          >
+            Pedro <span className={text({ css: { color: '$gray' } })}>Duarte</span>
+          </h1>
 
-          <Text as="h2" size={5}>
+          <h2
+            className={text({
+              size: {
+                initial: '4',
+                bp1: '5',
+              },
+            })}
+          >
             I'm a UI developer interested in design systems, jamstack, user/dev experience and under
             engineering.
-          </Text>
+          </h2>
 
-          <Text as="p" size={5} mt={5}>
+          <p
+            className={text({
+              size: {
+                initial: '4',
+                bp1: '5',
+              },
+              css: { mt: '$5' },
+            })}
+          >
             Right now I'm working with{' '}
-            <Link href="https://modulz.app" target="_blank" rel="noopener">
+            <a className={link()} href="https://modulz.app" target="_blank" rel="noopener">
               Modulz
-            </Link>{' '}
+            </a>{' '}
             to help close the gap between design—dev.
-          </Text>
+          </p>
 
-          <Text as="p" size={5} mt={5}>
+          <p
+            className={text({
+              size: {
+                initial: '4',
+                bp1: '5',
+              },
+              css: { mt: '$5' },
+            })}
+          >
             I was born in Brazil, raised in the UK and now living in Barcelona with my little
             family.
-          </Text>
+          </p>
 
-          <Text as="p" size={5} mt={5} mb={6}>
+          <p
+            className={text({
+              size: {
+                initial: '4',
+                bp1: '5',
+              },
+              css: { mt: '$5', mb: '$6' },
+            })}
+          >
             You can find me on{' '}
-            <Link
+            <a
+              className={link({ variant: 'ghost' })}
               href="https://twitter.com/peduarte"
               target="_blank"
               rel="noopener"
-              variant="ghost"
             >
-              <VisuallyHidden>Github</VisuallyHidden>
+              <VisuallyHidden>GitHub</VisuallyHidden>
               <TwitterIcon aria-hidden />
-            </Link>{' '}
+            </a>{' '}
             or{' '}
-            <Link href="https://github.com/peduarte" target="_blank" rel="noopener" variant="ghost">
+            <a
+              className={link({ variant: 'ghost' })}
+              href="https://github.com/peduarte"
+              target="_blank"
+              rel="noopener"
+            >
               <VisuallyHidden>Twitter</VisuallyHidden>
               <GithubIcon aria-hidden />
-            </Link>
-          </Text>
-        </Container>
-      </Box>
+            </a>
+          </p>
+        </div>
+      </div>
 
-      <Box p={[3, 4, 5]} sx={{ bg: 'yellow' }}>
-        <Box mt={[-5, -6]} p={[4, 5]} sx={{ bg: 'black', color: 'white', borderRadius: 1 }}>
-          <Text as="h3" mx="auto" size={3} mb={5} weight="medium">
-            Writing
-          </Text>
+      <div
+        className={box({
+          padding: '$3',
+          bc: '$yellow',
+          when: {
+            bp1: {
+              padding: '$4',
+            },
+            bp2: {
+              padding: '$5',
+            },
+          },
+        })}
+      >
+        <div
+          className={box({
+            mt: '-$5',
+            p: '$4',
+            bc: '$black',
+            color: '$white',
+            borderRadius: '$1',
+            when: {
+              bp1: {
+                mt: '-$6',
+                p: '$5',
+              },
+            },
+          })}
+        >
+          <h3 className={text({ size: '3', css: { mb: '$5', mx: 'auto' } })}>Writing</h3>
 
-          <ul style={{ listStyle: 'none', paddingLeft: 0 }}>
+          <ul className={box({ listStyle: 'none', pl: 0 })}>
             {posts.map((post) => (
               <li key={post.title}>
                 <BlogCard key={post.data.title} slug={post.slug} data={post.data} />
               </li>
             ))}
           </ul>
-        </Box>
-      </Box>
+        </div>
+      </div>
     </>
   );
 }

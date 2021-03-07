@@ -45,19 +45,6 @@ The last step is to take the generated URL and pass in your queries via query st
 
 For example, let's say you want to generate a card with a title of "The future is now.":
 
-```jsx
-const title = 'The future is now.';
-const api = 'https://i.microlink.io/';
-const cardUrl = `https://cards.microlink.io/?preset=pedro&title=${title}`;
-const image = `${api}${encodeURIComponent(cardUrl)}`;
-```
-
-And then add it as an [OpenGraph](https://ogp.me/) meta:
-
-```jsx
-<meta property="og:image" content={image} />
-```
-
 ## Wrapping up
 
 I think this is a sweet balance between flexibility and simplicity. I love that I can build templates in JSX and decide how customisable I want them to be.

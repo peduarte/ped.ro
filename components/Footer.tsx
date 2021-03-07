@@ -1,46 +1,145 @@
 import React from 'react';
 import NextLink from 'next/link';
-import { Link, Text, Box, Container, Flex } from '@peduarte/wallop-system';
+import { text } from '@styles/text';
+import { box } from '@styles/box';
+import { container } from '@styles/container';
+import { link } from '@styles/link';
 
 export const Footer = () => {
   return (
-    <Box py={[4, 5]} sx={{ bg: 'white', color: 'black' }}>
-      <Container mx={[4, 5, 6]} py={[4, 5]}>
-        <Flex sx={{ flexDirection: ['column', 'row'] }}>
-          <Text
-            as="h3"
-            size={2}
-            weight="medium"
-            mr={[0, 4]}
-            mb={[4, 0]}
-            sx={{ textTransform: 'uppercase', color: 'gray' }}
+    <div
+      className={box({
+        py: '$4',
+        bc: '$white',
+        color: '$black',
+        when: {
+          bp1: {
+            py: '$5',
+          },
+        },
+      })}
+    >
+      <div
+        className={container({
+          css: {
+            mx: '$4',
+            py: '$4',
+            when: {
+              bp1: {
+                mx: '$5',
+                py: '$5',
+              },
+              bp2: {
+                mx: '$6',
+              },
+            },
+          },
+        })}
+      >
+        <div
+          className={box({
+            display: 'flex',
+            flexDirection: 'column',
+            when: { bp1: { flexDirection: 'row' } },
+          })}
+        >
+          <h3
+            className={text({
+              size: '2',
+              css: {
+                mb: '$4',
+                textTransform: 'uppercase',
+                color: '$gray',
+                when: {
+                  bp1: {
+                    mr: '$4',
+                    mb: 0,
+                  },
+                },
+              },
+            })}
           >
             PD
-          </Text>
+          </h3>
 
-          <Text as="p" size={2} weight="medium" mx={[0, 4]} mb={[1, 0]}>
+          <p
+            className={text({
+              size: '2',
+              css: {
+                mb: '$1',
+                when: {
+                  bp1: {
+                    mx: '$4',
+                  },
+                },
+              },
+            })}
+          >
             <NextLink href="/blog" passHref>
-              <Link>Blog</Link>
+              <a className={link()}>Blog</a>
             </NextLink>
-          </Text>
+          </p>
 
-          <Text as="p" size={2} weight="medium" mx={[0, 4]} mb={[1, 0]}>
-            <Link href="/blog/feed">RSS</Link>
-          </Text>
+          <p
+            className={text({
+              size: '2',
+              css: {
+                mb: '$1',
+                when: {
+                  bp1: {
+                    mx: '$4',
+                  },
+                },
+              },
+            })}
+          >
+            <a className={link()} href="/feed.xml">
+              RSS
+            </a>
+          </p>
 
-          <Text as="p" size={2} weight="medium" mx={[0, 4]} mb={[1, 0]}>
-            <Link href="https://github.com/peduarte" target="_blank" rel="noopener">
-              Github
-            </Link>
-          </Text>
+          <p
+            className={text({
+              size: '2',
+              css: {
+                mb: '$1',
+                when: {
+                  bp1: {
+                    mx: '$4',
+                  },
+                },
+              },
+            })}
+          >
+            <a className={link()} href="https://github.com/peduarte" target="_blank" rel="noopener">
+              GitHub
+            </a>
+          </p>
 
-          <Text as="p" size={2} weight="medium" mx={[0, 4]} mb={[1, 0]}>
-            <Link href="https://twitter.com/peduarte" target="_blank" rel="noopener">
+          <p
+            className={text({
+              size: '2',
+              css: {
+                mb: '$1',
+                when: {
+                  bp1: {
+                    mx: '$4',
+                  },
+                },
+              },
+            })}
+          >
+            <a
+              className={link()}
+              href="https://twitter.com/peduarte"
+              target="_blank"
+              rel="noopener"
+            >
               Twitter
-            </Link>
-          </Text>
-        </Flex>
-      </Container>
-    </Box>
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
   );
 };
