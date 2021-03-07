@@ -16,13 +16,9 @@ export const globalStyles = global({
 
   svg: { display: 'inline-block', verticalAlign: 'middle' },
 
-  '&::selection': {
+  '::selection': {
     backgroundColor: 'hsla(52, 100%, 49%, 0.99)',
     color: '$black',
-  },
-
-  pre: {
-    margin: 0,
   },
 
   // Prism
