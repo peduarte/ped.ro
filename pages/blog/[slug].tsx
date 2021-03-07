@@ -3,8 +3,7 @@ import NextLink from 'next/link';
 import renderToString from 'next-mdx-remote/render-to-string';
 import hydrate from 'next-mdx-remote/hydrate';
 import { getAllPosts, getPostBySlug } from '@lib/mdx';
-import rehypeCode from '@lib/rehype-code';
-import reypeHighlight from '@lib/rehype-highlight';
+import rehypeHighlightCode from '@lib/rehype-highlight-code';
 import { parseISO, format } from 'date-fns';
 import TitleAndMetaTags from '@components/TitleAndMetaTags';
 import { components } from '@components/MdxComponents';
@@ -110,7 +109,7 @@ export async function getStaticProps(context) {
   const mdxContent = await renderToString(content, {
     components,
     mdxOptions: {
-      rehypePlugins: [reypeHighlight, rehypeCode],
+      rehypePlugins: [rehypeHighlightCode],
     },
   });
 

@@ -92,7 +92,7 @@ export const globalStyles = global({
     userSelect: 'none',
   },
 
-  '.token.deleted .highlighted-word': {
+  '.token.deleted .callout': {
     // $$color: '$colors$red',
     // color: '$white',
   },
@@ -108,12 +108,12 @@ export const globalStyles = global({
     userSelect: 'none',
   },
 
-  '.token.inserted .highlighted-word': {
+  '.token.inserted .callout': {
     // $$color: '$colors$turq',
     // color: '$turq',
   },
 
-  '.highlighted-word': {
+  '.callout': {
     $$color: 'hsl(206deg 22% 64% / 10%)',
     $$xOffset: '3px',
     backgroundColor: '$$color',
@@ -122,9 +122,9 @@ export const globalStyles = global({
     boxShadow: '$$xOffset 0 0 0 $$color, -$$xOffset 0 0 0 $$color',
   },
 
-  '.line-faded': {
+  '.line.off': {
     opacity: 0.4,
   },
 
-  '.line-highlighted': {},
+  '.line.on': {},
 });
