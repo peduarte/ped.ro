@@ -73,77 +73,61 @@ export const { css, global, getCssString } = createCss({
     bp4: '@media (min-width: 1200px)',
   },
   utils: {
-    p: (config) => (value) => ({
+    p: (config) => (value: keyof typeof config.theme['space'] | (string & {})) => ({
       paddingTop: value,
       paddingBottom: value,
       paddingLeft: value,
       paddingRight: value,
     }),
-    pt: (config) => (value) => ({
+    pt: (config) => (value: keyof typeof config.theme['space'] | (string & {})) => ({
       paddingTop: value,
     }),
-    pr: (config) => (value) => ({
+    pr: (config) => (value: keyof typeof config.theme['space'] | (string & {})) => ({
       paddingRight: value,
     }),
-    pb: (config) => (value) => ({
+    pb: (config) => (value: keyof typeof config.theme['space'] | (string & {})) => ({
       paddingBottom: value,
     }),
-    pl: (config) => (value) => ({
+    pl: (config) => (value: keyof typeof config.theme['space'] | (string & {})) => ({
       paddingLeft: value,
     }),
-    px: (config) => (value) => ({
+    px: (config) => (value: keyof typeof config.theme['space'] | (string & {})) => ({
       paddingLeft: value,
       paddingRight: value,
     }),
-    py: (config) => (value) => ({
+    py: (config) => (value: keyof typeof config.theme['space'] | (string & {})) => ({
       paddingTop: value,
       paddingBottom: value,
     }),
-
-    m: (config) => (value) => ({
+    m: (config) => (value: keyof typeof config.theme['space'] | (string & {})) => ({
       marginTop: value,
       marginBottom: value,
       marginLeft: value,
       marginRight: value,
     }),
-    mt: (config) => (value) => ({
+    mt: (config) => (value: keyof typeof config.theme['space'] | (string & {})) => ({
       marginTop: value,
     }),
-    mr: (config) => (value) => ({
+    mr: (config) => (value: keyof typeof config.theme['space'] | (string & {})) => ({
       marginRight: value,
     }),
-    mb: (config) => (value) => ({
+    mb: (config) => (value: keyof typeof config.theme['space'] | (string & {})) => ({
       marginBottom: value,
     }),
-    ml: (config) => (value) => ({
+    ml: (config) => (value: keyof typeof config.theme['space'] | (string & {})) => ({
       marginLeft: value,
     }),
-    mx: (config) => (value) => ({
+    mx: (config) => (value: keyof typeof config.theme['space'] | (string & {})) => ({
       marginLeft: value,
       marginRight: value,
     }),
-    my: (config) => (value) => ({
+    my: (config) => (value: keyof typeof config.theme['space'] | (string & {})) => ({
       marginTop: value,
       marginBottom: value,
     }),
-
-    ta: (config) => (value) => ({ textAlign: value }),
-
-    fd: (config) => (value) => ({ flexDirection: value }),
-    fw: (config) => (value) => ({ flexWrap: value }),
-
-    ai: (config) => (value) => ({ alignItems: value }),
-    ac: (config) => (value) => ({ alignContent: value }),
-    jc: (config) => (value) => ({ justifyContent: value }),
-    as: (config) => (value) => ({ alignSelf: value }),
-    fg: (config) => (value) => ({ flexGrow: value }),
-    fs: (config) => (value) => ({ flexShrink: value }),
-    fb: (config) => (value) => ({ flexBasis: value }),
-
-    bc: (config) => (value) => ({
+    bc: (config) => (value: keyof typeof config.theme['colors'] | (string & {})) => ({
       backgroundColor: value,
     }),
-
     size: (config) => (value: keyof typeof config.theme['sizes'] | (string & {})) => ({
       width: value,
       height: value,

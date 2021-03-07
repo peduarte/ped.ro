@@ -8,6 +8,9 @@ export default class Document extends NextDocument {
     return (
       <Html lang="en">
         <Head>
+          {/* Inset SSR styles twice, the second one with hydration
+          this is a hack to prevent a flash! Will be fixed soon. */}
+          <style dangerouslySetInnerHTML={{ __html: getCssString() }} />
           <style id="stitches" dangerouslySetInnerHTML={{ __html: getCssString() }} />
           <script async src={gtagUrl} />
           <script dangerouslySetInnerHTML={{ __html: renderSnippet() }} />
