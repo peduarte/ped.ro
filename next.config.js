@@ -1,4 +1,3 @@
-const withPlugins = require('next-compose-plugins');
 const withVideos = require('next-videos');
 
 const nextConfig = {
@@ -11,4 +10,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withPlugins([withVideos], nextConfig);
+module.exports = withVideos(nextConfig);
