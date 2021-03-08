@@ -4,11 +4,13 @@ import { text } from '@styles/text';
 import { box } from '@styles/box';
 import { link } from '@styles/link';
 import { CardPlayground } from '@components/CardPlayground';
+import { Preview } from '@components/Preview';
 import { divider } from '@styles/divider';
 import { code } from '@styles/code';
 
 export const components = {
   CardPlayground,
+  Preview,
   h1: (props) => <h1 className={text({ size: '7', css: { mb: '$5' } })} {...props} />,
   h2: (props) => (
     <h2 className={text({ size: '5', css: { mt: '$5', mb: '$4', mx: 'auto' } })} {...props} />
@@ -109,7 +111,7 @@ export const components = {
           mb: '$5',
 
           '[data-preview] + &': {
-            marginTop: '$1',
+            marginTop: '0',
           },
 
           when: {

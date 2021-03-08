@@ -13,6 +13,7 @@ export const globalStyles = global({
   },
 
   figure: { margin: 0 },
+  pre: { margin: 0 },
 
   svg: { display: 'inline-block', verticalAlign: 'middle' },
 
@@ -26,6 +27,7 @@ export const globalStyles = global({
     $$lineHeight: '$lineHeights$3',
     fontFamily: '$mono',
     bc: 'hsla(206 12% 89.5% / 5%)',
+    backgroundImage: 'linear-gradient(140deg, hsla(206 12% 89.5% / 5%), hsla(206 12% 89.5% / 1%))',
     color: '$white',
     fontSize: '$2',
     lineHeight: '$$lineHeight',
