@@ -2,6 +2,7 @@ import React from 'react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import TitleAndMetaTags from '@components/TitleAndMetaTags';
 import { BlogCard } from '@components/BlogCard';
+import { CodeBlock } from '@components/CodeBlock';
 import { box } from '@styles/box';
 import { getAllPosts } from '@lib/mdx';
 import { text } from '@styles/text';
@@ -154,7 +155,7 @@ export default function Home({ posts }) {
 
           <ul className={box({ listStyle: 'none', pl: 0 })}>
             {posts.map((post) => (
-              <li key={post.title}>
+              <li key={post.data.title}>
                 <BlogCard key={post.data.title} slug={post.slug} data={post.data} />
               </li>
             ))}

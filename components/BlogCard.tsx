@@ -7,9 +7,9 @@ import { box } from '@styles/box';
 import { link } from '@styles/link';
 import { badge } from '@styles/badge';
 
-export const BlogCard = ({ data, slug }: Post) => {
+export const BlogCard = ({ data, slug, ...props }: Post) => {
   return (
-    <div className={box({ mt: '$4' })}>
+    <div className={box({ mt: '$4' })} {...props}>
       <NextLink href={`blog/${slug}`} passHref>
         <a
           className={link({
