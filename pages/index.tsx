@@ -142,7 +142,6 @@ export default function Home({ posts }) {
             p: '$4',
             bc: '$black',
             color: '$white',
-            borderRadius: '$1',
             when: {
               bp1: {
                 mt: '-$6',

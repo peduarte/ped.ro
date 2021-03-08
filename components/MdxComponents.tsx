@@ -65,7 +65,6 @@ export const components = {
         my: '$4',
         mx: '-$3',
         border: '1px solid $gray',
-        borderRadius: 1,
         overflow: 'hidden',
         when: {
           bp1: { mx: '-$5' },
@@ -111,15 +110,11 @@ export const components = {
 
           '[data-preview] + &': {
             marginTop: '$1',
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0,
           },
 
           when: {
             bp1: {
               mx: 0,
-              borderRadius: '$2',
-              overflow: 'hidden',
             },
           },
         })}

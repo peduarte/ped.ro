@@ -3,33 +3,21 @@ import { css } from 'stitches.config';
 export const input = css({
   boxSizing: 'border-box',
   appearance: 'none',
+  border: '1px solid $gray',
+  WebkitTapHighlightColor: 'rgba(0, 0, 0, 0)',
   margin: 0,
-  py: 0,
+  py: '0',
   px: '$2',
-  backgroundColor: '$white',
-  border: '1px solid hsl(240, 10%, 90%)',
-  borderRadius: '$1',
+  height: '$4',
+  backgroundColor: 'transparent',
   color: '$black',
   fontFamily: '$sans',
   fontSize: '$3',
-  height: '$4',
+  lineHeight: 1,
   width: '100%',
 
-  // placeholder: color: "hsl(240, 5%, 85%)",
-
-  variants: {
-    variant: {
-      ghost: {
-        backgroundColor: 'transparent',
-        borderColor: 'transparent',
-      },
-    },
-    size: {
-      large: {
-        fontSize: '$4',
-        height: '$3',
-        px: '$3',
-      },
-    },
+  '&:focus': {
+    outline: 'none',
+    borderColor: '$black',
   },
 });

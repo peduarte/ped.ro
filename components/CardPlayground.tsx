@@ -24,7 +24,6 @@ export function CardPlayground(props) {
       className={box({
         p: '$3',
         bc: '$white',
-        borderRadius: '$2',
         when: {
           bp1: {
             p: '$4',
@@ -51,7 +50,6 @@ export function CardPlayground(props) {
           flexWrap: 'wrap',
           alignItems: 'center',
           mb: '$4',
-          maxWidth: 400,
           mx: 'auto',
         })}
         onSubmit={(e) => {
@@ -63,25 +61,31 @@ export function CardPlayground(props) {
         }}
       >
         <label className={box({ mb: '$2', pr: '$2', display: 'block', flex: '1 1 50%' })}>
-          <span className={text({ size: '1', css: { color: '$gray' } })}>Heading</span>
+          <span className={text({ size: '2', css: { color: '$gray', lineHeight: '$3' } })}>
+            Heading
+          </span>
           <input className={input()} ref={headingRef} defaultValue={heading} />
         </label>
         <label className={box({ mb: '$2', pl: '$2', display: 'block', flex: '1 1 50%' })}>
-          <span className={text({ size: '1', css: { color: '$gray' } })}>Sub heading</span>
+          <span className={text({ size: '2', css: { color: '$gray', lineHeight: '$3' } })}>
+            Sub heading
+          </span>
           <input className={input()} ref={subHeadingRef} defaultValue={subHeading} />
         </label>
         <label className={box({ mb: '$2', pr: '$2', display: 'block', flex: '1 1 50%' })}>
-          <span className={text({ size: '1', css: { color: '$gray' } })}>Title</span>
+          <span className={text({ size: '2', css: { color: '$gray', lineHeight: '$3' } })}>
+            Title
+          </span>
           <input className={input()} ref={titleRef} defaultValue={title} />
         </label>
         <label className={box({ mb: '$2', pl: '$2', display: 'block', flex: '1 1 50%' })}>
-          <span className={text({ size: '1', css: { color: '$gray' } })}>Domain</span>
+          <span className={text({ size: '2', css: { color: '$gray', lineHeight: '$3' } })}>
+            Domain
+          </span>
           <input className={input()} ref={domainRef} defaultValue={domain} />
         </label>
 
-        <button className={button({ variant: 'blue', css: { mt: '$3', width: '100%' } })}>
-          Generate
-        </button>
+        <button className={button({ css: { mt: '$3', mx: 'auto' } })}>Generate</button>
       </form>
 
       <div className={box({ my: '$4', bc: 'yellow' })}>
@@ -107,8 +111,7 @@ export function CardPlayground(props) {
       <div
         className={box({
           mt: '$3',
-          p: '$3',
-          borderRadius: '$2',
+          p: '$2',
           bc: '$gray',
           color: '$white',
           fontFamily: '$mono',
