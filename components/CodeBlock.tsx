@@ -17,22 +17,13 @@ refractor.register(bash);
 refractor.register(css);
 refractor.register(diff);
 
-type CodeBlockProps = {
+type CodeBlockProps = React.ComponentProps<'pre'> & {
   language: 'js' | 'jsx' | 'bash' | 'css' | 'diff';
-  className?: string;
   value: string;
   line?: string;
 };
 
-export function CodeBlock({ language, value, line }: CodeBlockProps) {
-  if (process.env.NODE_ENV !== 'production') {
-    if (!refractor.registered(language)) {
-      console.warn(
-        `No language definitions for "${language}" seems to be registered, did you forget to call \`Refractor.registerLanguage()\`?`
-      );
-    }
-  }
-
+export function CodeBlock({ language, value, line, className, ...props }: CodeBlockProps) {
   let result = refractor.highlight(value, language);
 
   if (line) {
@@ -42,12 +33,12 @@ export function CodeBlock({ language, value, line }: CodeBlockProps) {
   result = highlightCallout(result);
 
   // convert to html
-  // result = rehype().stringify({ type: 'root', children: result }).toString();
   result = hastToHtml(result);
 
+  const classes = `language-${language} ${className}`;
   return (
-    <pre className={`language-${language}`}>
-      <code className={`language-${language}`} dangerouslySetInnerHTML={{ __html: result }} />
+    <pre className={classes} {...props}>
+      <code className={classes} dangerouslySetInnerHTML={{ __html: result }} />
     </pre>
   );
 }
