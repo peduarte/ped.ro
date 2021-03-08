@@ -8,8 +8,8 @@ import css from 'refractor/lang/css';
 import diff from 'refractor/lang/diff';
 import hastToHtml from 'hast-util-to-html';
 import rangeParser from 'parse-numeric-range';
-import highlightLine from '@lib/rehype-line';
-import highlightCallout from '@lib/rehype-callout';
+import highlightLine from '@lib/rehype-highlight-line';
+import highlightWord from '@lib/rehype-highlight-word';
 
 refractor.register(js);
 refractor.register(jsx);
@@ -30,7 +30,7 @@ export function CodeBlock({ language, value, line, className, ...props }: CodeBl
     result = highlightLine(result, rangeParser(line));
   }
 
-  result = highlightCallout(result);
+  result = highlightWord(result);
 
   // convert to html
   result = hastToHtml(result);

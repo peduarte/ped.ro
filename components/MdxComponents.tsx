@@ -1,5 +1,8 @@
+import React from 'react';
 import NextLink from 'next/link';
+import NextRouter from 'next/router';
 import NextImage from 'next/image';
+import rangeParser from 'parse-numeric-range';
 import { text } from '@styles/text';
 import { box } from '@styles/box';
 import { link } from '@styles/link';
@@ -11,6 +14,64 @@ import { code } from '@styles/code';
 export const components = {
   CardPlayground,
   Preview,
+  RegisterLink: ({ id, index, href }) => {
+    const isExternal = href.startsWith('http');
+
+    React.useEffect(() => {
+      const codeBlock = document.getElementById(id);
+      if (!codeBlock) return;
+
+      const allHighlightWords = codeBlock.querySelectorAll('.highlight-word');
+      const target = allHighlightWords[index - 1];
+      if (!target) return;
+
+      const addClass = () => target.classList.add('on');
+      const removeClass = () => target.classList.remove('on');
+      const addClick = () => (isExternal ? window.location.replace(href) : NextRouter.push(href));
+
+      target.addEventListener('mouseenter', addClass);
+      target.addEventListener('mouseleave', removeClass);
+      target.addEventListener('click', addClick);
+
+      return () => {
+        target.removeEventListener('mouseenter', addClass);
+        target.removeEventListener('mouseleave', removeClass);
+        target.removeEventListener('click', addClick);
+      };
+    }, []);
+
+    return null;
+  },
+  h: ({ id, index, ...props }) => {
+    const triggerRef = React.useRef<HTMLElement>(null);
+
+    React.useEffect(() => {
+      const trigger = triggerRef.current;
+
+      const codeBlock = document.getElementById(id);
+      if (!codeBlock) return;
+
+      const allHighlightWords = codeBlock.querySelectorAll('.highlight-word');
+      const targetIndex = rangeParser(index).map((i) => i - 1);
+      // exit if the `index` passed is bigger than the total number of highlighted words
+      if (Math.max(...targetIndex) >= allHighlightWords.length) return;
+
+      const addClass = () => targetIndex.forEach((i) => allHighlightWords[i].classList.add('on'));
+      const removeClass = () =>
+        targetIndex.forEach((i) => allHighlightWords[i].classList.remove('on'));
+
+      trigger.addEventListener('mouseenter', addClass);
+      trigger.addEventListener('mouseleave', removeClass);
+
+      return () => {
+        trigger.removeEventListener('mouseenter', addClass);
+        trigger.removeEventListener('mouseleave', removeClass);
+      };
+    }, []);
+
+    return <code className={code({ css: { cursor: 'default' } })} ref={triggerRef} {...props} />;
+  },
+  inlineCode: (props) => <code className={code()} {...props} />,
   h1: (props) => <h1 className={text({ size: '7', css: { mb: '$5' } })} {...props} />,
   h2: (props) => (
     <h2 className={text({ size: '5', css: { mt: '$5', mb: '$4', mx: 'auto' } })} {...props} />
@@ -33,7 +94,6 @@ export const components = {
     return <a className={link()} href={href} target="_blank" rel="noopener" {...props} />;
   },
   hr: (props) => <hr className={divider({ size: '1', css: { my: '$5' } })} {...props} />,
-  inlineCode: (props) => <code className={code()} {...props} />,
   ul: (props) => <ul className={box({ mb: '$4' })} {...props} />,
   ol: (props) => <ol className={box({ mb: '$4' })} {...props} />,
   li: (props) => <li className={text({ size: '4' })} {...props} />,
@@ -99,10 +159,8 @@ export const components = {
       {...props}
     />
   ),
-  code: ({ className, children }) => {
-    return <code className={className} children={children} />;
-  },
-  pre: (props) => {
+  pre: ({ children }) => <>{children}</>,
+  code: ({ className, children, id }) => {
     return (
       <div
         className={box({
@@ -121,7 +179,9 @@ export const components = {
           },
         })}
       >
-        <pre {...props} />
+        <pre className={className} id={id}>
+          <code className={className} children={children} />
+        </pre>
       </div>
     );
   },

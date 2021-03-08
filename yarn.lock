@@ -1160,17 +1160,10 @@
     "@radix-ui/react-polymorphic" "0.0.6"
     "@radix-ui/react-primitive" "0.0.5"
 
-"@stitches/core@^0.1.0-canary.12":
-  version "0.1.0-canary.12"
-  resolved "https://registry.yarnpkg.com/@stitches/core/-/core-0.1.0-canary.12.tgz#9254f5372607e57c2563d813907b972c5c411dcd"
-  integrity sha512-JP2OVj1yU3TijCkOr9pg0lHeLzJd7LnOeUsSOmp+H9R/LTFCrYKDuFufI71S7zlupJNBQnq76SrJXdov0pdPNA==
-
-"@stitches/react@^0.1.0-canary.12":
-  version "0.1.0-canary.12"
-  resolved "https://registry.yarnpkg.com/@stitches/react/-/react-0.1.0-canary.12.tgz#ef38e0ecfa037ff7d7f3f21d5cdbbdd87ad6044a"
-  integrity sha512-E6VsTJ2rKW89MTcfV0+PdzdFjA8GGjZ0sYFtG9f+IAXP73MGsNaHYKuulfMDDzCByFFMW9PkcDMH65xAMlyMvA==
-  dependencies:
-    "@stitches/core" "^0.1.0-canary.12"
+"@stitches/core@^0.1.0-canary.14":
+  version "0.1.0-canary.14"
+  resolved "https://registry.yarnpkg.com/@stitches/core/-/core-0.1.0-canary.14.tgz#573971b4da9c45478bfeaa15023a52db746b4eb0"
+  integrity sha512-b5UT0/Z4tJoMP75te6rQyP80S+fvMXhRXZBWBL5SJ75a/EQHXdPImuKhVBJKmpT4Ir+W43YWK8I+1+uykH7ucw==
 
 "@types/color-name@^1.1.1":
   version "1.1.1"

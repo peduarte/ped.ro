@@ -90,10 +90,7 @@ export const globalStyles = global({
     userSelect: 'none',
   },
 
-  '.token.deleted .callout': {
-    // $$color: '$colors$red',
-    // color: '$white',
-  },
+  '.token.deleted .highlight-word': {},
 
   '.token.inserted:not(.prefix)': {
     color: '$turq',
@@ -106,23 +103,26 @@ export const globalStyles = global({
     userSelect: 'none',
   },
 
-  '.token.inserted .callout': {
-    // $$color: '$colors$turq',
-    // color: '$turq',
-  },
+  '.token.inserted .highlight-word': {},
 
-  '.callout': {
+  '.highlight-word': {
     $$color: 'hsl(206deg 22% 64% / 10%)',
     $$xOffset: '3px',
     backgroundColor: '$$color',
     borderRadius: '$1',
     display: 'inline-block',
     boxShadow: '$$xOffset 0 0 0 $$color, -$$xOffset 0 0 0 $$color',
+
+    '&.on': {
+      $$color: 'hsl(206deg 22% 64% / 30%)' as any,
+      transition: 'all 100ms ease',
+      cursor: 'pointer',
+    },
   },
 
-  '.line.off': {
+  '.highlight-line.off': {
     opacity: 0.4,
   },
 
-  '.line.on': {},
+  '.highlight-line.on': {},
 });

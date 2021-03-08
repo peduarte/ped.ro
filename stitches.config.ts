@@ -1,4 +1,4 @@
-import { createCss } from '@stitches/react';
+import { createCss } from '@stitches/core';
 
 export const { css, global, getCssString } = createCss({
   theme: {
