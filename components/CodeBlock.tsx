@@ -6,7 +6,7 @@ import jsx from 'refractor/lang/jsx';
 import bash from 'refractor/lang/bash';
 import css from 'refractor/lang/css';
 import diff from 'refractor/lang/diff';
-import rehype from 'rehype';
+import hastToHtml from 'hast-util-to-html';
 import rangeParser from 'parse-numeric-range';
 import highlightLine from '@lib/rehype-line';
 import highlightCallout from '@lib/rehype-callout';
@@ -42,7 +42,8 @@ export function CodeBlock({ language, value, line }: CodeBlockProps) {
   result = highlightCallout(result);
 
   // convert to html
-  result = rehype().stringify({ type: 'root', children: result }).toString();
+  // result = rehype().stringify({ type: 'root', children: result }).toString();
+  result = hastToHtml(result);
 
   return (
     <pre className={`language-${language}`}>
