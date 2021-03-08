@@ -87,13 +87,9 @@ Now that we've established the key API differences, let's look at how to migrate
 
 ### Wallop System
 
-Use the <h id="one" index="2">sx</h> prop
-
-<RegisterLink id="one" index="1" href="/" />
-
 ```jsx id=one line=1,2
-<Box px={[4, 5, 6]} py={[4, 5]} sx={{ __bg: 'black', color: 'white'__ }}>
-  <Text as="h1" __sx__={{ fontSize: [2, 3] }}>
+<Box px={[4, 5, 6]} py={[4, 5]} sx={{ bg: 'black', color: 'white' }}>
+  <Text as="h1" sx={{ fontSize: [2, 3] }}>
     JAMstack
   </Text>
 </Box>
