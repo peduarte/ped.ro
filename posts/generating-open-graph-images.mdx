@@ -1,0 +1,64 @@
+---
+title: 'Dynamically generating social images'
+publishedAt: '2020-05-12'
+---
+
+Inspired by [Chris Biscardi](https://twitter.com/chrisbiscardi), [Joel Hooks](https://twitter.com/jhooks), [Shawn Wang](https://twitter.com/swyx), and others, I, too, wanted to dynamically generate social images for my blog posts.
+
+But the thought of creating an image generation API was daunting to me. Cloudinary, Lambdas, Chromium are cool, but I wanted something more straightforward.
+
+It was around this time that [Marina](https://twitter.com/MarinaAisa/status/1250425913705025536) introduced me to Microlink and its creator [Kiko](https://twitter.com/kikobeats). Microlink was just about to release their new product, [Microlink Cards](https://cards.microlink.io/).
+
+Being one of the alpha testers of Microlink Cards, I decided to take it for a spin and rely on it to generate the social images for me.
+
+Microlink Cards works like this:
+
+1. Pick a template or build your own
+2. Define your dynamic queries
+3. Add the generated URL to your `meta` tag, providing the right queries
+
+<Image src="/posts/generating-open-graph-images/microlink.png" width="3104" height="2024">
+  A screen shot of Microlink Cards showing my template
+</Image>
+
+## Building my template
+
+Instead of using an existing template, I decided to build my own. Have a [look here](https://cards.microlink.io/editor?preset=pedro).
+
+Templates are built (designed) in JSX, powered by [Theme UI](https://theme-ui.com). What a good idea! 👏
+
+## Defining my queries
+
+This how you choose what can be customised via query strings passed in to the generated URL.
+
+I created the following queries:
+
+- `heading`: the heading of the card
+- `subheading`: the sub-heading of the card
+- `title`: the main title of the page you're sharing
+- `domain`: the URL of the page you're sharing
+- `theme`: a theme object following (I'm using a subset from [Wallop System](/blog/wallop-system-built-with-modulz) theme)
+
+## Showing dynamic images
+
+The last step is to take the generated URL and pass in your queries via query strings.
+
+For example, let's say you want to generate a card with a title of "The future is now.":
+
+## Wrapping up
+
+I think this is a sweet balance between flexibility and simplicity. I love that I can build templates in JSX and decide how customisable I want them to be.
+
+The ability to take a URL, provide some query strings, and get back a social image (at the right size!) is brilliant to me.
+
+In order to create templates right now, you need to contribute to [the repo](https://github.com/microlinkhq/cards). It would be cool if there was a way to do it all in the app.
+
+Finally, I think there's some potential for a [Modulz](https://modulz.app) integration. Imagine connecting your Modulz generated design system and having access to all your components? 🤯
+
+---
+
+## Have a play
+
+See for yourself how it works. Enjoy! ✌️
+
+<CardPlayground />

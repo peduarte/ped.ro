@@ -1,44 +1,31 @@
 import React from 'react';
-import NextDocument, { Head, Main, NextScript, DocumentContext } from 'next/document';
-import { ServerStyleSheet } from 'styled-components';
-import { renderSnippet, gtagUrl } from '../utils/analytics';
+import NextDocument, { Html, Head, Main, NextScript } from 'next/document';
+import { getCssString } from 'stitches.config';
+import { renderSnippet, gtagUrl } from '@lib/analytics';
 
 export default class Document extends NextDocument {
-  static async getInitialProps(ctx: DocumentContext) {
-    const sheet = new ServerStyleSheet();
-    const originalRenderPage = ctx.renderPage;
-    try {
-      ctx.renderPage = () =>
-        originalRenderPage({
-          enhanceApp: (App) => (props) => sheet.collectStyles(<App {...props} />),
-        });
-      const initialProps = await NextDocument.getInitialProps(ctx);
-      return {
-        ...initialProps,
-        styles: (
-          <>
-            {initialProps.styles}
-            {sheet.getStyleElement()}
-          </>
-        ),
-      };
-    } finally {
-      sheet.seal();
-    }
-  }
-
   render() {
     return (
-      <html lang="en">
+      <Html lang="en">
         <Head>
+          <style id="stitches" dangerouslySetInnerHTML={{ __html: getCssString() }} />
           <script async src={gtagUrl} />
           <script dangerouslySetInnerHTML={{ __html: renderSnippet() }} />
+          <link rel="icon" href="/favicon.png" />
+          <link
+            href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&display=swap"
+            rel="stylesheet"
+          />
+          <link
+            href="https://fonts.googleapis.com/css?family=Fira+Mono&display=swap"
+            rel="stylesheet"
+          />
         </Head>
         <body>
           <Main />
           <NextScript />
         </body>
-      </html>
+      </Html>
     );
   }
 }

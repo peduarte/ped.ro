@@ -1,44 +1,46 @@
 import React from 'react';
 import NextLink from 'next/link';
 import { parseISO, format } from 'date-fns';
-import { Link, Text, Box, Badge, Tooltip } from '@peduarte/wallop-system';
-import { FrontMatter } from '../types';
+import type { Post } from 'types/post';
+import { text } from '@styles/text';
+import { box } from '@styles/box';
+import { link } from '@styles/link';
+import { badge } from '@styles/badge';
 
-export const BlogCard = ({ frontMatter }: { frontMatter: FrontMatter }) => {
+export const BlogCard = ({ data, slug, ...props }: Post) => {
   return (
-    <Box mt={4}>
-      <NextLink href={frontMatter.id} passHref>
-        <Link
-          aria-label={`Read ${frontMatter.title}`}
-          variant="ghost"
-          sx={{
-            display: 'inline-block',
-            lineHeight: 3,
-          }}
+    <div className={box({ mt: '$4' })} {...props}>
+      <NextLink href={`blog/${slug}`} passHref>
+        <a
+          className={link({
+            variant: 'ghost',
+            css: {
+              display: 'inline-block',
+              lineHeight: '$3',
+            },
+          })}
+          aria-label={`Read ${data.title}`}
         >
-          <Text size={4}>
-            {frontMatter.title}{' '}
-            {frontMatter.draft && (
-              <Tooltip label="This article is work in progress" side="top" align="center">
-                <Badge variant="white" ml={1} mt="-1px">
-                  Draft
-                </Badge>
-              </Tooltip>
+          <span className={text({ size: '4', css: { display: 'flex', alignItems: 'center' } })}>
+            {data.title}{' '}
+            {data.draft && (
+              <span className={badge({ variant: 'white', css: { ml: '$2' } })}>Draft</span>
             )}
-          </Text>
-          <Text
-            as="time"
-            size={2}
-            sx={{
-              fontFamily: 'mono',
-              display: 'block',
-              color: 'gray',
-            }}
+          </span>
+
+          <time
+            className={text({
+              size: '2',
+              css: {
+                fontFamily: '$mono',
+                color: '$gray',
+              },
+            })}
           >
-            {format(parseISO(frontMatter.publishedAt), 'MMMM "yy')}
-          </Text>
-        </Link>
+            {format(parseISO(data.publishedAt), 'MMMM "yy')}
+          </time>
+        </a>
       </NextLink>
-    </Box>
+    </div>
   );
 };
