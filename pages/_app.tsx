@@ -15,7 +15,7 @@ function App({ Component, pageProps }: AppProps) {
         <title>Pedro Duarte</title>
       </Head>
 
-      <div className={box({ displayy: 'flex', minHeight: '100vh', flexDirection: 'column' })}>
+      <div className={box({ display: 'flex', minHeight: '100vh', flexDirection: 'column' })}>
         <div className={box({ flex: 1 })}>
           <Component {...pageProps} />
         </div>
