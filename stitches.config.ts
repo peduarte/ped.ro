@@ -66,11 +66,11 @@ export const { css, global, getCssString } = createCss({
       round: '9999px',
     },
   },
-  conditions: {
-    bp1: '@media (min-width: 575px)',
-    bp2: '@media (min-width: 750px)',
-    bp3: '@media (min-width: 1000px)',
-    bp4: '@media (min-width: 1200px)',
+  media: {
+    bp1: '(min-width: 575px)',
+    bp2: '(min-width: 750px)',
+    bp3: '(min-width: 1000px)',
+    bp4: '(min-width: 1200px)',
   },
   utils: {
     p: (config) => (value: keyof typeof config.theme['space'] | number | (string & {})) => ({

@@ -99,7 +99,7 @@ export const components = {
   li: (props) => <li className={text({ size: '4' })} {...props} />,
   strong: (props) => <strong className={text({ weight: 'bold' })} {...props} />,
   Image: ({ children, ...props }) => (
-    <figure className={box({ my: '$5', mx: '-$3', when: { bp1: { mx: '-$5' } } })}>
+    <figure className={box({ my: '$5', mx: '-$3', '@bp1': { mx: '-$5' } })}>
       <NextImage {...(props as any)} />
       {children && (
         <figcaption
@@ -117,7 +117,7 @@ export const components = {
     </figure>
   ),
   img: ({ children, ...props }) => (
-    <div className={box({ my: '$5', mx: '-$3', when: { bp1: { mx: '-$5' } } })}>
+    <div className={box({ my: '$5', mx: '-$3', '@bp1': { mx: '-$5' } })}>
       <NextImage {...(props as any)} />
     </div>
   ),
@@ -128,9 +128,7 @@ export const components = {
         mx: '-$3',
         border: '1px solid $gray',
         overflow: 'hidden',
-        when: {
-          bp1: { mx: '-$5' },
-        },
+        '@bp1': { mx: '-$5' },
       })}
     >
       <video
@@ -172,10 +170,8 @@ export const components = {
             marginTop: '0',
           },
 
-          when: {
-            bp1: {
-              mx: 0,
-            },
+          '@bp1': {
+            mx: 0,
           },
         })}
       >

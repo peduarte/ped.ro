@@ -12,10 +12,8 @@ export const Footer = () => {
         py: '$4',
         bc: '$white',
         color: '$black',
-        when: {
-          bp1: {
-            py: '$5',
-          },
+        '@bp1': {
+          py: '$5',
         },
       })}
     >
@@ -24,14 +22,12 @@ export const Footer = () => {
           css: {
             mx: '$4',
             py: '$4',
-            when: {
-              bp1: {
-                mx: '$5',
-                py: '$5',
-              },
-              bp2: {
-                mx: '$6',
-              },
+            '@bp1': {
+              mx: '$5',
+              py: '$5',
+            },
+            '@bp2': {
+              mx: '$6',
             },
           },
         })}
@@ -40,7 +36,7 @@ export const Footer = () => {
           className={box({
             display: 'flex',
             flexDirection: 'column',
-            when: { bp1: { flexDirection: 'row' } },
+            '@bp1': { flexDirection: 'row' },
           })}
         >
           <h3
@@ -50,11 +46,9 @@ export const Footer = () => {
                 mb: '$4',
                 textTransform: 'uppercase',
                 color: '$gray',
-                when: {
-                  bp1: {
-                    mr: '$4',
-                    mb: 0,
-                  },
+                '@bp1': {
+                  mr: '$4',
+                  mb: 0,
                 },
               },
             })}
@@ -67,10 +61,8 @@ export const Footer = () => {
               size: '2',
               css: {
                 mb: '$1',
-                when: {
-                  bp1: {
-                    mx: '$4',
-                  },
+                '@bp1': {
+                  mx: '$4',
                 },
               },
             })}
@@ -85,10 +77,8 @@ export const Footer = () => {
               size: '2',
               css: {
                 mb: '$1',
-                when: {
-                  bp1: {
-                    mx: '$4',
-                  },
+                '@bp1': {
+                  mx: '$4',
                 },
               },
             })}
@@ -103,10 +93,8 @@ export const Footer = () => {
               size: '2',
               css: {
                 mb: '$1',
-                when: {
-                  bp1: {
-                    mx: '$4',
-                  },
+                '@bp1': {
+                  mx: '$4',
                 },
               },
             })}
@@ -121,10 +109,8 @@ export const Footer = () => {
               size: '2',
               css: {
                 mb: '$1',
-                when: {
-                  bp1: {
-                    mx: '$4',
-                  },
+                '@bp1': {
+                  mx: '$4',
                 },
               },
             })}

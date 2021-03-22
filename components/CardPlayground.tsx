@@ -24,10 +24,8 @@ export function CardPlayground(props) {
       className={box({
         p: '$3',
         bc: '$white',
-        when: {
-          bp1: {
-            p: '$4',
-          },
+        '@bp1': {
+          p: '$4',
         },
       })}
     >
