@@ -147,7 +147,7 @@ export default function Home({ posts }) {
           <ul className={box({ listStyle: 'none', pl: 0 })}>
             {posts.map((post) => (
               <li key={post.data.title}>
-                <BlogCard key={post.data.title} slug={post.slug} data={post.data} />
+                <BlogCard slug={post.slug} data={post.data} />
               </li>
             ))}
           </ul>
