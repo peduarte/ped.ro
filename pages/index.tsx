@@ -2,7 +2,6 @@ import React from 'react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import TitleAndMetaTags from '@components/TitleAndMetaTags';
 import { BlogCard } from '@components/BlogCard';
-import { CodeBlock } from '@components/CodeBlock';
 import { box } from '@styles/box';
 import { getAllPosts } from '@lib/mdx';
 import { text } from '@styles/text';
@@ -20,14 +19,12 @@ export default function Home({ posts }) {
             css: {
               mx: '$4',
               py: '$4',
-              when: {
-                bp1: {
-                  mx: '$5',
-                  py: '$5',
-                },
-                bp2: {
-                  mx: '$6',
-                },
+              '@bp1': {
+                mx: '$5',
+                py: '$5',
+              },
+              '@bp2': {
+                mx: '$6',
               },
             },
           })}
@@ -38,10 +35,8 @@ export default function Home({ posts }) {
               css: {
                 mb: '$5',
                 textTransform: 'uppercase',
-                when: {
-                  bp1: {
-                    mb: '$6',
-                  },
+                '@bp1': {
+                  mb: '$6',
                 },
               },
             })}
@@ -52,8 +47,8 @@ export default function Home({ posts }) {
           <h2
             className={text({
               size: {
-                initial: '4',
-                bp1: '5',
+                '@initial': '4',
+                '@bp1': '5',
               },
             })}
           >
@@ -64,8 +59,8 @@ export default function Home({ posts }) {
           <p
             className={text({
               size: {
-                initial: '4',
-                bp1: '5',
+                '@initial': '4',
+                '@bp1': '5',
               },
               css: { mt: '$5' },
             })}
@@ -80,8 +75,8 @@ export default function Home({ posts }) {
           <p
             className={text({
               size: {
-                initial: '4',
-                bp1: '5',
+                '@initial': '4',
+                '@bp1': '5',
               },
               css: { mt: '$5' },
             })}
@@ -93,8 +88,8 @@ export default function Home({ posts }) {
           <p
             className={text({
               size: {
-                initial: '4',
-                bp1: '5',
+                '@initial': '4',
+                '@bp1': '5',
               },
               css: { mt: '$5', mb: '$6' },
             })}
@@ -127,13 +122,11 @@ export default function Home({ posts }) {
         className={box({
           padding: '$3',
           bc: '$yellow',
-          when: {
-            bp1: {
-              padding: '$4',
-            },
-            bp2: {
-              padding: '$5',
-            },
+          '@bp1': {
+            padding: '$4',
+          },
+          '@bp2': {
+            padding: '$5',
           },
         })}
       >
@@ -143,11 +136,9 @@ export default function Home({ posts }) {
             p: '$4',
             bc: '$black',
             color: '$white',
-            when: {
-              bp1: {
-                mt: '-$6',
-                p: '$5',
-              },
+            '@bp1': {
+              mt: '-$6',
+              p: '$5',
             },
           })}
         >
@@ -156,7 +147,7 @@ export default function Home({ posts }) {
           <ul className={box({ listStyle: 'none', pl: 0 })}>
             {posts.map((post) => (
               <li key={post.data.title}>
-                <BlogCard key={post.data.title} slug={post.slug} data={post.data} />
+                <BlogCard slug={post.slug} data={post.data} />
               </li>
             ))}
           </ul>

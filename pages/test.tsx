@@ -33,7 +33,7 @@ const code4 = `const Button = styled("button", {
 
 const code5 = `const Button = styled("button", {
   backgroundColor: "gainsboro",
-- bp1: {}
+- '@bp1': {}
 + '@bp1': {}
 });
 `;

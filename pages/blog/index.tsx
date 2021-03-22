@@ -19,14 +19,12 @@ export default function Blog({ posts }: { posts: Post[] }) {
           css: {
             mx: '$4',
             py: '$4',
-            when: {
-              bp1: {
-                mx: '$5',
-                py: '$5',
-              },
-              bp2: {
-                mx: '$6',
-              },
+            '@bp1': {
+              mx: '$5',
+              py: '$5',
+            },
+            '@bp2': {
+              mx: '$6',
             },
           },
         })}
@@ -34,10 +32,8 @@ export default function Blog({ posts }: { posts: Post[] }) {
         <div
           className={box({
             mb: '$5',
-            when: {
-              bp1: {
-                mb: '$6',
-              },
+            '@bp1': {
+              mb: '$6',
             },
           })}
         >
