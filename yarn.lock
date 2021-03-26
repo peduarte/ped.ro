@@ -1160,10 +1160,10 @@
     "@radix-ui/react-polymorphic" "0.0.6"
     "@radix-ui/react-primitive" "0.0.5"
 
-"@stitches/core@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@stitches/core/-/core-0.1.2.tgz#c4b7880384e0efb717956de3dc61c70a38a43da1"
-  integrity sha512-DbWq3gyqWXcpeVN21k7E2gTeIN0vbRfRoBSgDNmuYUVXTeSa58EfwQkaIpwiodORnkN2qMjdrT7FbsTrBIyS3g==
+"@stitches/core@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@stitches/core/-/core-0.1.4.tgz#1b33c3ef55c044f006049d8310b784720d669798"
+  integrity sha512-jFZMpw6uD7BRvkPp3n0JsUlLO6d7oRwBgInEHDB1xlsRLqB4yaepyEyJ1CqMx8HidyW5QeLXH6IYPzERxCUM/Q==
 
 "@types/color-name@^1.1.1":
   version "1.1.1"

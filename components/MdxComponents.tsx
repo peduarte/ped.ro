@@ -6,6 +6,7 @@ import rangeParser from 'parse-numeric-range';
 import { text } from '@styles/text';
 import { box } from '@styles/box';
 import { link } from '@styles/link';
+import { pre } from '@styles/pre';
 import { CardPlayground } from '@components/CardPlayground';
 import { Preview } from '@components/Preview';
 import { divider } from '@styles/divider';
@@ -175,7 +176,7 @@ export const components = {
           },
         })}
       >
-        <pre className={className} id={id}>
+        <pre className={`${pre()} ${className}`} id={id}>
           <code className={className} children={children} />
         </pre>
       </div>

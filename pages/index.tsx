@@ -65,11 +65,19 @@ export default function Home({ posts }) {
               css: { mt: '$5' },
             })}
           >
-            Right now I'm working with{' '}
+            I work at{' '}
             <a className={link()} href="https://modulz.app" target="_blank" rel="noopener">
               Modulz
             </a>{' '}
-            to help close the gap between design—dev.
+            as a DX Engineer. Helping close the gap between design—dev and focusing on{' '}
+            <a className={link()} href="https://radix-ui.com" target="_blank" rel="noopener">
+              Radix
+            </a>{' '}
+            and{' '}
+            <a className={link()} href="https://stitches.dev" target="_blank" rel="noopener">
+              Stitches
+            </a>
+            .
           </p>
 
           <p
