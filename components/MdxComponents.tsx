@@ -98,7 +98,12 @@ export const components = {
   ul: (props) => <ul className={box({ mb: '$4' })} {...props} />,
   ol: (props) => <ol className={box({ mb: '$4' })} {...props} />,
   li: (props) => <li className={text({ size: '4' })} {...props} />,
-  strong: (props) => <strong className={text({ weight: 'bold' })} {...props} />,
+  strong: (props) => (
+    <strong
+      className={text({ weight: 'bold', css: { fontSize: 'inherit', lineHeight: 'inherit' } })}
+      {...props}
+    />
+  ),
   Image: ({ children, ...props }) => (
     <figure className={box({ my: '$5', mx: '-$3', '@bp1': { mx: '-$5' } })}>
       <NextImage {...(props as any)} />
