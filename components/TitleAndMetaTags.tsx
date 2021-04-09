@@ -17,11 +17,13 @@ export default function TitleAndMetaTags({
 }: TitleAndMetaTagsProps) {
   const router = useRouter();
 
-  const path = pathname || router.pathname;
+  const path = pathname || router.asPath;
   const domain = `${url}${path}`;
 
   const screenshotUrl = 'https://i.microlink.io/';
-  const cardUrl = `https://cards.microlink.io/?preset=pedro&title=${encodeURIComponent(description)}&domain=${domain}`;
+  const cardUrl = `https://cards.microlink.io/?preset=pedro&title=${encodeURIComponent(
+    description
+  )}&domain=${domain}`;
   const image = `${screenshotUrl}${encodeURIComponent(cardUrl)}`;
 
   return (
