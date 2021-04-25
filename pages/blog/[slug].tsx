@@ -1,9 +1,7 @@
 import React from 'react';
 import NextLink from 'next/link';
-import renderToString from 'next-mdx-remote/render-to-string';
-import hydrate from 'next-mdx-remote/hydrate';
-import { getAllPosts, getPostBySlug } from '@lib/mdx';
-import rehypeHighlightCode from '@lib/rehype-highlight-code';
+import { getMDXComponent } from 'mdx-bundler/client';
+import { getAllFrontmatter, getMdxBySlug } from '@lib/mdx';
 import { parseISO, format } from 'date-fns';
 import TitleAndMetaTags from '@components/TitleAndMetaTags';
 import { components } from '@components/MdxComponents';
@@ -15,18 +13,18 @@ import { link } from '@styles/link';
 import { badge } from '@styles/badge';
 import { divider } from '@styles/divider';
 
-export default function PostPage({ data, source, slug }: Post) {
-  const content = hydrate(source, { components });
+export default function PostPage({ frontmatter, code }: Post) {
+  const Component = React.useMemo(() => getMDXComponent(code), [code]);
 
   const twitterShare = `
 	https://twitter.com/intent/tweet?
-	text="${data.title}" by @peduarte
-	&url=https://ped.ro/blog/${slug}
+	text="${frontmatter.title}" by @peduarte
+	&url=https://ped.ro/blog/${frontmatter.slug}
 	`;
 
   return (
     <div className={box({ bc: '$black', color: '$white' })}>
-      <TitleAndMetaTags description={data.title} />
+      <TitleAndMetaTags description={frontmatter.title} />
 
       <div
         className={container({
@@ -54,8 +52,8 @@ export default function PostPage({ data, source, slug }: Post) {
         </div>
 
         <h1 className={text({ size: '5', css: { display: 'flex', alignItems: 'center' } })}>
-          {data.title}{' '}
-          {data.draft && (
+          {frontmatter.title}{' '}
+          {frontmatter.draft && (
             <span className={badge({ variant: 'white', css: { ml: '$2' } })}>Draft</span>
           )}
         </h1>
@@ -66,10 +64,13 @@ export default function PostPage({ data, source, slug }: Post) {
             css: { mt: '$1', mx: 'auto', fontFamily: '$mono', color: '$gray' },
           })}
         >
-          {format(parseISO(data.publishedAt), 'MMMM dd, yyyy')} — {data.readingTime.text}
+          {format(parseISO(frontmatter.publishedAt), 'MMMM dd, yyyy')} —{' '}
+          {frontmatter.readingTime.text}
         </time>
 
-        <div className={box({ my: '$5' })}>{content}</div>
+        <div className={box({ my: '$5' })}>
+          <Component components={components as any} />
+        </div>
 
         <hr className={divider({ size: '1', css: { my: '$5', mb: '$5' } })} />
 
@@ -92,24 +93,16 @@ export default function PostPage({ data, source, slug }: Post) {
 }
 
 export async function getStaticPaths() {
-  const posts = getAllPosts();
+  const frontmatters = getAllFrontmatter();
+
   return {
-    paths: posts.map((file) => ({
-      params: { slug: file.slug },
-    })),
+    paths: frontmatters.map(({ slug }) => ({ params: { slug } })),
     fallback: false,
   };
 }
 
 export async function getStaticProps(context) {
-  const { data, content, slug } = getPostBySlug(context.params.slug);
+  const { frontmatter, code } = await getMdxBySlug(context.params.slug);
 
-  const mdxContent = await renderToString(content, {
-    components,
-    mdxOptions: {
-      rehypePlugins: [rehypeHighlightCode],
-    },
-  });
-
-  return { props: { data, source: mdxContent, slug } };
+  return { props: { frontmatter, code } };
 }
