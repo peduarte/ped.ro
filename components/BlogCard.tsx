@@ -7,10 +7,10 @@ import { box } from '@styles/box';
 import { link } from '@styles/link';
 import { badge } from '@styles/badge';
 
-export const BlogCard = ({ data, slug, ...props }: Post) => {
+export const BlogCard = ({ frontmatter, ...props }: Post) => {
   return (
     <div className={box({ mt: '$4' })} {...props}>
-      <NextLink href={`blog/${slug}`} passHref>
+      <NextLink href={`blog/${frontmatter.slug}`} passHref>
         <a
           className={link({
             variant: 'ghost',
@@ -19,11 +19,11 @@ export const BlogCard = ({ data, slug, ...props }: Post) => {
               lineHeight: '$3',
             },
           })}
-          aria-label={`Read ${data.title}`}
+          aria-label={`Read ${frontmatter.title}`}
         >
           <span className={text({ size: '4', css: { display: 'flex', alignItems: 'center' } })}>
-            {data.title}{' '}
-            {data.draft && (
+            {frontmatter.title}{' '}
+            {frontmatter.draft && (
               <span className={badge({ variant: 'white', css: { ml: '$2' } })}>Draft</span>
             )}
           </span>
@@ -37,7 +37,7 @@ export const BlogCard = ({ data, slug, ...props }: Post) => {
               },
             })}
           >
-            {format(parseISO(data.publishedAt), 'MMMM "yy')}
+            {format(parseISO(frontmatter.publishedAt), 'MMMM "yy')}
           </time>
         </a>
       </NextLink>

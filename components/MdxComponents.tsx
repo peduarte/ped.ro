@@ -72,7 +72,6 @@ export const components = {
 
     return <code className={code({ css: { cursor: 'default' } })} ref={triggerRef} {...props} />;
   },
-  inlineCode: (props) => <code className={code()} {...props} />,
   h1: (props) => <h1 className={text({ size: '7', css: { mb: '$5' } })} {...props} />,
   h2: (props) => (
     <h2 className={text({ size: '5', css: { mt: '$5', mb: '$4', mx: 'auto' } })} {...props} />
@@ -165,6 +164,10 @@ export const components = {
   ),
   pre: ({ children }) => <>{children}</>,
   code: ({ className, children, id }) => {
+    const isInlineCode = !className;
+    if (isInlineCode) {
+      return <code className={code()} children={children} />;
+    }
     return (
       <div
         className={box({
