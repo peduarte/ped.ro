@@ -20,7 +20,7 @@ export default class Document extends NextDocument {
           <link href={FONT_INTER} rel="preload" as="style" />
           <link href={FONT_INTER} rel="stylesheet" media="all" />
           <link href={FONT_FIRA_CODE} rel="preload" as="style" />
-          <link href={FONT_FIRA_CODE} rel="stylesheet" />
+          <link href={FONT_FIRA_CODE} rel="stylesheet" media="all" />
           <noscript>
             <link href={FONT_INTER} rel="stylesheet" />
             <link href={FONT_FIRA_CODE} rel="stylesheet" />
