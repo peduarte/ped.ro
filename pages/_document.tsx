@@ -11,10 +11,13 @@ export default class Document extends NextDocument {
           <style id="stitches" dangerouslySetInnerHTML={{ __html: getCssString() }} />
           <script async src={gtagUrl} />
           <script dangerouslySetInnerHTML={{ __html: renderSnippet() }} />
-          <link rel="icon" href="/favicon.png" />
+          <link rel="icon" href="/favicon.ico" />
           <link
             href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&display=swap"
-            rel="stylesheet"
+            rel="preload"
+            as="font"
+            type="font/woff"
+            crossOrigin="anonymous"
           />
           <link
             href="https://fonts.googleapis.com/css?family=Fira+Mono&display=swap"
