@@ -1,0 +1,274 @@
+---
+title: 'Design System with Stitches and Radix'
+publishedAt: '2021-04-27'
+---
+
+For the most part of my career as a front-end developer, I've been focusing on design systems. I've learned about different styling methods, naming conventions, component-driven development, constraint-based design, and other related topics.
+
+But every time I was about to start a new design system, I'd get stuck on the same two obstacles: styling approach and complex, accessible components.
+
+For the last couple of years, myself and my colleagues at Modulz have been hard at work to make those obstacles redundant.
+
+Design systems built today can rely on the styling power of [Stitches]() and the accessible building block of [Radix]().
+
+---
+
+## A brief introduction
+
+If you've never heard of Stitches or Radix before, here's a brief introdction.
+
+### Stitches
+
+I've built design systems with css, sass, stylus, css-modules, styled-components, emotion, system-components and styled-system. I've used BEM, scoped css, atomic css, styled components and even made up conventions.
+
+Even though all of those different libraries and conventions worked well at the time, none of them felt _quite right_ — some were too labourious and too error prone. Others were too slow and too opinionated.
+
+That's why we built [Stitches](). Stitches is a lightweight, performant styling library with a focus on component architecture and developer experience.
+
+It introduces a first-class variant API, enabling design system authors to better express their intent. It's fully typed, catching potential mistakes and improving the scalability of design systems. It's lightweight, coming in at less than 5kb. And finally, it's a breeze to get up and running with it.
+
+### Radix
+
+I've lost count how many times I was working on a project and I was asked to built a custom select component. Or a tooltip component. Or other components that required more than styling, such as accessibility concerns.
+
+I'd usually try two things: either push for a more native solution, for example, use a native select under styled "face". Or try find a library that would meet my needs, in terms of customisation, developer experience, accessibility adherence.
+
+Have you ever found yourself in this situation? If the answer is yes, you know how little resource there is out there. And trying to build it your own, while following the WAI-ARIA spec is a slippery slope.
+
+That's why we built [Radix](). Radix offers a set of low-level UI components with a focus on accessibility, customization and developer experience.
+
+---
+
+With the combination of Stitches and Radix, you can build a powerful design system with little effort.
+
+Ready? Let's get it.
+
+- Set up Stitches
+- Define your default theme
+- Create your first component
+- Add variants
+- Use your component
+- Add overrides
+- Define your media queries
+- Apply responsive styles
+- Set up Radix
+- Create your first component
+
+## Set up Stitches
+
+We'll start by installing and initialising Stitches.
+
+### Install
+
+Stitches can be installed via `yarn` or `npm`.
+
+```bash
+yarn add @stitches/react
+```
+
+### Set up
+
+Import the `createCss` function from `@stitches/react`. Destructure and export the `style` function from it.
+
+```jsx
+// stitches.config.ts
+import { createCss } from '@stitches/react';
+
+export const { styled } = createCss();
+```
+
+The `createCss` function accepts a config. It's useful for defining a prefix, the default theme, media queries, custom utils, and other things. You can learn more about it [here]().
+
+## Define your default theme
+
+You can use the `theme` config key to define the default theme of your system. This is important for constraint-based design.
+
+```jsx
+export const { styled } = createCss({
+  theme: {
+    colors: {
+      gray400: 'gainsboro',
+      gray500: 'lightgray',
+      purple400: 'blueviolet',
+      purple500: 'darkviolet',
+    },
+  },
+  space: {
+    1: '10px',
+    2: '20px',
+  },
+  fontSizes: {},
+  fonts: {},
+  fontWeights: {},
+  lineHeights: {},
+  letterSpacings: {},
+  sizes: {},
+  borderWidths: {},
+  borderStyles: {},
+  radii: {},
+  shadows: {},
+  zIndices: {},
+  transitions: {},
+});
+```
+
+When you define a default theme, those tokens will be automatially mapped to certain CSS properties. For example, the `backgroundColor` property will automatially look into the `colors` scale when a token is used. More on this in the next section.
+
+## Create your first component
+
+Import the `styled` function to create your first component. Call the `styled` function providing the element you want to style and the style object.
+
+```jsx
+// button.tsx
+import { styled } from './stitches.config.ts';
+
+export const Button = styled('button', {
+  appearance: 'none',
+  border: 'none',
+  borderRadius: '99999px',
+  lineHeight: 1,
+  fontSize: '13px',
+  height: '25px',
+  paddingLeft: '10px',
+  paddingRight: '10px',
+  backgroundColor: 'gainsboro',
+
+  '&:hover': {
+    backgroundColor: 'lightgray',
+  },
+});
+```
+
+Since we previously defined our `colors` and `space` scales, we can take this a step further and make use of the available tokens.
+
+```jsx line=5-8,10
+import { styled } from './stitches.config.ts';
+
+export const Button = styled('button', {
+  // styles
+  paddingLeft: '$1',
+  paddingRight: '$1',
+  backgroundColor: '$gray400',
+
+  '&:hover': {
+    backgroundColor: '$gray500',
+  },
+});
+```
+
+To use tokens you need to prefix them with a `$` (dollar sign).
+
+## Add variants
+
+Stitches offer a first-class variant API. It's useful when a component can used with different visual treatments.
+
+```jsx line=14-29
+// button.tsx
+import { styled } from './stitches.config.ts';
+
+export const Button = styled('button', {
+  appearance: 'none',
+  border: 'none',
+  borderRadius: '99999px',
+  lineHeight: 1,
+  fontSize: '13px',
+  height: '25px',
+  paddingLeft: '$1',
+  paddingRight: '$1',
+
+  variants: {
+    variant: {
+      gray: {
+        backgroundColor: '$gray400',
+        '&:hover': {
+          backgroundColor: '$gray500',
+        },
+      },
+      purple: {
+        backgroundColor: '$purple400',
+        '&:hover': {
+          backgroundColor: '$purple500',
+        },
+      },
+    },
+  },
+});
+```
+
+We created a variant called `variant` and it can be either `gray` or `purple`. You can use the `defaultVariants` key to set it to `gray` by default:
+
+```jsx line=18-20
+// button.tsx
+import { styled } from './stitches.config.ts';
+
+export const Button = styled('button', {
+  // styles
+
+  variants: {
+    variant: {
+      gray: {
+        // styles
+      },
+      purple: {
+        // styles
+      },
+    },
+  },
+
+  defaultVariants: {
+    variant: 'gray',
+  },
+});
+```
+
+You can also add styles based on a combination of variants, via the `compoundVariants` API. Learn more about [compound variants here]().
+
+## Use your component
+
+Now that you've created a component, you can use it the same way as any other React component.
+
+```jsx
+import { Button } from './button';
+
+function App() {
+  return <Button>My button</Button>;
+}
+```
+
+You can apply variants as defined in your component. The key becomes a prop.
+
+```jsx line=4
+import { Button } from './button';
+
+function App() {
+  return <Button variant="purple">My button</Button>;
+}
+```
+
+## Add overrides
+
+Every component created with Stitches supports a `css` prop. This is useful for applying layout-related properties, overrides and exceptions.
+
+```jsx line=4
+import { Button } from './button';
+
+function App() {
+  return <Button css={{ marginTop: '$2' }}>My button</Button>;
+}
+```
+
+The `css` prop accepts a style object, much like the `styled` function. Unlike the `style` attribute, here you can add pseudo classes, descendant selectors, media queries, etc.
+
+Tokens are auto automatically mapped here.
+
+---
+
+## Conclusion
+
+With Stitches, you're able to create a resilient, maintainable and scalable design system. You can focus on what matters the most. The system itself — your theme, scales and tokens. The look and feel of the components and its potential variations. The way each component can look at different breakpoints. The styling API, create properties that make it easier for you and your team to work with.
+
+With Radix, you're able to delegate the logic and accessibility concerns of complex components, while having full control over its asthetics and behaviour. Style its parts and states. Use them controlled or uncontrolled. Add animations, either with CSS or an animation library.
+
+```
+
+```
