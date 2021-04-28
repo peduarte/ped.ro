@@ -54,6 +54,7 @@ Ready? Let's get it.
 - Create a `Box` primitive
 - Set up Radix
 - Create a `Dialog` component
+- Conclusion
 
 ## Set up Stitches
 
@@ -442,6 +443,7 @@ To achieve my desired API, I'll start by importing all of the dialog parts. Some
 
 ```jsx
 import { styled } from '../stitches.config';
+import { Cross1Icon } from '@radix-ui/react-icons';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 
 const StyledOverlay = styled(DialogPrimitive.Overlay, {
@@ -449,7 +451,52 @@ const StyledOverlay = styled(DialogPrimitive.Overlay, {
   position: 'fixed',
   inset: 0,
 });
+
+export function Dialog({ children, ...props }: DialogProps) {
+  return (
+    <DialogPrimitive.Root {...props}>
+      <StyledOverlay />
+      {children}
+    </DialogPrimitive.Root>
+  );
+}
+
+const StyledContent = styled(DialogPrimitive.Content, {
+  position: 'fixed',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  // other styles
+
+  '&:focus': {
+    outline: 'none',
+  },
+});
+
+const StyledCloseButton = styled(DialogPrimitive.Close, {
+  position: 'absolute',
+  top: '$2',
+  right: '$2',
+});
+
+export const DialogContent = React.forwardRef(({ children, ...props }, forwardedRef) => (
+  <StyledContent {...props} ref={forwardedRef}>
+    {children}
+    <StyledCloseButton as={StyledCloseButton}>
+      <Cross1Icon />
+    </StyledCloseButton>
+  </StyledContent>
+));
+
+export const DialogTrigger = DialogPrimitive.Trigger;
+export const DialogClose = StyledCloseButton;
 ```
+
+This process is similar for most Radix primitives. They're low-level enough to allow you to re-export them with your own API, yet high level enough that's an intuitive experience. It's all just components.
+
+Currently there are over 25 primitives available. With more coming almost every couple of weeks.
+
+Learn more on [radix-ui.com]()
 
 ---
 
@@ -458,3 +505,15 @@ const StyledOverlay = styled(DialogPrimitive.Overlay, {
 With Stitches, you're able to create a resilient, maintainable and scalable design system. You can focus on what matters the most. The system itself — your theme, scales and tokens. The look and feel of the components and its potential variations. The way each component can look at different breakpoints. The styling API, create properties that make it easier for you and your team to work with.
 
 With Radix, you're able to delegate the logic and accessibility concerns of complex components, while having full control over its asthetics and behaviour. Style its parts and states. Use them controlled or uncontrolled. Add animations, either with CSS or an animation library.
+
+It's an exciting time to be building UIs and design systems.
+
+If you're interested in learning more, here are some useful resources:
+
+- Modulz Discord for Stitches and Radix
+- Stitches GitHub
+- Stitches Twitter
+- Radix GitHub
+- Radix Twitter
+
+Thanks for reading ✌️
