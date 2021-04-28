@@ -3,43 +3,35 @@ title: 'Design System with Stitches and Radix'
 publishedAt: '2021-04-27'
 ---
 
-For the most part of my career as a front-end developer, I've been focusing on design systems. I've learned about different styling methods, naming conventions, component-driven development, constraint-based design, and other related topics.
+I've built design systems with CSS, Sass, Stylus, css-modules, styled-components, emotion, system-components and styled-system. I've used BEM, scoped CSS, atomic css, styled components and even made up conventions.
 
-But every time I was about to start a new design system, I'd get stuck on the same two obstacles: styling approach and complex, accessible components.
+But they never felt _quite right_ — some were too laborious and too error-prone. Others were too slow and too opinionated.
 
-For the last couple of years, myself and my colleagues at [Modulz]() have been hard at work to make those obstacles redundant.
+I've lost count of how many times I've been asked to build complex components from scratch—dialogs, tooltips, dropdown menus, popovers, sheets, tabs.
 
-Design systems built today can rely on the styling power of [Stitches]() and the accessible building blocks of [Radix]().
+But they were all flawed and lacked fundamental accessibility features. When working against a deadline, it's almost impossible to build them correctly.
+
+So for the last couple of years, we at [Modulz]() worked hard to facilitate how teams can build, maintain and scale their design systems—all whilst adhering to the WAI-ARIA design pattern.
 
 ---
 
-## A brief introduction
-
-If you've never heard of Stitches or Radix before, here's a little background.
+If you've never heard of Stitches or Radix Primitives before, here's a little background.
 
 ### Stitches
 
-I've built design systems with css, sass, stylus, css-modules, styled-components, emotion, system-components and styled-system. I've used BEM, scoped css, atomic css, styled components and even made up conventions.
+Stitches is a styling solution focusing on component architecture and developer experience.
 
-Even though all of those different libraries and conventions worked well at the time, none of them felt _quite right_ — some were too labourious and too error prone. Others were too slow and too opinionated.
+It introduces a first-class variant API, enabling design system authors to express their intent better. It's fully typed, catching potential mistakes and improving the scalability of design systems. It's lightweight, coming in at less than 5kb. And finally, it's a breeze to get up and running with it.
 
-That's why we built [Stitches](). Stitches is a lightweight, performant styling library with a focus on component architecture and developer experience.
+### Radix Primitives
 
-It introduces a first-class variant API, enabling design system authors to better express their intent. It's fully typed, catching potential mistakes and improving the scalability of design systems. It's lightweight, coming in at less than 5kb. And finally, it's a breeze to get up and running with it.
+Radix Primitives is a low-level UI component library focusing on accessibility, customisation and developer experience.
 
-### Radix
-
-I've lost count how many times I was working on a project and I was asked to built a custom select component. Or a tooltip component. Or other components that required more than styling, such as accessibility concerns.
-
-I'd usually try two things: either push for a more native solution, for example, use a native select under styled "face". Or try find a library that would meet my needs, in terms of customisation, developer experience, accessibility adherence.
-
-Have you ever found yourself in this situation? If the answer is yes, you know how little resource there is out there. And trying to build it your own, while following the WAI-ARIA spec is a slippery slope.
-
-That's why we built [Radix](). Radix offers a set of low-level UI components with a focus on accessibility, customization and developer experience.
+All its components adhere to the WAI-ARIA design patterns. They can be the base layer of your design system or adopted incrementally.
 
 ---
 
-With the combination of Stitches and Radix, you can build a powerful design system with little effort.
+With the combination of Stitches and Radix Primitives, you can build a robust design system with little effort.
 
 Ready? Let's get it.
 
@@ -58,19 +50,13 @@ Ready? Let's get it.
 
 ## Set up Stitches
 
-We'll start by installing and initialising Stitches.
-
-### Install
-
-Stitches can be installed via `yarn` or `npm`.
+Install Stitches with `npm` or `yarn`.
 
 ```bash
 yarn add @stitches/react
 ```
 
-### Set up
-
-Import the `createCss` function from `@stitches/react`. Destructure and export the `style` function from it.
+Then, import the `createCss` function and destructure and export the `style` function.
 
 ```jsx
 // stitches.config.ts
@@ -83,7 +69,9 @@ The `createCss` function accepts a config. It's useful for defining a prefix, th
 
 ## Define your default theme
 
-You can use the `theme` config key to define the default theme of your system. This is important for constraint-based design.
+You can use the `theme` config key to define the default theme of your system. A theme consists of scales. Scales consist of tokens.
+
+Tokens are essential for constraint-based design.
 
 ```jsx
 // stitches.config.ts
