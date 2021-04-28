@@ -7,15 +7,15 @@ For the most part of my career as a front-end developer, I've been focusing on d
 
 But every time I was about to start a new design system, I'd get stuck on the same two obstacles: styling approach and complex, accessible components.
 
-For the last couple of years, myself and my colleagues at Modulz have been hard at work to make those obstacles redundant.
+For the last couple of years, myself and my colleagues at [Modulz]() have been hard at work to make those obstacles redundant.
 
-Design systems built today can rely on the styling power of [Stitches]() and the accessible building block of [Radix]().
+Design systems built today can rely on the styling power of [Stitches]() and the accessible building blocks of [Radix]().
 
 ---
 
 ## A brief introduction
 
-If you've never heard of Stitches or Radix before, here's a brief introdction.
+If you've never heard of Stitches or Radix before, here's a little background.
 
 ### Stitches
 
@@ -51,8 +51,9 @@ Ready? Let's get it.
 - Add overrides
 - Define your media queries
 - Apply responsive styles
+- Create a `Box` primitive
 - Set up Radix
-- Create your first component
+- Create a `Dialog` component
 
 ## Set up Stitches
 
@@ -84,6 +85,7 @@ The `createCss` function accepts a config. It's useful for defining a prefix, th
 You can use the `theme` config key to define the default theme of your system. This is important for constraint-based design.
 
 ```jsx
+// stitches.config.ts
 export const { styled } = createCss({
   theme: {
     colors: {
@@ -141,7 +143,8 @@ export const Button = styled('button', {
 
 Since we previously defined our `colors` and `space` scales, we can take this a step further and make use of the available tokens.
 
-```jsx line=5-8,10
+```jsx line=6-9,11
+// button.tsx
 import { styled } from './stitches.config.ts';
 
 export const Button = styled('button', {
@@ -261,6 +264,193 @@ The `css` prop accepts a style object, much like the `styled` function. Unlike t
 
 Tokens are auto automatically mapped here.
 
+## Define your media queries
+
+You can use the `media` config key to define the media queries of your system. This is useful for applyin responsive styles, or for responsively applying variants.
+
+```jsx line=6-9
+// stitches.config.ts
+import { createCss } from '@stitches/react'
+
+export { styled } = createCss({
+  theme: {},
+  media: {
+    bp1: '(min-width: 575px)',
+    bp2: '(min-width: 750px)',
+  }
+})
+```
+
+## Apply responsive styles
+
+You can use your predefined media queries within style object, or when applying variants. To use media queries, prefix your media keys with an `@` (at sign).
+
+For example, this is how you can increase the font size property over different media queries.
+
+```jsx
+// button.tsx
+import { styled } from './stitches.config.ts';
+
+const Button = styled('button', {
+  // styles
+  fontSize: '13px',
+
+  '@bp1': {
+    fontSize: '15px',
+  },
+  '@bp2': {
+    fontSize: '19px',
+  },
+});
+```
+
+Alternatively, you can organise the increases as `variants`:
+
+```jsx
+// button.tsx
+import { styled } from './stitches.config.ts';
+
+const Button = styled('button', {
+  // styles
+  variants: {
+    size: {
+      small: { fontSize: '13px' },
+      medium: { fontSize: '15px' },
+      large: { fontSize: '19px' },
+    },
+  },
+
+  defaultVariants: {
+    size: 'small',
+  },
+});
+```
+
+And then _responsively apply them_:
+
+```jsx line=5-8
+import { Button } from './button';
+
+function App() {
+  return (
+    <Button
+      size={{
+        '@bp1': 'medium',
+        '@bp2': 'large',
+      }}
+    >
+      My button
+    </Button>
+  );
+}
+```
+
+With the features above, you have enough tools to build a component-driven, constraint-based design system.
+
+## Create a `Box` primitive
+
+One thing I like to do is create a low-level `Box` component. It's useful because components built with Stitches support a `css` prop, meaning you have access to tokens, utils, and media queries.
+
+It's worth noting that components built with Stitches are also polymorphic. So you can use the `as` prop to change the underlying element.
+
+It looks like this:
+
+```jsx
+// box.tsx
+export const Box = styled('div');
+```
+
+And can be used like this:
+
+```jsx
+import { Box } from './box';
+
+function App() {
+  return (
+    <Box css={{ margin: '$2 auto' }}>
+      <Box as="h1" css={{ fontSize: '24px', color: '$purple400' }}>
+        Title
+      </Box>
+    </Box>
+  );
+}
+```
+
+## Set up Radix
+
+I'll use [Radix]() for the more complex components, such as dialog, dropdown menu, tooltips, etc.
+
+### Install
+
+Radix can be installed via `yarn` or `npm`. Each primitive can be installed individually so you can adopt them incrementally.
+
+```bash
+yarn add @radix-ui/react-dialog
+yarn add @radix-ui/react-dropdown-menu
+yarn add @radix-ui/react-tooltip
+```
+
+## Create a dialog component
+
+Most design systems will need a dialog component. Although they may seem like a straight forward component to build from scratch, there are many accessibility concerns to look out for.
+
+For example, the focus should be automatially trapped within the dialog's content. The first interactive element should be focused by default. If there are no interactive elements, then the dialog's content should receive focus. When the dialog is closed, the focus must return to the dialog's trigger.
+
+Pressing `Space/Enter` while the dialog trigger's focused should open the dialog. Pressing `Escape` should close the dialog.
+
+The Radix dialog consists of the following parts:
+
+```tsx
+import * as Dialog from '@radix-ui/react-dialog';
+
+export default () => (
+  <Dialog.Root>
+    <Dialog.Trigger />
+    <Dialog.Overlay />
+    <Dialog.Content>
+      <Dialog.Close />
+    </Dialog.Content>
+  </Dialog.Root>
+);
+```
+
+I can style the parts above and re-export them as part of my design system. I have full control over the API and abstractions.
+
+This is what I want the API of my design system's dialog to look like:
+
+```tsx
+import { Dialog } from './dialog';
+import { Button } from './button';
+
+function App() {
+  return (
+    <Dialog>
+      <DialogTrigger as={Button}>Open</DialogTrigger>
+      <DialogContent>Dialog content goes here</DialogContent>
+    </Dialog>
+  );
+}
+```
+
+Radix components are polymorphic, so they support the `as` prop. We can take advantage of this technique for the dialog trigger. Say we have 3 different types of buttons in our design system, and any of them can be used as the trigger. We don't want to add styles directly to the `Dialog.Trigger`, because that would mean duplicating the styles of our buttons — we lose the single source of truth. All we want is the trigger's functionality.
+
+Also notice how in my API, I don't want to have to manually render the `Dialog.Overlay` part. I am making a decision that I always want the overlay to appear.
+
+### Implementation
+
+To achieve my desired API, I'll start by importing all of the dialog parts. Some parts will be a simple re-export, and some will be styled.
+
+```jsx
+import { styled } from '../stitches.config';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
+
+const StyledOverlay = styled(DialogPrimitive.Overlay, {
+  backgroundColor: 'rgba(0, 0, 0, .15)',
+  position: 'fixed',
+  inset: 0,
+});
+```
+
 ---
 
 ## Conclusion
@@ -268,7 +458,3 @@ Tokens are auto automatically mapped here.
 With Stitches, you're able to create a resilient, maintainable and scalable design system. You can focus on what matters the most. The system itself — your theme, scales and tokens. The look and feel of the components and its potential variations. The way each component can look at different breakpoints. The styling API, create properties that make it easier for you and your team to work with.
 
 With Radix, you're able to delegate the logic and accessibility concerns of complex components, while having full control over its asthetics and behaviour. Style its parts and states. Use them controlled or uncontrolled. Add animations, either with CSS or an animation library.
-
-```
-
-```
