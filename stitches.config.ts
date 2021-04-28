@@ -12,6 +12,7 @@ const stitchesConfig = createCss({
       pink: 'rgba(232, 141, 163, 1)',
       turq: 'rgba(0, 245, 196, 1)',
       orange: 'rgba(255, 135, 31, 1)',
+      copy: 'rgba(155, 165, 175, 1)',
     },
     fonts: {
       sans: 'Inter, sans-serif',

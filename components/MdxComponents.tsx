@@ -74,15 +74,21 @@ export const components = {
   },
   h1: (props) => <h1 className={text({ size: '7', css: { mb: '$5' } })} {...props} />,
   h2: (props) => (
-    <h2 className={text({ size: '5', css: { mt: '$5', mb: '$4', mx: 'auto' } })} {...props} />
+    <h2
+      className={text({ size: '5', weight: 'bold', css: { mt: '$5', mb: '$4', mx: 'auto' } })}
+      {...props}
+    />
   ),
   h3: (props) => (
-    <h3 className={text({ size: '3', css: { mt: '$5', mb: '$3', mx: 'auto' } })} {...props} />
+    <h3
+      className={text({ size: '4', weight: 'bold', css: { mt: '$5', mb: '$3', mx: 'auto' } })}
+      {...props}
+    />
   ),
   h4: (props) => (
     <h4 className={text({ size: '3', css: { mt: '$4', mb: '$3', mx: 'auto' } })} {...props} />
   ),
-  p: (props) => <p className={text({ size: '4', css: { mb: '$4' } })} {...props} />,
+  p: (props) => <p className={text({ size: '4', css: { mb: '$4', color: '$copy' } })} {...props} />,
   a: ({ href = '', ...props }) => {
     if (href.startsWith('/')) {
       return (
@@ -96,7 +102,12 @@ export const components = {
   hr: (props) => <hr className={divider({ size: '1', css: { my: '$5' } })} {...props} />,
   ul: (props) => <ul className={box({ mb: '$4' })} {...props} />,
   ol: (props) => <ol className={box({ mb: '$4' })} {...props} />,
-  li: (props) => <li className={text({ size: '4' })} {...props} />,
+  li: (props) => (
+    <li
+      className={text({ size: '4', css: { color: '$copy', listStyleType: 'circle' } })}
+      {...props}
+    />
+  ),
   strong: (props) => (
     <strong
       className={text({ weight: 'bold', css: { fontSize: 'inherit', lineHeight: 'inherit' } })}
