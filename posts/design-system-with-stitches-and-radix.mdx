@@ -82,6 +82,8 @@ Tokens are essential for constraint-based design.
 
 ```jsx
 // stitches.config.ts
+import { createCss } from '@stitches/react';
+
 export const { styled } = createCss({
   theme: {
     colors: {
@@ -242,7 +244,7 @@ function App() {
 
 ## Add overrides
 
-Every component created with Stitches supports a `css` prop. This is useful for applying layout-related properties, overrides and exceptions.
+Every component created with Stitches supports a `css` prop. This is useful for applying layout-related styles, overrides and exceptions.
 
 ```jsx line=4
 import { Button } from './button';
@@ -254,11 +256,9 @@ function App() {
 
 The `css` prop accepts a style object, much like the `styled` function. Unlike the `style` attribute, here you can add pseudo classes, descendant selectors, media queries, etc.
 
-Tokens are auto automatically mapped here.
-
 ## Define your media queries
 
-You can use the `media` config key to define the media queries of your system. This is useful for applyin responsive styles, or for responsively applying variants.
+You can use the `media` config key to define the media queries of your system. This is useful for applying responsive styles, or for responsively applying variants.
 
 ```jsx line=6-9
 // stitches.config.ts
