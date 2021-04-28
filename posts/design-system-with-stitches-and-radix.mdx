@@ -103,7 +103,7 @@ export const { styled } = createCss({
 });
 ```
 
-When you define a default theme, those tokens will be automatially mapped to certain CSS properties. For example, the `backgroundColor` property will automatially look into the `colors` scale when a token is used. More on this in the next section.
+From this point on, tokens will be available when you write CSS. By default, Stitches maps CSS properties to theme scales. You can see the mapping [here](https://stitches.dev/docs/tokens#property-mapping).
 
 ## Create your first component
 
@@ -130,7 +130,7 @@ export const Button = styled('button', {
 });
 ```
 
-Since we previously defined our `colors` and `space` scales, we can take this a step further and make use of the available tokens.
+Because we've provided a theme, you can replace arbitrary values with tokens.
 
 ```jsx line=6-9,11
 // button.tsx
@@ -152,7 +152,7 @@ To use tokens you need to prefix them with a `$` (dollar sign).
 
 ## Add variants
 
-Stitches offer a first-class variant API. It's useful when a component can used with different visual treatments.
+Stitches offer a first-class variant API. It's a powerful way to express alternative styles for a given component.
 
 ```jsx line=14-29
 // button.tsx
@@ -169,7 +169,7 @@ export const Button = styled('button', {
   paddingRight: '$1',
 
   variants: {
-    variant: {
+    color: {
       gray: {
         backgroundColor: '$gray400',
         '&:hover': {
@@ -187,9 +187,9 @@ export const Button = styled('button', {
 });
 ```
 
-We created a variant called `variant` and it can be either `gray` or `purple`. You can use the `defaultVariants` key to set it to `gray` by default:
+We created a variant called `color` and it can be either `gray` or `purple`. You can use the `defaultVariants` key to set it to `gray` by default:
 
-```jsx line=18-20
+```jsx line=14-16
 // button.tsx
 import { styled } from './stitches.config.ts';
 
@@ -197,13 +197,9 @@ export const Button = styled('button', {
   // styles
 
   variants: {
-    variant: {
-      gray: {
-        // styles
-      },
-      purple: {
-        // styles
-      },
+    color: {
+      gray: {...},
+      purple: {...},
     },
   },
 
@@ -213,7 +209,7 @@ export const Button = styled('button', {
 });
 ```
 
-You can also add styles based on a combination of variants, via the `compoundVariants` API. Learn more about [compound variants here]().
+You can also add styles based on a combination of variants via the `compoundVariants` API. Learn more about [compound variants here]().
 
 ## Use your component
 
