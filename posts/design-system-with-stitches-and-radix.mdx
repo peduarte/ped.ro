@@ -157,7 +157,7 @@ export const Button = styled('button', {
 });
 ```
 
-To use tokens you need to prefix them with a `$` (dollar sign).
+To use tokens, you need to prefix them with a `$` (dollar sign).
 
 ## Add variants
 
@@ -254,7 +254,7 @@ function App() {
 }
 ```
 
-The `css` prop accepts a style object, much like the `styled` function. Unlike the `style` attribute, here you can add pseudo classes, descendant selectors, media queries, etc.
+The `css` prop accepts a style object, much like the `styled` function. Unlike the `style` attribute, here, you can add pseudo-classes, descendant selectors, media queries, etc.
 
 ## Define your media queries
 
@@ -275,7 +275,7 @@ export { styled } = createCss({
 
 ## Apply responsive styles
 
-You can use your predefined media queries within style object, or when applying variants. To use media queries, prefix your media keys with an `@` (at sign).
+You can use your predefined media queries within the style object or when applying variants. To use media queries, prefix your media keys with an `@` (at sign).
 
 For example, this is how you can increase the font size property over different media queries.
 
@@ -382,7 +382,7 @@ yarn add @radix-ui/react-tooltip
 
 Most design systems will need a dialog component. Although they may seem like a straight forward component to build from scratch, there are many accessibility concerns to look out for.
 
-For example, the focus should be automatially trapped within the dialog's content. The first interactive element should be focused by default. If there are no interactive elements, then the dialog's content should receive focus. When the dialog is closed, the focus must return to the dialog's trigger.
+For example, the focus should be automatically trapped within the dialog's content. The first interactive element should be focused by default. If there are no interactive elements, then the dialog's content should receive focus. When the dialog is closed, the focus must return to the dialog's trigger.
 
 Pressing `Space/Enter` while the dialog trigger's focused should open the dialog. Pressing `Escape` should close the dialog.
 
@@ -420,7 +420,7 @@ function App() {
 }
 ```
 
-Radix components are polymorphic, so they support the `as` prop. We can take advantage of this technique for the dialog trigger. Say we have 3 different types of buttons in our design system, and any of them can be used as the trigger. We don't want to add styles directly to the `Dialog.Trigger`, because that would mean duplicating the styles of our buttons — we lose the single source of truth. All we want is the trigger's functionality.
+Radix components are polymorphic, so they support the `as` prop. We can take advantage of this technique for the dialog trigger. Say we have three different types of buttons in our design system, and any of them can be used as the trigger. We don't want to add styles directly to the `Dialog.Trigger`, because that would mean duplicating the styles of our buttons — we lose the single source of truth. All we want is the trigger's functionality.
 
 Also notice how in my API, I don't want to have to manually render the `Dialog.Overlay` part. I am making a decision that I always want the overlay to appear.
 
@@ -439,7 +439,7 @@ const StyledOverlay = styled(DialogPrimitive.Overlay, {
   inset: 0,
 });
 
-export function Dialog({ children, ...props }: DialogProps) {
+export function Dialog({ children, ...props }) {
   return (
     <DialogPrimitive.Root {...props}>
       <StyledOverlay />
@@ -479,9 +479,9 @@ export const DialogTrigger = DialogPrimitive.Trigger;
 export const DialogClose = StyledCloseButton;
 ```
 
-This process is similar for most Radix primitives. They're low-level enough to allow you to re-export them with your own API, yet high level enough that's an intuitive experience. It's all just components.
+This process is similar to most Radix primitives. They're low-level enough to allow you to re-export them with your own API, yet high level enough that's an intuitive experience. It's all just components.
 
-Currently there are over 25 primitives available. With more coming almost every couple of weeks.
+Currently, there are over 25 primitives available, with more coming almost every couple of weeks.
 
 Learn more on [radix-ui.com]()
 
@@ -489,9 +489,9 @@ Learn more on [radix-ui.com]()
 
 ## Conclusion
 
-With Stitches, you're able to create a resilient, maintainable and scalable design system. You can focus on what matters the most. The system itself — your theme, scales and tokens. The look and feel of the components and its potential variations. The way each component can look at different breakpoints. The styling API, create properties that make it easier for you and your team to work with.
+With Stitches, you're able to create a resilient, maintainable and scalable design systems. You can focus on what matters the most. The system itself — your theme, scales and tokens. The look and feel of the components and their potential variations. The way each component can look at different breakpoints.
 
-With Radix, you're able to delegate the logic and accessibility concerns of complex components, while having full control over its asthetics and behaviour. Style its parts and states. Use them controlled or uncontrolled. Add animations, either with CSS or an animation library.
+With Radix, you're able to delegate the logic and accessibility concerns of complex components while having full control over their aesthetics and behaviour. Style its parts and states. Use them controlled or uncontrolled. Add animations, either with CSS or an animation library.
 
 It's an exciting time to be building UIs and design systems.
 
