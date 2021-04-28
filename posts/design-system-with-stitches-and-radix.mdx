@@ -147,8 +147,8 @@ import { styled } from './stitches.config.ts';
 
 export const Button = styled('button', {
   // styles
-  paddingLeft: '$1',
-  paddingRight: '$1',
+  paddingLeft: '$2',
+  paddingRight: '$2',
   backgroundColor: '$gray400',
 
   '&:hover': {
@@ -174,8 +174,8 @@ export const Button = styled('button', {
   lineHeight: 1,
   fontSize: '13px',
   height: '25px',
-  paddingLeft: '$1',
-  paddingRight: '$1',
+  paddingLeft: '$2',
+  paddingRight: '$2',
 
   variants: {
     color: {
@@ -187,6 +187,7 @@ export const Button = styled('button', {
       },
       purple: {
         backgroundColor: '$purple400',
+        color: 'white',
         '&:hover': {
           backgroundColor: '$purple500',
         },
@@ -224,6 +225,20 @@ You can also add styles based on a combination of variants via the `compoundVari
 
 Now that you've created a component, you can use it the same way as any other React component.
 
+{
+
+<Preview>
+  <DemoButton
+    css={{
+      backgroundColor: 'gainsboro',
+      '&:hover': {
+        backgroundColor: 'lightgray',
+      },
+    }}
+  />
+</Preview>
+}
+
 ```jsx
 import { Button } from './button';
 
@@ -233,6 +248,21 @@ function App() {
 ```
 
 You can apply variants as defined in your component. The key becomes a prop.
+
+{
+
+<Preview>
+  <DemoButton
+    css={{
+      backgroundColor: 'blueviolet',
+      color: 'white',
+      '&:hover': {
+        backgroundColor: 'darkviolet',
+      },
+    }}
+  />
+</Preview>
+}
 
 ```jsx line=4
 import { Button } from './button';
@@ -246,11 +276,22 @@ function App() {
 
 Every component created with Stitches supports a `css` prop. This is useful for applying layout-related styles, overrides and exceptions.
 
+{
+
+<Preview>
+  <DemoButton
+    css={{
+      width: '100%',
+    }}
+  />
+</Preview>
+}
+
 ```jsx line=4
 import { Button } from './button';
 
 function App() {
-  return <Button css={{ marginTop: '$2' }}>My button</Button>;
+  return <Button css={{ width: '100%' }}>My button</Button>;
 }
 ```
 

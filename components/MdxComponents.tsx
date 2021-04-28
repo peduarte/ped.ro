@@ -12,7 +12,27 @@ import { Preview } from '@components/Preview';
 import { divider } from '@styles/divider';
 import { code } from '@styles/code';
 
+const DemoButton = ({ css }) => (
+  <button
+    className={box({
+      appearance: 'none',
+      border: 'none',
+      borderRadius: '99999px',
+      lineHeight: 1,
+      fontSize: '13px',
+      height: '25px',
+      paddingLeft: '$2',
+      paddingRight: '$2',
+
+      ...css,
+    })}
+  >
+    My button
+  </button>
+);
+
 export const components = {
+  DemoButton,
   CardPlayground,
   Preview,
   RegisterLink: ({ id, index, href }) => {
@@ -180,25 +200,28 @@ export const components = {
       return <code className={code()} children={children} />;
     }
     return (
-      <div
-        className={box({
-          mx: '-$4',
-          mt: '$3',
-          mb: '$5',
+      <pre
+        className={`${pre({
+          css: {
+            mx: '-$4',
+            mt: '$3',
+            mb: '$5',
 
-          '[data-preview] + &': {
-            marginTop: '0',
-          },
+            '[data-preview] + &': {
+              marginTop: '0',
+              borderTopLeftRadius: 0,
+              borderTopRightRadius: 0,
+            },
 
-          '@bp1': {
-            mx: 0,
+            '@bp1': {
+              mx: 0,
+            },
           },
-        })}
+        })} ${className}`}
+        id={id}
       >
-        <pre className={`${pre()} ${className}`} id={id}>
-          <code className={className} children={children} />
-        </pre>
-      </div>
+        <code className={className} children={children} />
+      </pre>
     );
   },
 };
