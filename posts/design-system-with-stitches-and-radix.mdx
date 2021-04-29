@@ -146,6 +146,18 @@ export const { styled } = createCss({
 
 From this point on, tokens will be available when you write CSS. By default, Stitches maps CSS properties to theme scales. You can see the mapping [here](https://stitches.dev/docs/tokens#property-mapping).
 
+For example, here's a style object setting tokens as values.
+
+```js
+{
+  backgroundColor: '$turq', // maps to theme.colors.turq
+  color: '$black', // maps to theme.colors.turq
+  fontSize: '$5', // maps to theme.fontSizes.5
+  padding: '$4', // maps to theme.space.4
+  borderRadius: '$3' // maps to theme.radii.3
+}
+```
+
 ## Create a `Box` primitive
 
 One thing I like to do is create a low-level `Box` component.
@@ -159,7 +171,7 @@ import { styled } from '@stitches/react';
 export const Box = styled('div');
 ```
 
-It's useful because components built with Stitches support a `css` prop, meaning you have access to tokens, utils, and media queries.
+It's useful because components built with Stitches support a `css` prop, meaning you have access to [tokens](), [utils](), and [media queries]().
 
 You can use the `Box` the lowest-level building block of your application.
 
@@ -198,6 +210,12 @@ const App = () => (
 );
 ```
 
+The `css` prop accepts a style object. Unlike the `style` attribute, here, you can add pseudo-classes, descendant selectors, media queries, etc.
+
+Additionally, you can access tokens via the `$` prefix in the `css` prop.
+
+### Polymorphic
+
 It's worth noting that components built with Stitches are also polymorphic. So you can use the `as` prop to change the underlying element.
 
 {
@@ -228,128 +246,66 @@ You can use the `styled` function to create as many components as you need. Here
 import { styled } from './stitches.config.ts';
 
 export const Button = styled('button', {
-  appearance: 'none',
-  border: 'none',
-  borderRadius: '99999px',
-  lineHeight: 1,
-  fontSize: '13px',
-  height: '25px',
-  paddingLeft: '10px',
-  paddingRight: '10px',
-  backgroundColor: 'gainsboro',
+  borderRadius: '$round',
+  fontSize: '$4',
+  padding: '$2 $3',
+  border: '2px solid $turq',
+  color: '$white',
 
   '&:hover': {
-    backgroundColor: 'lightgray',
+    backgroundColor: '$turq',
+    color: '$black',
   },
 });
 ```
 
-Because we've provided a theme, you can replace arbitrary values with tokens.
+> To use tokens, you need to prefix them with a `$` (dollar sign).
 
-```jsx line=6-9,11
-// button.tsx
-import { styled } from './stitches.config.ts';
-
-export const Button = styled('button', {
-  // styles
-  paddingLeft: '$2',
-  paddingRight: '$2',
-  backgroundColor: '$gray400',
-
-  '&:hover': {
-    backgroundColor: '$gray500',
-  },
-});
-```
-
-To use tokens, you need to prefix them with a `$` (dollar sign).
-
-## Add variants
-
-Stitches offer a first-class variant API. It's a powerful way to express alternative styles for a given component.
-
-```jsx line=14-29
-// button.tsx
-import { styled } from './stitches.config.ts';
-
-export const Button = styled('button', {
-  appearance: 'none',
-  border: 'none',
-  borderRadius: '99999px',
-  lineHeight: 1,
-  fontSize: '13px',
-  height: '25px',
-  paddingLeft: '$2',
-  paddingRight: '$2',
-
-  variants: {
-    color: {
-      gray: {
-        backgroundColor: '$gray400',
-        '&:hover': {
-          backgroundColor: '$gray500',
-        },
-      },
-      purple: {
-        backgroundColor: '$purple400',
-        color: 'white',
-        '&:hover': {
-          backgroundColor: '$purple500',
-        },
-      },
-    },
-  },
-});
-```
-
-We created a variant called `color` that can be either `gray` or `purple`. You can use the `defaultVariants` key to set it to `gray` by default:
-
-```jsx line=14-16
-// button.tsx
-import { styled } from './stitches.config.ts';
-
-export const Button = styled('button', {
-  // styles
-
-  variants: {
-    color: {
-      gray: {...},
-      purple: {...},
-    },
-  },
-
-  defaultVariants: {
-    variant: 'gray',
-  },
-});
-```
-
-You can also add styles based on a combination of variants via the `compoundVariants` API. Learn more about [compound variants here]().
-
-## Use your component
-
-Now that you've created a component, you can use it the same way as any other React component.
+Then render it.
 
 {
 
 <Preview>
-  <DemoButton
-    css={{
-      backgroundColor: 'gainsboro',
-      '&:hover': {
-        backgroundColor: 'lightgray',
-      },
-    }}
-  />
+  <DemoButton />
 </Preview>
 }
 
 ```jsx
 import { Button } from './button';
 
-function App() {
-  return <Button>My button</Button>;
-}
+const App = () => <Button>My Button</Button>;
+```
+
+## Add variants
+
+Stitches offer a first-class variant API. It's a powerful way to express alternative styles for a given component.
+
+```jsx line=7-24
+// button.tsx
+import { styled } from './stitches.config.ts';
+
+export const Button = styled('button', {
+  // styles
+
+  variants: {
+    color: {
+      turq: {
+        border: '2px solid $turq',
+        '&:hover': {
+          backgroundColor: '$turq',
+          color: '$black',
+        },
+      },
+      orange: {
+        border: '2px solid $orange',
+        '&:hover': {
+          backgroundColor: '$orange',
+          color: '$black',
+        },
+      },
+    },
+  },
+});
 ```
 
 You can apply variants as defined in your component. The key becomes a prop.
@@ -357,52 +313,44 @@ You can apply variants as defined in your component. The key becomes a prop.
 {
 
 <Preview>
-  <DemoButton
-    css={{
-      backgroundColor: 'blueviolet',
-      color: 'white',
-      '&:hover': {
-        backgroundColor: 'darkviolet',
-      },
-    }}
-  />
+  <Box css={{ display: 'flex', gap: '$3' }}>
+    <DemoButton />
+    <DemoButton color="orange" />
+  </Box>
 </Preview>
 }
 
-```jsx line=4
+```jsx line=4-7
 import { Button } from './button';
 
-function App() {
-  return <Button color="purple">My button</Button>;
-}
+const App = () => (
+  <Box css={{ display: 'flex', gap: '$3' }}>
+    <Button color="turq">My Button</Button>
+    <Button color="orange">My Button</Button>
+  </Box>
+);
 ```
 
-## Add overrides
+### Set a default variant
 
-Every component created with Stitches supports a `css` prop. This is useful for applying layout-related styles, overrides and exceptions.
+We created a variant called `color` that can be either `gray` or `purple`. You can use the `defaultVariants` key to set it to `gray` by default:
 
-{
+```jsx line=9-11
+// button.tsx
+import { styled } from './stitches.config.ts';
 
-<Preview>
-  <DemoButton
-    css={{
-      width: '100%',
-    }}
-  />
-</Preview>
-}
+export const Button = styled('button', {
+  // styles
 
-```jsx line=4
-import { Button } from './button';
+  // variants
 
-function App() {
-  return <Button css={{ width: '100%' }}>My button</Button>;
-}
+  defaultVariants: {
+    color: 'turq',
+  },
+});
 ```
 
-The `css` prop accepts a style object, much like the `styled` function. Unlike the `style` attribute, here, you can add pseudo-classes, descendant selectors, media queries, etc.
-
-Additionally, you can access tokens via the `$` prefix in the `css` prop.
+You can also add styles based on a combination of variants via the `compoundVariants` API. Learn more about [compound variants here]().
 
 ## Define your media queries
 
@@ -425,65 +373,89 @@ export { styled } = createCss({
 
 You can use your predefined media queries within the style object or when applying variants. To use media queries, prefix your media keys with an `@` (at sign).
 
-For example, this is how you can increase the font size property over different media queries.
+For example, the code below changes the `backgroundColor` property over different media queries.
+
+{
+
+<Preview>
+  <Box
+    css={{
+      width: '100%',
+      height: '100px',
+      backgroundColor: '$pink',
+      '@bp1': { backgroundColor: '$turq' },
+      '@bp2': { backgroundColor: '$orange' },
+    }}
+  />
+</Preview>
+}
 
 ```jsx
-// button.tsx
+// responsive-box.tsx
 import { styled } from './stitches.config.ts';
 
-const Button = styled('button', {
-  // styles
-  fontSize: '13px',
-
-  '@bp1': {
-    fontSize: '15px',
-  },
-  '@bp2': {
-    fontSize: '19px',
-  },
+const ResponsiveBox = styled('div', {
+  backgroundColor: '$pink',
+  '@bp1': { backgroundColor: '$turq' },
+  '@bp2': { backgroundColor: '$orange' },
 });
 ```
+
+> Media queries also work in the `css` prop.
+
+### Responsive variants
 
 Alternatively, you can organise the increments as `variants`:
 
 ```jsx
-// button.tsx
+// responsive-box.tsx
 import { styled } from './stitches.config.ts';
 
-const Button = styled('button', {
-  // styles
+const ResponsiveBox = styled('div', {
   variants: {
-    size: {
-      small: { fontSize: '13px' },
-      medium: { fontSize: '15px' },
-      large: { fontSize: '19px' },
+    color: {
+      pink: { backgroundColor: '$pink' },
+      turq: { backgroundColor: '$turq' },
+      orange: { backgroundColor: '$orange' },
     },
-  },
-
-  defaultVariants: {
-    size: 'small',
   },
 });
 ```
 
 And then _responsively apply them_:
 
+{
+
+<Preview>
+  <Box
+    css={{
+      width: '100%',
+      height: '100px',
+      backgroundColor: '$orange',
+      '@bp1': { backgroundColor: '$pink' },
+      '@bp2': { backgroundColor: '$turq' },
+    }}
+  />
+</Preview>
+}
+
 ```jsx line=5-8
-import { Button } from './button';
+import { ResponsiveBox } from './responsiveBox';
 
 function App() {
   return (
-    <Button
-      size={{
-        '@bp1': 'medium',
-        '@bp2': 'large',
+    <ResponsiveBox
+      color={{
+        '@initial': 'orange',
+        '@bp1': 'pink',
+        '@bp2': 'turq',
       }}
-    >
-      My button
-    </Button>
+    />
   );
 }
 ```
+
+> Use the `@initial` to set the initial variant.
 
 With the features above, you have enough tools to build a component-driven, constraint-based design system.
 
