@@ -114,9 +114,9 @@ export const DialogContent = React.forwardRef(({ children, animation, ...props }
 
 export const DialogTrigger = DialogPrimitive.Trigger;
 
-export const DemoDialog = ({ animation }) => (
+export const DemoDialog = ({ animation, color = 'turq' }) => (
   <Dialog animation={typeof animation !== 'string' ? false : true}>
-    <DialogTrigger className={demoButton()}>Open dialog</DialogTrigger>
+    <DialogTrigger className={demoButton({ color })}>Open dialog</DialogTrigger>
     <DialogContent animation={animation}>
       <p className={text({ size: '3' })}>Order complete.</p>
       <p className={text({ size: '2', css: { mt: '$2', color: '$gray' } })}>

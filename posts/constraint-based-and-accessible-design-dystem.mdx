@@ -486,21 +486,18 @@ This is what I want the API of my design system's dialog to look like:
 
 ```tsx
 import { Dialog } from './dialog';
-import { Button } from './button';
 
 function App() {
   return (
     <Dialog>
-      <DialogTrigger as={Button}>Open</DialogTrigger>
+      <DialogTrigger>Open</DialogTrigger>
       <DialogContent>Dialog content goes here</DialogContent>
     </Dialog>
   );
 }
 ```
 
-Radix components are polymorphic, so they support the `as` prop. We can take advantage of this technique for the dialog trigger. Say we have three different types of buttons in our design system, and any of them can be used as the trigger. We don't want to add styles directly to the `Dialog.Trigger`, because that would mean duplicating the styles of our buttons — we lose the single source of truth. All we want is the trigger's functionality.
-
-Also notice how in my API, I don't want to have to manually render the `Dialog.Overlay` part. I am making a decision that I always want the overlay to appear.
+Notice how in my API, I don't want to have to manually render the `Dialog.Overlay` part. I am making a decision that I always want the overlay to appear.
 
 ### Implementation
 
@@ -568,6 +565,40 @@ const App = () => (
   </Dialog>
 );
 ```
+
+### Polymorphic
+
+Notice how Radix components are polymorphic, so they support the `as` prop. We can take advantage of this technique for the `DialogTrigger` and use our custom `Button` component instead.
+
+When doing do, variants are inferred.
+
+{
+
+<Preview>
+  <DemoDialog withAnimations color="orange" />
+</Preview>
+}
+
+```jsx line=6-8
+import { Dialog, DialogTrigger, DialogContent } from './dialog';
+import { Button } from './button';
+
+const App = () => (
+  <Dialog>
+    <DialogTrigger as={Button} color="orange">
+      Open dialog
+    </DialogTrigger>
+    <DialogContent>
+      <p>Order complete.</p>
+      <p>You'll receive a confirmation email in the next few minutes.</p>
+    </DialogContent>
+  </Dialog>
+);
+```
+
+### Inferred variants
+
+When you
 
 ### Animate it
 
