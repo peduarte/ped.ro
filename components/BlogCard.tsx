@@ -37,7 +37,7 @@ export const BlogCard = ({ frontmatter, ...props }: Post) => {
               },
             })}
           >
-            {format(parseISO(frontmatter.publishedAt), 'MMMM "yy')}
+            {format(parseISO(frontmatter.publishedAt), 'MMMM dd, yyyy')}
           </time>
         </a>
       </NextLink>
