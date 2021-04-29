@@ -65,7 +65,7 @@ const content = css({
     animation: {
       fade: {
         '&[data-state="open"]': {
-          animation: `${fadeIn} 400ms ease-out`,
+          animation: `${fadeIn} 300ms ease-out`,
         },
 
         '&[data-state="closed"]': {
