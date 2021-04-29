@@ -37,13 +37,13 @@ Ready? Let's get it.
 
 - Set up Stitches
 - Define your default theme
+- Create a `Box` primitive
 - Create your first component
 - Add variants
 - Use your component
 - Add overrides
 - Define your media queries
 - Apply responsive styles
-- Create a `Box` primitive
 - Set up Radix
 - Create a `Dialog` component
 - Conclusion
@@ -56,7 +56,7 @@ Install Stitches with `npm` or `yarn`.
 yarn add @stitches/react
 ```
 
-Create a `stitches.config.ts` (or `.js`) file import the `createCss` function.
+Create a `stitches.config.ts` (or `.js`) file and import the `createCss` function.
 
 ```jsx
 // stitches.config.ts
@@ -80,6 +80,8 @@ You can use the `theme` config key to define the default theme of your system. A
 
 Tokens are essential for constraint-based design.
 
+Here's a simplified theme, for the sake of brevity. For more complete themes, checkout the Modulz [design system config]().
+
 ```jsx
 // stitches.config.ts
 import { createCss } from '@stitches/react';
@@ -87,36 +89,139 @@ import { createCss } from '@stitches/react';
 export const { styled } = createCss({
   theme: {
     colors: {
-      gray400: 'gainsboro',
-      gray500: 'lightgray',
-      purple400: 'blueviolet',
-      purple500: 'darkviolet',
+      black: 'rgba(19, 19, 21, 1)',
+      white: 'rgba(255, 255, 255, 1)',
+      gray: 'rgba(128, 128, 128, 1)',
+      blue: 'rgba(3, 136, 252, 1)',
+      red: 'rgba(249, 16, 74, 1)',
+      yellow: 'rgba(255, 221, 0, 1)',
+      pink: 'rgba(232, 141, 163, 1)',
+      turq: 'rgba(0, 245, 196, 1)',
+      orange: 'rgba(255, 135, 31, 1)',
     },
+    fonts: {
+      sans: 'Inter, sans-serif',
+    },
+    fontSizes: {
+      1: '12px',
+      2: '14px',
+      3: '16px',
+      4: '20px',
+      5: '24px',
+      6: '32px',
+    },
+    space: {
+      1: '4px',
+      2: '8px',
+      3: '16px',
+      4: '32px',
+      5: '64px',
+      6: '128px',
+    },
+    sizes: {
+      1: '4px',
+      2: '8px',
+      3: '16px',
+      4: '32px',
+      5: '64px',
+      6: '128px',
+    },
+    radii: {
+      1: '2px',
+      2: '4px',
+      3: '8px',
+      round: '9999px',
+    },
+    fontWeights: {},
+    lineHeights: {},
+    letterSpacings: {},
+    borderWidths: {},
+    borderStyles: {},
+    shadows: {},
+    zIndices: {},
+    transitions: {},
   },
-  space: {
-    1: '10px',
-    2: '20px',
-  },
-  fontSizes: {},
-  fonts: {},
-  fontWeights: {},
-  lineHeights: {},
-  letterSpacings: {},
-  sizes: {},
-  borderWidths: {},
-  borderStyles: {},
-  radii: {},
-  shadows: {},
-  zIndices: {},
-  transitions: {},
 });
 ```
 
 From this point on, tokens will be available when you write CSS. By default, Stitches maps CSS properties to theme scales. You can see the mapping [here](https://stitches.dev/docs/tokens#property-mapping).
 
-## Create your first component
+## Create a `Box` primitive
 
-Import the `styled` function to create your first component. Call the `styled` function providing the element you want to style and the style object.
+One thing I like to do is create a low-level `Box` component.
+
+Import the `styled` function to create your first component. Call the `styled` function providing the element you want to style and the optional style object. I don't usually add any styles for `Box`, so I left it out.
+
+```jsx
+// box.tsx
+import { styled } from '@stitches/react';
+
+export const Box = styled('div');
+```
+
+It's useful because components built with Stitches support a `css` prop, meaning you have access to tokens, utils, and media queries.
+
+You can use the `Box` the lowest-level building block of your application.
+
+{
+
+<Preview>
+  <Box>
+    <Box
+      css={{
+        backgroundColor: '$turq',
+        color: '$black',
+        fontSize: '$5',
+        padding: '$4',
+      }}
+    >
+      Box
+    </Box>
+  </Box>
+</Preview>
+}
+
+```jsx
+import { Box } from './box';
+
+const App = () => (
+  <Box
+    css={{
+      backgroundColor: '$turq',
+      color: '$black',
+      fontSize: '$5',
+      padding: '$4',
+    }}
+  >
+    Box
+  </Box>
+);
+```
+
+It's worth noting that components built with Stitches are also polymorphic. So you can use the `as` prop to change the underlying element.
+
+{
+
+<Preview>
+  <Box as="h1" css={{ color: '$turq' }}>
+    Box as h1
+  </Box>
+</Preview>
+}
+
+```jsx
+import { Box } from './box';
+
+const App = () => (
+  <Box as="h1" css={{ color: '$turq' }}>
+    Box as h1
+  </Box>
+);
+```
+
+## Create components
+
+You can use the `styled` function to create as many components as you need. Here's a demo button.
 
 ```jsx
 // button.tsx
@@ -197,7 +302,7 @@ export const Button = styled('button', {
 });
 ```
 
-We created a variant called `color` and it can be either `gray` or `purple`. You can use the `defaultVariants` key to set it to `gray` by default:
+We created a variant called `color` that can be either `gray` or `purple`. You can use the `defaultVariants` key to set it to `gray` by default:
 
 ```jsx line=14-16
 // button.tsx
@@ -268,7 +373,7 @@ You can apply variants as defined in your component. The key becomes a prop.
 import { Button } from './button';
 
 function App() {
-  return <Button variant="purple">My button</Button>;
+  return <Button color="purple">My button</Button>;
 }
 ```
 
@@ -296,6 +401,8 @@ function App() {
 ```
 
 The `css` prop accepts a style object, much like the `styled` function. Unlike the `style` attribute, here, you can add pseudo-classes, descendant selectors, media queries, etc.
+
+Additionally, you can access tokens via the `$` prefix in the `css` prop.
 
 ## Define your media queries
 
@@ -379,35 +486,6 @@ function App() {
 ```
 
 With the features above, you have enough tools to build a component-driven, constraint-based design system.
-
-## Create a `Box` primitive
-
-One thing I like to do is create a low-level `Box` component. It's useful because components built with Stitches support a `css` prop, meaning you have access to tokens, utils, and media queries.
-
-It's worth noting that components built with Stitches are also polymorphic. So you can use the `as` prop to change the underlying element.
-
-It looks like this:
-
-```jsx
-// box.tsx
-export const Box = styled('div');
-```
-
-And can be used like this:
-
-```jsx
-import { Box } from './box';
-
-function App() {
-  return (
-    <Box css={{ margin: '$2 auto' }}>
-      <Box as="h1" css={{ fontSize: '24px', color: '$purple400' }}>
-        Title
-      </Box>
-    </Box>
-  );
-}
-```
 
 ## Set up Radix
 

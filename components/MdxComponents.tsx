@@ -31,7 +31,10 @@ const DemoButton = ({ css }) => (
   </button>
 );
 
+const Box = ({ css, as: Comp = 'div', ...props }: any) => <Comp className={box(css)} {...props} />;
+
 export const components = {
+  Box,
   DemoButton,
   CardPlayground,
   Preview,
@@ -215,6 +218,7 @@ export const components = {
 
             '@bp1': {
               mx: 0,
+              borderRadius: '$3',
             },
           },
         })} ${className}`}
