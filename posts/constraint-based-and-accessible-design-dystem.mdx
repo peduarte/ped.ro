@@ -35,19 +35,6 @@ With the combination of Stitches and Radix Primitives, you can build a robust de
 
 Ready? Let's get it.
 
-- Set up Stitches
-- Define your default theme
-- Create a `Box` primitive
-- Create your first component
-- Add variants
-- Use your component
-- Add overrides
-- Define your media queries
-- Apply responsive styles
-- Set up Radix
-- Create a `Dialog` component
-- Conclusion
-
 ## Set up Stitches
 
 Install Stitches with `npm` or `yarn`.
@@ -520,14 +507,13 @@ Also notice how in my API, I don't want to have to manually render the `Dialog.O
 To achieve my desired API, I'll start by importing all of the dialog parts. Some parts will be a simple re-export, and some will be styled.
 
 ```jsx
-import { styled } from '../stitches.config';
+// dialog.tsx
+import { styled } from './stitches.config';
 import { Cross1Icon } from '@radix-ui/react-icons';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 
 const StyledOverlay = styled(DialogPrimitive.Overlay, {
-  backgroundColor: 'rgba(0, 0, 0, .15)',
-  position: 'fixed',
-  inset: 0,
+  // overlay styles
 });
 
 export function Dialog({ children, ...props }) {
@@ -540,21 +526,11 @@ export function Dialog({ children, ...props }) {
 }
 
 const StyledContent = styled(DialogPrimitive.Content, {
-  position: 'fixed',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  // other styles
-
-  '&:focus': {
-    outline: 'none',
-  },
+  // content styles
 });
 
 const StyledCloseButton = styled(DialogPrimitive.Close, {
-  position: 'absolute',
-  top: '$2',
-  right: '$2',
+  // close button styles
 });
 
 export const DialogContent = React.forwardRef(({ children, ...props }, forwardedRef) => (
@@ -567,7 +543,149 @@ export const DialogContent = React.forwardRef(({ children, ...props }, forwarded
 ));
 
 export const DialogTrigger = DialogPrimitive.Trigger;
-export const DialogClose = StyledCloseButton;
+```
+
+Then render the custom dialog
+
+{
+
+<Preview>
+  <DemoDialog withAnimations />
+</Preview>
+}
+
+```jsx
+import { Dialog, DialogTrigger, DialogContent } from './dialog';
+import { Button } from './button';
+
+const App = () => (
+  <Dialog>
+    <DialogTrigger as={Button}>Open dialog</DialogTrigger>
+    <DialogContent>
+      <p>Order complete.</p>
+      <p>You'll receive a confirmation email in the next few minutes.</p>
+    </DialogContent>
+  </Dialog>
+);
+```
+
+### Animate it
+
+You can add animation to the Radix dialog by targeting the `data-state` attribute.
+
+But first, we need to export the `keyframes` function from Stitches.
+
+```jsx
+import { createCss } from '@stitches/react';
+
+export const { styles, __keyframes__ } = createCss(/* your config */);
+```
+
+Then use the `keyframes` function to create CSS keyframes.
+
+{
+
+<Preview>
+  <DemoDialog animation="fade" />
+</Preview>
+}
+
+```jsx
+// dialog.tsx
+import { keyframes } from './stitches.config';
+
+const fadeIn = keyframes({
+  from: { opacity: 0 },
+  to: { opacity: 1 },
+});
+
+const fadeout = keyframes({
+  from: { opacity: 1 },
+  to: { opacity: 0 },
+});
+
+const StyledOverlay = styled(DialogPrimitive.Overlay, {
+  '&[data-state="open"]': {
+    animation: `${fadeIn} 300ms ease-out`,
+  },
+
+  '&[data-state="closed"]': {
+    animation: `${fadeout} 200ms ease-out`,
+  },
+});
+
+const StyledContent = styled(DialogPrimitive.Content, {
+  '&[data-state="open"]': {
+    animation: `${fadeIn} 300ms ease-out`,
+  },
+
+  '&[data-state="closed"]': {
+    animation: `${fadeout} 200ms ease-out`,
+  },
+});
+```
+
+### Animation variants
+
+You can rely on the powerful variant API from Stitches to offer different types of animations.
+
+For example, the `Content` part can support two types of animation: a `fade` or a `scale`.
+
+```tsx line=7-30
+// dialog.tsx
+import { keyframes } from './stitches.config';
+
+const fadeIn = keyframes({…});
+const fadeout = keyframes({…});
+
+const scaleIn = keyframes({
+  from: { transform: 'scale(0.9)' },
+  to: { transform: 'scale(1)' },
+})
+
+
+const StyledContent = styled(DialogPrimitive.Content, {
+  variants: {
+    animation: {
+      fade: {
+        '&[data-state="open"]': {
+          animation: `${fadeIn} 1400ms ease-out`,
+        },
+
+        '&[data-state="closed"]': {
+          animation: `${fadeout} 200ms ease-out`,
+        },
+      },
+      scale: {
+        animation: `${fadeIn} 300ms ease-out, ${scaleIn} 200ms ease-out`,
+      },
+    },
+  },
+});
+```
+
+Then you can pick one:
+
+{
+
+<Preview>
+  <DemoDialog animation="scale" />
+</Preview>
+}
+
+```jsx line=7
+import { Dialog, DialogTrigger, DialogContent } from './dialog';
+import { Button } from './button';
+
+const App = () => (
+  <Dialog>
+    <DialogTrigger as={Button}>Open dialog</DialogTrigger>
+    <DialogContent animation="scale">
+      <p>Order complete.</p>
+      <p>You'll receive a confirmation email in the next few minutes.</p>
+    </DialogContent>
+  </Dialog>
+);
 ```
 
 This process is similar to most Radix primitives. They're low-level enough to allow you to re-export them with your own API, yet high level enough that's an intuitive experience. It's all just components.

@@ -7,54 +7,17 @@ import { text } from '@styles/text';
 import { box } from '@styles/box';
 import { link } from '@styles/link';
 import { pre } from '@styles/pre';
-import { CardPlayground } from '@components/CardPlayground';
-import { Preview } from '@components/Preview';
 import { divider } from '@styles/divider';
 import { code } from '@styles/code';
-import { css } from 'stitches.config';
-
-const demoButton = css({
-  appearance: 'none',
-  background: 'transparent',
-  borderRadius: '$round',
-  lineHeight: 1,
-  fontSize: '$4',
-  padding: '$2 $3',
-  color: '$white',
-
-  variants: {
-    color: {
-      turq: {
-        border: '2px solid $turq',
-        '&:hover': {
-          backgroundColor: '$turq',
-          color: '$black',
-        },
-      },
-      orange: {
-        border: '2px solid $orange',
-        '&:hover': {
-          backgroundColor: '$orange',
-          color: '$black',
-        },
-      },
-    },
-  },
-
-  defaultVariants: {
-    color: 'turq',
-  },
-});
-
-const DemoButton = ({ css, color }) => (
-  <button className={demoButton({ color, css })}>My button</button>
-);
-
-const Box = ({ css, as: Comp = 'div', ...props }: any) => <Comp className={box(css)} {...props} />;
+import { CardPlayground } from '@components/CardPlayground';
+import { Preview } from '@components/Preview';
+import { DemoButton } from '@components/demos/DemoButton';
+import { DemoDialog } from '@components/demos/DemoDialog';
 
 export const components = {
-  Box,
+  Box: ({ css, as: Comp = 'div', ...props }: any) => <Comp className={box(css)} {...props} />,
   DemoButton,
+  DemoDialog,
   CardPlayground,
   Preview,
   RegisterLink: ({ id, index, href }) => {
