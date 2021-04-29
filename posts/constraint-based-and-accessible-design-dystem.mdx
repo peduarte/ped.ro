@@ -25,7 +25,7 @@ It introduces a first-class variant API, enabling design system authors to expre
 
 ### Radix Primitives
 
-Radix Primitives is a low-level UI component library focusing on accessibility, customisation and developer experience.
+Radix Primitives is a low-level UI component library focusing on accessibility, customisation and developer experience. It's the largest library of accessible components in the world, with over 25 to choose from.
 
 All its components adhere to the WAI-ARIA design patterns. They can be the base layer of your design system or adopted incrementally.
 
@@ -67,7 +67,7 @@ You can use the `theme` config key to define the default theme of your system. A
 
 Tokens are essential for constraint-based design.
 
-Here's a simplified theme, for the sake of brevity. For more complete themes, checkout the Modulz [design system config](https://github.com/radix-ui/design-system/blob/master/stitches.config.ts).
+Here's a simplified theme for the sake of brevity. For more complete themes, check out the Modulz [design system config](https://github.com/radix-ui/design-system/blob/master/stitches.config.ts).
 
 ```jsx
 // stitches.config.ts
@@ -160,7 +160,7 @@ export const Box = styled('div');
 
 It's useful because components built with Stitches support a `css` prop, meaning you have access to [tokens](https://stitches.dev/docs/tokens), [utils](https://stitches.dev/docs/utils), and [media queries](https://stitches.dev/docs/breakpoints).
 
-You can use the `Box` the lowest-level building block of your application.
+You can use the `Box`, the lowest-level building block of your application.
 
 {
 
@@ -542,7 +542,7 @@ export const DialogContent = React.forwardRef(({ children, ...props }, forwarded
 export const DialogTrigger = DialogPrimitive.Trigger;
 ```
 
-Then render the custom dialog
+Then render the custom dialog.
 
 {
 
@@ -570,7 +570,7 @@ const App = () => (
 
 Notice how Radix components are polymorphic, so they support the `as` prop. We can take advantage of this technique for the `DialogTrigger` and use our custom `Button` component instead.
 
-When doing do, variants are inferred.
+When doing so, variants are inferred.
 
 {
 
@@ -731,7 +731,7 @@ Learn more on [radix-ui.com](https://radix-ui.com)
 
 ## Conclusion
 
-With Stitches, you're able to create a resilient, maintainable and scalable design systems. You can focus on what matters the most. The system itself — your theme, scales and tokens. The look and feel of the components and their potential variations. The way each component can look at different breakpoints.
+With Stitches, you're able to create resilient, maintainable and scalable design systems. You can focus on what matters the most. The system itself — your theme, scales and tokens. The look and feel of the components and their potential variations. The way each component can look at different breakpoints.
 
 With Radix, you're able to delegate the logic and accessibility concerns of complex components while having full control over their aesthetics and behaviour. Style its parts and states. Use them controlled or uncontrolled. Add animations, either with CSS or an animation library.
 
@@ -761,4 +761,4 @@ Shoutout to [Jonathan Neal](https://twitter.com/jon_neal) for the excellent work
 
 Shoutout to [Benoît Grélard](https://twitter.com/benoitgrelard) and [Jenna Smith](https://twitter.com/jjenzz) for the outstanding work on Radix Primitives.
 
-Shoutout to [Paco Coursey](https://twitter.com/pacocoursey) and [Mike San Román](https://twitter.com/msanromanv) for proof reading this article.
+Shoutout to [Paco Coursey](https://twitter.com/pacocoursey), [Mike San Román](https://twitter.com/msanromanv) and [Vlad Moroz](https://twitter.com/vladyslavmoroz) for proofreading this article.
