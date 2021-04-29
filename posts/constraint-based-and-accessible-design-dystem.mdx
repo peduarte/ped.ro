@@ -59,7 +59,7 @@ import { createCss } from '@stitches/react';
 export const { styled } = createCss();
 ```
 
-The `createCss` function accepts a config. It's useful for defining a prefix, the default theme, media queries, custom utils, and other things. You can learn more about it [here]().
+The `createCss` function accepts a config. It's useful for defining a prefix, the default theme, media queries, custom utils, and other things. You can learn more about it [here](https://stitches.dev/docs/api#createcss).
 
 ## Define your default theme
 
@@ -67,7 +67,7 @@ You can use the `theme` config key to define the default theme of your system. A
 
 Tokens are essential for constraint-based design.
 
-Here's a simplified theme, for the sake of brevity. For more complete themes, checkout the Modulz [design system config]().
+Here's a simplified theme, for the sake of brevity. For more complete themes, checkout the Modulz [design system config](https://github.com/radix-ui/design-system/blob/master/stitches.config.ts).
 
 ```jsx
 // stitches.config.ts
@@ -158,7 +158,7 @@ import { styled } from '@stitches/react';
 export const Box = styled('div');
 ```
 
-It's useful because components built with Stitches support a `css` prop, meaning you have access to [tokens](), [utils](), and [media queries]().
+It's useful because components built with Stitches support a `css` prop, meaning you have access to [tokens](https://stitches.dev/docs/tokens), [utils](https://stitches.dev/docs/utils), and [media queries](https://stitches.dev/docs/breakpoints).
 
 You can use the `Box` the lowest-level building block of your application.
 
@@ -337,7 +337,7 @@ export const Button = styled('button', {
 });
 ```
 
-You can also add styles based on a combination of variants via the `compoundVariants` API. Learn more about [compound variants here]().
+You can also add styles based on a combination of variants via the `compoundVariants` API. Learn more about [compound variants here](https://stitches.dev/docs/variants#compound-variants).
 
 ## Define your media queries
 
@@ -625,6 +625,8 @@ const StyledContent = styled(DialogPrimitive.Content, {
 });
 ```
 
+> You can use CSS animation to animate both mount and unmount phases. The latter is possible because the Radix Primitives will suspend unmount while your animation plays out.
+
 ### Animation variants
 
 You can rely on the powerful variant API from Stitches to offer different types of animations.
@@ -692,7 +694,7 @@ This process is similar to most Radix primitives. They're low-level enough to al
 
 Currently, there are over 25 primitives available, with more coming almost every couple of weeks.
 
-Learn more on [radix-ui.com]()
+Learn more on [radix-ui.com](https://radix-ui.com)
 
 ---
 
