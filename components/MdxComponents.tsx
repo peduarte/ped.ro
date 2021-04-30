@@ -93,7 +93,12 @@ export const components = {
   h4: (props) => (
     <h4 className={text({ size: '3', css: { mt: '$4', mb: '$3', mx: 'auto' } })} {...props} />
   ),
-  p: (props) => <p className={text({ size: '4', css: { mb: '$4', color: '$copy' } })} {...props} />,
+  p: (props) => (
+    <p
+      className={text({ size: '4', weight: 'normal', css: { mb: '$4', color: '$copy' } })}
+      {...props}
+    />
+  ),
   a: ({ href = '', ...props }) => {
     if (href.startsWith('/')) {
       return (
