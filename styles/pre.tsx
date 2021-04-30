@@ -21,7 +21,6 @@ export const pre = css({
   $$highlightedWord3Text: '$colors$black',
 
   boxSizing: 'border-box',
-  borderRadius: '$3',
   padding: '$3',
   overflow: 'auto',
   fontFamily: '$mono',

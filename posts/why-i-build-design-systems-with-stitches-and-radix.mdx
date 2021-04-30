@@ -1,0 +1,764 @@
+---
+title: 'Why I Build Design Systems with Stitches and Radix'
+publishedAt: '2021-04-27'
+---
+
+I've built design systems with CSS, Sass, Stylus, css-modules, styled-components, emotion, system-components and styled-system. I've used BEM, scoped CSS, atomic CSS, and even made up conventions.
+
+But they never felt _quite right_—some were too laborious and too error-prone. Others were too slow and too opinionated.
+
+I've lost count of how many times I've been asked to build complex components from scratch—dialogs, tooltips, dropdown menus, popovers, sheets, tabs.
+
+But they were all flawed and lacked fundamental accessibility features. When working against a deadline, it's almost impossible to build them correctly.
+
+So for the last couple of years, we at [Modulz](https://modulz.app) worked hard to facilitate how teams can build, maintain and scale their design systems—all whilst adhering to the WAI-ARIA design pattern.
+
+---
+
+If you've never heard of [Stitches](https://stitches.dev) or [Radix Primitives](https://radix-ui.com) before, here's a little background.
+
+### Stitches
+
+Stitches is a styling solution focusing on component architecture and developer experience.
+
+It introduces a first-class variant API, enabling design system authors to express their intent better. It's fully typed, catching potential mistakes and improving the scalability of design systems. It's lightweight, coming in at less than 5kb. And finally, it's a breeze to get up and running with it.
+
+### Radix Primitives
+
+Radix Primitives is a low-level UI component library focusing on accessibility, customisation and developer experience. It's the largest library of accessible components in the world, with over twenty-five to choose from.
+
+All its components adhere to the WAI-ARIA design patterns. They can be the base layer of your design system or adopted incrementally.
+
+---
+
+With the combination of Stitches and Radix Primitives, you can build a robust design system with little effort.
+
+Ready? Let's get it.
+
+## Set up Stitches
+
+Install Stitches with `npm` or `yarn`.
+
+```bash
+yarn add @stitches/react
+```
+
+Create a `stitches.config.ts` (or `.js`) file and import the `createCss` function.
+
+```jsx
+// stitches.config.ts
+import { createCss } from '@stitches/react';
+```
+
+Destructure and export the `styled` function.
+
+```jsx line=4
+// stitches.config.ts
+import { createCss } from '@stitches/react';
+
+export const { styled } = createCss();
+```
+
+The `createCss` function accepts a config. It's useful for defining a prefix, the default theme, media queries, custom utils, and other things. You can learn more about it [here](https://stitches.dev/docs/api#createcss).
+
+## Define your default theme
+
+You can use the `theme` config key to define the default theme of your system. A theme consists of scales. Scales consist of tokens.
+
+Tokens are essential for constraint-based design.
+
+Here's a simplified theme for the sake of brevity. For more complete themes, check out the Modulz [design system config](https://github.com/radix-ui/design-system/blob/master/stitches.config.ts).
+
+```jsx
+// stitches.config.ts
+import { createCss } from '@stitches/react';
+
+export const { styled } = createCss({
+  theme: {
+    colors: {
+      black: 'rgba(19, 19, 21, 1)',
+      white: 'rgba(255, 255, 255, 1)',
+      gray: 'rgba(128, 128, 128, 1)',
+      blue: 'rgba(3, 136, 252, 1)',
+      red: 'rgba(249, 16, 74, 1)',
+      yellow: 'rgba(255, 221, 0, 1)',
+      pink: 'rgba(232, 141, 163, 1)',
+      turq: 'rgba(0, 245, 196, 1)',
+      orange: 'rgba(255, 135, 31, 1)',
+    },
+    fonts: {
+      sans: 'Inter, sans-serif',
+    },
+    fontSizes: {
+      1: '12px',
+      2: '14px',
+      3: '16px',
+      4: '20px',
+      5: '24px',
+      6: '32px',
+    },
+    space: {
+      1: '4px',
+      2: '8px',
+      3: '16px',
+      4: '32px',
+      5: '64px',
+      6: '128px',
+    },
+    sizes: {
+      1: '4px',
+      2: '8px',
+      3: '16px',
+      4: '32px',
+      5: '64px',
+      6: '128px',
+    },
+    radii: {
+      1: '2px',
+      2: '4px',
+      3: '8px',
+      round: '9999px',
+    },
+    fontWeights: {},
+    lineHeights: {},
+    letterSpacings: {},
+    borderWidths: {},
+    borderStyles: {},
+    shadows: {},
+    zIndices: {},
+    transitions: {},
+  },
+});
+```
+
+From this point on, tokens will be available when you write CSS. By default, Stitches maps CSS properties to theme scales. You can see the mapping [here](https://stitches.dev/docs/tokens#property-mapping).
+
+For example, here's a style object setting tokens as values.
+
+```js
+{
+  backgroundColor: '$turq', // maps to theme.colors.turq
+  color: '$black', // maps to theme.colors.turq
+  fontSize: '$5', // maps to theme.fontSizes.5
+  padding: '$4', // maps to theme.space.4
+  borderRadius: '$3' // maps to theme.radii.3
+}
+```
+
+## Create a `Box` primitive
+
+One thing I like to do is create a low-level `Box` component.
+
+Import the `styled` function to create your first component. Call the `styled` function providing the element you want to style and the optional style object. I don't usually add any styles for `Box`, so I left it out.
+
+```jsx
+// box.tsx
+import { styled } from '@stitches/react';
+
+export const Box = styled('div');
+```
+
+It's useful because components built with Stitches support a `css` prop, meaning you have access to [tokens](https://stitches.dev/docs/tokens), [utils](https://stitches.dev/docs/utils), and [media queries](https://stitches.dev/docs/breakpoints).
+
+You can use the `Box`, the lowest-level building block of your application.
+
+{
+
+<Preview>
+  <Box>
+    <Box
+      css={{
+        backgroundColor: '$turq',
+        color: '$black',
+        fontSize: '$5',
+        padding: '$4',
+      }}
+    >
+      Box
+    </Box>
+  </Box>
+</Preview>
+}
+
+```jsx
+import { Box } from './box';
+
+const App = () => (
+  <Box
+    css={{
+      backgroundColor: '$turq',
+      color: '$black',
+      fontSize: '$5',
+      padding: '$4',
+    }}
+  >
+    Box
+  </Box>
+);
+```
+
+The `css` prop accepts a style object. Unlike the `style` attribute, here, you can add pseudo-classes, descendant selectors, media queries, etc.
+
+Additionally, you can access tokens via the `$` prefix in the `css` prop.
+
+### Polymorphic
+
+It's worth noting that components built with Stitches are also polymorphic. So you can use the `as` prop to change the underlying element.
+
+{
+
+<Preview>
+  <Box as="h1" css={{ color: '$turq' }}>
+    Box as h1
+  </Box>
+</Preview>
+}
+
+```jsx
+import { Box } from './box';
+
+const App = () => (
+  <Box as="h1" css={{ color: '$turq' }}>
+    Box as h1
+  </Box>
+);
+```
+
+## Create components
+
+You can use the `styled` function to create as many components as you need. Here's a demo button.
+
+```jsx
+// button.tsx
+import { styled } from './stitches.config.ts';
+
+export const Button = styled('button', {
+  borderRadius: '$round',
+  fontSize: '$4',
+  padding: '$2 $3',
+  border: '2px solid $turq',
+  color: '$white',
+
+  '&:hover': {
+    backgroundColor: '$turq',
+    color: '$black',
+  },
+});
+```
+
+> To use tokens, you need to prefix them with a `$` (dollar sign).
+
+Then render it.
+
+{
+
+<Preview>
+  <DemoButton />
+</Preview>
+}
+
+```jsx
+import { Button } from './button';
+
+const App = () => <Button>My Button</Button>;
+```
+
+## Add variants
+
+Stitches offer a first-class variant API. It's a powerful way to express alternative styles for a given component.
+
+```jsx line=7-24
+// button.tsx
+import { styled } from './stitches.config.ts';
+
+export const Button = styled('button', {
+  // styles
+
+  variants: {
+    color: {
+      turq: {
+        border: '2px solid $turq',
+        '&:hover': {
+          backgroundColor: '$turq',
+          color: '$black',
+        },
+      },
+      orange: {
+        border: '2px solid $orange',
+        '&:hover': {
+          backgroundColor: '$orange',
+          color: '$black',
+        },
+      },
+    },
+  },
+});
+```
+
+You can apply variants as defined in your component. The key becomes a prop.
+
+{
+
+<Preview>
+  <Box css={{ display: 'flex', gap: '$3' }}>
+    <DemoButton />
+    <DemoButton color="orange" />
+  </Box>
+</Preview>
+}
+
+```jsx line=4-7
+import { Button } from './button';
+
+const App = () => (
+  <Box css={{ display: 'flex', gap: '$3' }}>
+    <Button color="turq">My Button</Button>
+    <Button color="orange">My Button</Button>
+  </Box>
+);
+```
+
+### Set a default variant
+
+We created a variant called `color` that can be either `gray` or `purple`. You can use the `defaultVariants` key to set it to `gray` by default:
+
+```jsx line=9-11
+// button.tsx
+import { styled } from './stitches.config.ts';
+
+export const Button = styled('button', {
+  // styles
+
+  // variants
+
+  defaultVariants: {
+    color: 'turq',
+  },
+});
+```
+
+You can also add styles based on a combination of variants via the `compoundVariants` API. Learn more about [compound variants here](https://stitches.dev/docs/variants#compound-variants).
+
+## Define your media queries
+
+You can use the `media` config key to define the media queries of your system. This is useful for applying responsive styles and for responsively applying variants.
+
+```jsx line=6-9
+// stitches.config.ts
+import { createCss } from '@stitches/react'
+
+export { styled } = createCss({
+  theme: {},
+  media: {
+    bp1: '(min-width: 575px)',
+    bp2: '(min-width: 750px)',
+  }
+})
+```
+
+## Apply responsive styles
+
+You can use your predefined media queries within the style object or when applying variants. To use media queries, prefix your media keys with an `@` (at sign).
+
+For example, the code below changes the `backgroundColor` property over different media queries.
+
+{
+
+<Preview>
+  <Box
+    css={{
+      width: '100%',
+      height: '100px',
+      backgroundColor: '$pink',
+      '@bp1': { backgroundColor: '$turq' },
+      '@bp2': { backgroundColor: '$orange' },
+    }}
+  />
+</Preview>
+}
+
+```jsx
+// responsive-box.tsx
+import { styled } from './stitches.config.ts';
+
+const ResponsiveBox = styled('div', {
+  backgroundColor: '$pink',
+  '@bp1': { backgroundColor: '$turq' },
+  '@bp2': { backgroundColor: '$orange' },
+});
+```
+
+> Media queries also work in the `css` prop.
+
+### Responsive variants
+
+Alternatively, you can organise the increments as `variants`:
+
+```jsx
+// responsive-box.tsx
+import { styled } from './stitches.config.ts';
+
+const ResponsiveBox = styled('div', {
+  variants: {
+    color: {
+      pink: { backgroundColor: '$pink' },
+      turq: { backgroundColor: '$turq' },
+      orange: { backgroundColor: '$orange' },
+    },
+  },
+});
+```
+
+And then _responsively apply them_:
+
+{
+
+<Preview>
+  <Box
+    css={{
+      width: '100%',
+      height: '100px',
+      backgroundColor: '$orange',
+      '@bp1': { backgroundColor: '$pink' },
+      '@bp2': { backgroundColor: '$turq' },
+    }}
+  />
+</Preview>
+}
+
+```jsx line=5-8
+import { ResponsiveBox } from './responsiveBox';
+
+function App() {
+  return (
+    <ResponsiveBox
+      color={{
+        '@initial': 'orange',
+        '@bp1': 'pink',
+        '@bp2': 'turq',
+      }}
+    />
+  );
+}
+```
+
+> Use the `@initial` to set the initial variant.
+
+With the features above, you have enough tools to build a component-driven, constraint-based design system.
+
+## Set up Radix
+
+Install Radix Primitives with `npm` or `yarn`. You need to install them individually.
+
+```bash
+yarn add @radix-ui/react-dialog
+yarn add @radix-ui/react-dropdown-menu
+yarn add @radix-ui/react-tooltip
+```
+
+## Create a dialog component
+
+Most design systems will need a dialog component. Although they may seem like a straight forward component to build from scratch, there are many accessibility concerns to look out for.
+
+For example, the focus should be automatically trapped within the dialog's content. The first interactive element should be focused by default. If there are no interactive elements, then the dialog's content should receive focus. When the dialog is closed, the focus must return to the dialog's trigger.
+
+Pressing `Space/Enter` while the dialog trigger's focused should open the dialog. Pressing `Escape` should close the dialog.
+
+The Radix dialog consists of the following parts:
+
+```tsx
+import * as Dialog from '@radix-ui/react-dialog';
+
+export default () => (
+  <Dialog.Root>
+    <Dialog.Trigger />
+    <Dialog.Overlay />
+    <Dialog.Content>
+      <Dialog.Close />
+    </Dialog.Content>
+  </Dialog.Root>
+);
+```
+
+I can style the parts above and re-export them as part of my design system. I have full control over the API and abstractions.
+
+This is what I want the API of my design system's dialog to look like:
+
+```tsx
+import { Dialog } from './dialog';
+
+function App() {
+  return (
+    <Dialog>
+      <DialogTrigger>Open</DialogTrigger>
+      <DialogContent>Dialog content goes here</DialogContent>
+    </Dialog>
+  );
+}
+```
+
+Notice how in my API, I don't want to have to manually render the `Dialog.Overlay` part. I am making a decision that I always want the overlay to appear.
+
+### Implementation
+
+To achieve my desired API, I'll start by importing all of the dialog parts. Some parts will be a simple re-export, and some will be styled.
+
+```jsx
+// dialog.tsx
+import { styled } from './stitches.config';
+import { Cross1Icon } from '@radix-ui/react-icons';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
+
+const StyledOverlay = styled(DialogPrimitive.Overlay, {
+  // overlay styles
+});
+
+export function Dialog({ children, ...props }) {
+  return (
+    <DialogPrimitive.Root {...props}>
+      <StyledOverlay />
+      {children}
+    </DialogPrimitive.Root>
+  );
+}
+
+const StyledContent = styled(DialogPrimitive.Content, {
+  // content styles
+});
+
+const StyledCloseButton = styled(DialogPrimitive.Close, {
+  // close button styles
+});
+
+export const DialogContent = React.forwardRef(({ children, ...props }, forwardedRef) => (
+  <StyledContent {...props} ref={forwardedRef}>
+    {children}
+    <StyledCloseButton as={StyledCloseButton}>
+      <Cross1Icon />
+    </StyledCloseButton>
+  </StyledContent>
+));
+
+export const DialogTrigger = DialogPrimitive.Trigger;
+```
+
+Then render the custom dialog.
+
+{
+
+<Preview>
+  <DemoDialog withAnimations />
+</Preview>
+}
+
+```jsx
+import { Dialog, DialogTrigger, DialogContent } from './dialog';
+import { Button } from './button';
+
+const App = () => (
+  <Dialog>
+    <DialogTrigger as={Button}>Open dialog</DialogTrigger>
+    <DialogContent>
+      <p>Order complete.</p>
+      <p>You'll receive a confirmation email in the next few minutes.</p>
+    </DialogContent>
+  </Dialog>
+);
+```
+
+### Polymorphic
+
+Notice how Radix components are polymorphic, so they support the `as` prop. We can take advantage of this technique for the `DialogTrigger` and use our custom `Button` component instead.
+
+When doing so, variants are inferred.
+
+{
+
+<Preview>
+  <DemoDialog withAnimations color="orange" />
+</Preview>
+}
+
+```jsx line=6-8
+import { Dialog, DialogTrigger, DialogContent } from './dialog';
+import { Button } from './button';
+
+const App = () => (
+  <Dialog>
+    <DialogTrigger as={Button} color="orange">
+      Open dialog
+    </DialogTrigger>
+    <DialogContent>
+      <p>Order complete.</p>
+      <p>You'll receive a confirmation email in the next few minutes.</p>
+    </DialogContent>
+  </Dialog>
+);
+```
+
+### Inferred variants
+
+When you
+
+### Animate it
+
+You can add animation to the Radix dialog by targeting the `data-state` attribute.
+
+But first, we need to export the `keyframes` function from Stitches.
+
+```jsx
+import { createCss } from '@stitches/react';
+
+export const { styles, __keyframes__ } = createCss(/* your config */);
+```
+
+Then use the `keyframes` function to create CSS keyframes.
+
+{
+
+<Preview>
+  <DemoDialog animation="fade" />
+</Preview>
+}
+
+```jsx
+// dialog.tsx
+import { keyframes } from './stitches.config';
+
+const fadeIn = keyframes({
+  from: { opacity: 0 },
+  to: { opacity: 1 },
+});
+
+const fadeout = keyframes({
+  from: { opacity: 1 },
+  to: { opacity: 0 },
+});
+
+const StyledOverlay = styled(DialogPrimitive.Overlay, {
+  '&[data-state="open"]': {
+    animation: `${fadeIn} 300ms ease-out`,
+  },
+
+  '&[data-state="closed"]': {
+    animation: `${fadeout} 200ms ease-out`,
+  },
+});
+
+const StyledContent = styled(DialogPrimitive.Content, {
+  '&[data-state="open"]': {
+    animation: `${fadeIn} 300ms ease-out`,
+  },
+
+  '&[data-state="closed"]': {
+    animation: `${fadeout} 200ms ease-out`,
+  },
+});
+```
+
+> You can use CSS animation to animate both mount and unmount phases. The latter is possible because the Radix Primitives will suspend unmount while your animation plays out.
+
+### Animation variants
+
+You can rely on the powerful variant API from Stitches to offer different types of animations.
+
+For example, the `Content` part can support two types of animation: a `fade` or a `scale`.
+
+```tsx line=7-30
+// dialog.tsx
+import { keyframes } from './stitches.config';
+
+const fadeIn = keyframes({…});
+const fadeout = keyframes({…});
+
+const scaleIn = keyframes({
+  from: { transform: 'scale(0.9)' },
+  to: { transform: 'scale(1)' },
+})
+
+
+const StyledContent = styled(DialogPrimitive.Content, {
+  variants: {
+    animation: {
+      fade: {
+        '&[data-state="open"]': {
+          animation: `${fadeIn} 300ms ease-out`,
+        },
+
+        '&[data-state="closed"]': {
+          animation: `${fadeout} 200ms ease-out`,
+        },
+      },
+      scale: {
+        animation: `${fadeIn} 300ms ease-out, ${scaleIn} 200ms ease-out`,
+      },
+    },
+  },
+});
+```
+
+Then you can pick one:
+
+{
+
+<Preview>
+  <DemoDialog animation="scale" />
+</Preview>
+}
+
+```jsx line=7
+import { Dialog, DialogTrigger, DialogContent } from './dialog';
+import { Button } from './button';
+
+const App = () => (
+  <Dialog>
+    <DialogTrigger as={Button}>Open dialog</DialogTrigger>
+    <DialogContent animation="scale">
+      <p>Order complete.</p>
+      <p>You'll receive a confirmation email in the next few minutes.</p>
+    </DialogContent>
+  </Dialog>
+);
+```
+
+This process is similar to most Radix primitives. They're low-level enough to allow you to re-export them with your own API, yet high level enough that's an intuitive experience. It's all just components.
+
+Currently, there are over 25 primitives available, with more coming almost every couple of weeks.
+
+Learn more on [radix-ui.com](https://radix-ui.com)
+
+---
+
+## Conclusion
+
+With Stitches, you're able to create resilient, maintainable and scalable design systems. You can focus on what matters the most. The system itself — your theme, scales and tokens. The look and feel of the components and their potential variations. The way each component can look at different breakpoints.
+
+With Radix, you're able to delegate the logic and accessibility concerns of complex components while having full control over their aesthetics and behaviour. Style its parts and states. Use them controlled or uncontrolled. Add animations, either with CSS or an animation library.
+
+It's an exciting time to be building UIs and design systems.
+
+If you're interested in learning more, here are some useful resources:
+
+- [Stitches demo with Lee Robinson](https://www.youtube.com/watch?t=1471&v=Gw28VgyKGkw&feature=youtu.be)
+- [Stitches introduction](https://stitches.dev/docs/introduction)
+- [Using Next.js with Stitches](https://stitches.dev/blog/using-nextjs-with-stitches)
+- [Migrating from styled-components to Stitches](https://stitches.dev/blog/migrating-from-styled-components-to-stitches)
+
+### Community
+
+- [Stitches GitHub](https://github.com/modulz/stitches)
+- [Stitches Twitter](https://twitter.com/stitchesjs)
+- [Stitches Discord](https://discord.com/invite/H4eG3Mk)
+- [Radix GitHub](https://github.com/radix-ui/primitives)
+- [Radix Twitter](https://twitter.com/radix_ui)
+- [Radix Discord](https://discord.com/invite/7Xb99uG)
+
+Thanks for reading ✌️
+
+---
+
+Shoutout to [Jonathan Neal](https://twitter.com/jon_neal) for the excellent work on Stitches.
+
+Shoutout to [Benoît Grélard](https://twitter.com/benoitgrelard) and [Jenna Smith](https://twitter.com/jjenzz) for the outstanding work on Radix Primitives.
+
+Shoutout to [Paco Coursey](https://twitter.com/pacocoursey), [Mike San Román](https://twitter.com/msanromanv) and [Vlad Moroz](https://twitter.com/vladyslavmoroz) for proofreading this article.

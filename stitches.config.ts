@@ -12,6 +12,7 @@ const stitchesConfig = createCss({
       pink: 'rgba(232, 141, 163, 1)',
       turq: 'rgba(0, 245, 196, 1)',
       orange: 'rgba(255, 135, 31, 1)',
+      copy: 'rgba(170, 170, 175, 1)',
     },
     fonts: {
       sans: 'Inter, sans-serif',
@@ -137,4 +138,4 @@ const stitchesConfig = createCss({
 
 export type CSS = StitchesCss<typeof stitchesConfig>;
 
-export const { css, global, getCssString } = stitchesConfig;
+export const { css, global, keyframes, getCssString } = stitchesConfig;

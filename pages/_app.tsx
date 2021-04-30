@@ -1,6 +1,7 @@
 import React from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import { IdProvider } from '@radix-ui/react-id';
 import { useAnalytics } from '@lib/analytics';
 import { Footer } from '@components/Footer';
 import { globalStyles } from '@styles/global';
@@ -9,8 +10,9 @@ import { box } from '@styles/box';
 function App({ Component, pageProps }: AppProps) {
   globalStyles();
   useAnalytics();
+
   return (
-    <>
+    <IdProvider>
       <Head>
         <title>Pedro Duarte</title>
       </Head>
@@ -22,7 +24,7 @@ function App({ Component, pageProps }: AppProps) {
 
         <Footer />
       </div>
-    </>
+    </IdProvider>
   );
 }
 

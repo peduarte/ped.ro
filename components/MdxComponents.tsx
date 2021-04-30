@@ -7,12 +7,17 @@ import { text } from '@styles/text';
 import { box } from '@styles/box';
 import { link } from '@styles/link';
 import { pre } from '@styles/pre';
-import { CardPlayground } from '@components/CardPlayground';
-import { Preview } from '@components/Preview';
 import { divider } from '@styles/divider';
 import { code } from '@styles/code';
+import { CardPlayground } from '@components/CardPlayground';
+import { Preview } from '@components/Preview';
+import { DemoButton } from '@components/demos/DemoButton';
+import { DemoDialog } from '@components/demos/DemoDialog';
 
 export const components = {
+  Box: ({ css, as: Comp = 'div', ...props }: any) => <Comp className={box(css)} {...props} />,
+  DemoButton,
+  DemoDialog,
   CardPlayground,
   Preview,
   RegisterLink: ({ id, index, href }) => {
@@ -74,15 +79,26 @@ export const components = {
   },
   h1: (props) => <h1 className={text({ size: '7', css: { mb: '$5' } })} {...props} />,
   h2: (props) => (
-    <h2 className={text({ size: '5', css: { mt: '$5', mb: '$4', mx: 'auto' } })} {...props} />
+    <h2
+      className={text({ size: '5', weight: 'bold', css: { mt: '$5', mb: '$4', mx: 'auto' } })}
+      {...props}
+    />
   ),
   h3: (props) => (
-    <h3 className={text({ size: '3', css: { mt: '$5', mb: '$3', mx: 'auto' } })} {...props} />
+    <h3
+      className={text({ size: '4', weight: 'bold', css: { mt: '$5', mb: '$3', mx: 'auto' } })}
+      {...props}
+    />
   ),
   h4: (props) => (
     <h4 className={text({ size: '3', css: { mt: '$4', mb: '$3', mx: 'auto' } })} {...props} />
   ),
-  p: (props) => <p className={text({ size: '4', css: { mb: '$4' } })} {...props} />,
+  p: (props) => (
+    <p
+      className={text({ size: '4', weight: 'normal', css: { mb: '$4', color: '$copy' } })}
+      {...props}
+    />
+  ),
   a: ({ href = '', ...props }) => {
     if (href.startsWith('/')) {
       return (
@@ -96,7 +112,12 @@ export const components = {
   hr: (props) => <hr className={divider({ size: '1', css: { my: '$5' } })} {...props} />,
   ul: (props) => <ul className={box({ mb: '$4' })} {...props} />,
   ol: (props) => <ol className={box({ mb: '$4' })} {...props} />,
-  li: (props) => <li className={text({ size: '4' })} {...props} />,
+  li: (props) => (
+    <li
+      className={text({ size: '4', css: { color: '$copy', listStyleType: 'circle' } })}
+      {...props}
+    />
+  ),
   strong: (props) => (
     <strong
       className={text({ weight: 'bold', css: { fontSize: 'inherit', lineHeight: 'inherit' } })}
@@ -169,25 +190,29 @@ export const components = {
       return <code className={code()} children={children} />;
     }
     return (
-      <div
-        className={box({
-          mx: '-$4',
-          mt: '$3',
-          mb: '$5',
+      <pre
+        className={`${pre({
+          css: {
+            mx: '-$4',
+            mt: '$3',
+            mb: '$5',
 
-          '[data-preview] + &': {
-            marginTop: '0',
-          },
+            '[data-preview] + &': {
+              marginTop: '0',
+              borderTopLeftRadius: 0,
+              borderTopRightRadius: 0,
+            },
 
-          '@bp1': {
-            mx: 0,
+            '@bp1': {
+              mx: 0,
+              borderRadius: '$3',
+            },
           },
-        })}
+        })} ${className}`}
+        id={id}
       >
-        <pre className={`${pre()} ${className}`} id={id}>
-          <code className={className} children={children} />
-        </pre>
-      </div>
+        <code className={className} children={children} />
+      </pre>
     );
   },
 };

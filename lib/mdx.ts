@@ -26,8 +26,7 @@ export const getAllFrontmatter = () => {
       return {
         ...(data as Frontmatter),
         slug: path.basename(filePath).replace('.mdx', ''), // file name without extension
-        wordCount: content.split(/\s+/g).length,
-        readingTime: readingTime(content),
+        readingTime: readingTime(content, { wordsPerMinute: 300 }),
       } as Frontmatter;
     })
     .sort((a, b) => Number(new Date(b.publishedAt)) - Number(new Date(a.publishedAt)));
@@ -52,8 +51,7 @@ export const getMdxBySlug = async (slug) => {
     frontmatter: {
       ...(frontmatter as Frontmatter),
       slug,
-      wordCount: code.split(/\s+/g).length,
-      readingTime: readingTime(code),
+      readingTime: readingTime(code, { wordsPerMinute: 300 }),
     } as Frontmatter,
     code,
   };
