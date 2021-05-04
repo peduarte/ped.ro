@@ -130,10 +130,11 @@ export const components = {
       {...props}
     />
   ),
-  pre: ({ children }) => {
+  pre: ({ children, theme, ...props }) => {
     return (
       <pre
         className={pre({
+          theme,
           css: {
             mx: '-$4',
             mt: '$3',

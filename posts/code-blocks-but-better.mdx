@@ -8,6 +8,7 @@ I've been exploring ways to improve the code blocks on the Stitches and Radix do
 For an enhanced user experience, I wanted to be able to:
 
 - Syntax highlight
+- Multiple themes
 - Highlight specific lines
 - Highlight specific words
 - Interact with the content
@@ -32,6 +33,49 @@ I'll be using the code block of my own website as the demo, it looks like this:
 A minimal demo, showing the syntax highlighting:
 
 ```jsx
+import React from 'react';
+
+export function Counter({ initialCount = 0 }) {
+  const [count, setCount] = React.useState(initialCount);
+  return (
+    <button type="button" onClick={() => setCount((prevCount) => prevCount + 1)}>
+      {count}
+    </button>
+  );
+}
+```
+
+### Multiple themes
+
+Render the code block with differnt styles:
+
+```jsx theme=orange
+import React from 'react';
+
+export function Counter({ initialCount = 0 }) {
+  const [count, setCount] = React.useState(initialCount);
+  return (
+    <button type="button" onClick={() => setCount((prevCount) => prevCount + 1)}>
+      {count}
+    </button>
+  );
+}
+```
+
+```jsx theme=pink
+import React from 'react';
+
+export function Counter({ initialCount = 0 }) {
+  const [count, setCount] = React.useState(initialCount);
+  return (
+    <button type="button" onClick={() => setCount((prevCount) => prevCount + 1)}>
+      {count}
+    </button>
+  );
+}
+```
+
+```jsx theme=turq
 import React from 'react';
 
 export function Counter({ initialCount = 0 }) {
