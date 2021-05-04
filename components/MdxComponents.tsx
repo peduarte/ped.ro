@@ -3,6 +3,7 @@ import NextLink from 'next/link';
 import NextRouter from 'next/router';
 import NextImage from 'next/image';
 import rangeParser from 'parse-numeric-range';
+import * as Collapsible from '@radix-ui/react-collapsible';
 import { text } from '@styles/text';
 import { box } from '@styles/box';
 import { link } from '@styles/link';
@@ -13,70 +14,16 @@ import { CardPlayground } from '@components/CardPlayground';
 import { Preview } from '@components/Preview';
 import { DemoButton } from '@components/demos/DemoButton';
 import { DemoDialog } from '@components/demos/DemoDialog';
+import { DemoCounter } from '@components/demos/DemoCounter';
+import { button } from '@styles/button';
 
 export const components = {
   Box: ({ css, as: Comp = 'div', ...props }: any) => <Comp className={box(css)} {...props} />,
   DemoButton,
   DemoDialog,
+  DemoCounter,
   CardPlayground,
   Preview,
-  RegisterLink: ({ id, index, href }) => {
-    const isExternal = href.startsWith('http');
-
-    React.useEffect(() => {
-      const codeBlock = document.getElementById(id);
-      if (!codeBlock) return;
-
-      const allHighlightWords = codeBlock.querySelectorAll('.highlight-word');
-      const target = allHighlightWords[index - 1];
-      if (!target) return;
-
-      const addClass = () => target.classList.add('on');
-      const removeClass = () => target.classList.remove('on');
-      const addClick = () => (isExternal ? window.location.replace(href) : NextRouter.push(href));
-
-      target.addEventListener('mouseenter', addClass);
-      target.addEventListener('mouseleave', removeClass);
-      target.addEventListener('click', addClick);
-
-      return () => {
-        target.removeEventListener('mouseenter', addClass);
-        target.removeEventListener('mouseleave', removeClass);
-        target.removeEventListener('click', addClick);
-      };
-    }, []);
-
-    return null;
-  },
-  h: ({ id, index, ...props }) => {
-    const triggerRef = React.useRef<HTMLElement>(null);
-
-    React.useEffect(() => {
-      const trigger = triggerRef.current;
-
-      const codeBlock = document.getElementById(id);
-      if (!codeBlock) return;
-
-      const allHighlightWords = codeBlock.querySelectorAll('.highlight-word');
-      const targetIndex = rangeParser(index).map((i) => i - 1);
-      // exit if the `index` passed is bigger than the total number of highlighted words
-      if (Math.max(...targetIndex) >= allHighlightWords.length) return;
-
-      const addClass = () => targetIndex.forEach((i) => allHighlightWords[i].classList.add('on'));
-      const removeClass = () =>
-        targetIndex.forEach((i) => allHighlightWords[i].classList.remove('on'));
-
-      trigger.addEventListener('mouseenter', addClass);
-      trigger.addEventListener('mouseleave', removeClass);
-
-      return () => {
-        trigger.removeEventListener('mouseenter', addClass);
-        trigger.removeEventListener('mouseleave', removeClass);
-      };
-    }, []);
-
-    return <code className={code({ css: { cursor: 'default' } })} ref={triggerRef} {...props} />;
-  },
   h1: (props) => <h1 className={text({ size: '7', css: { mb: '$5' } })} {...props} />,
   h2: (props) => (
     <h2
@@ -183,15 +130,10 @@ export const components = {
       {...props}
     />
   ),
-  pre: ({ children }) => <>{children}</>,
-  code: ({ className, children, id }) => {
-    const isInlineCode = !className;
-    if (isInlineCode) {
-      return <code className={code()} children={children} />;
-    }
+  pre: ({ children }) => {
     return (
       <pre
-        className={`${pre({
+        className={pre({
           css: {
             mx: '-$4',
             mt: '$3',
@@ -208,11 +150,96 @@ export const components = {
               borderRadius: '$3',
             },
           },
-        })} ${className}`}
-        id={id}
+        })}
       >
-        <code className={className} children={children} />
+        {children}
       </pre>
     );
+  },
+  code: ({ children, id, collapsible }) => {
+    const isCollapsible = typeof collapsible !== 'undefined';
+    const [isOpen, setIsOpen] = React.useState(!isCollapsible);
+    const isInline = typeof children === 'string';
+    const content = <code className={isInline ? code() : ''} children={children} id={id} />;
+    return isCollapsible ? (
+      <Collapsible.Root defaultOpen={isOpen} onOpenChange={(newOpen) => setIsOpen(newOpen)}>
+        <Collapsible.Button
+          className={button({
+            css: {
+              display: 'block',
+              ml: 'auto',
+              color: '$white',
+              borderRadius: '$2',
+              fontSize: '$2',
+              borderColor: '$gray',
+              fontFamily: '$mono',
+              '&:hover': { borderColor: '$white' },
+            },
+          })}
+        >
+          {isOpen ? 'Hide' : 'Show'}
+        </Collapsible.Button>
+        <Collapsible.Content>{content}</Collapsible.Content>
+      </Collapsible.Root>
+    ) : (
+      content
+    );
+  },
+  RegisterLink: ({ id, index, href }) => {
+    const isExternal = href.startsWith('http');
+
+    React.useEffect(() => {
+      const codeBlock = document.getElementById(id);
+      if (!codeBlock) return;
+
+      const allHighlightWords = codeBlock.querySelectorAll('.highlight-word');
+      const target = allHighlightWords[index - 1];
+      if (!target) return;
+
+      const addClass = () => target.classList.add('on');
+      const removeClass = () => target.classList.remove('on');
+      const addClick = () => (isExternal ? window.location.assign(href) : NextRouter.push(href));
+
+      target.addEventListener('mouseenter', addClass);
+      target.addEventListener('mouseleave', removeClass);
+      target.addEventListener('click', addClick);
+
+      return () => {
+        target.removeEventListener('mouseenter', addClass);
+        target.removeEventListener('mouseleave', removeClass);
+        target.removeEventListener('click', addClick);
+      };
+    }, []);
+
+    return null;
+  },
+  H: ({ id, index, ...props }) => {
+    const triggerRef = React.useRef<HTMLElement>(null);
+
+    React.useEffect(() => {
+      const trigger = triggerRef.current;
+
+      const codeBlock = document.getElementById(id);
+      if (!codeBlock) return;
+
+      const allHighlightWords = codeBlock.querySelectorAll('.highlight-word');
+      const targetIndex = rangeParser(index).map((i) => i - 1);
+      // exit if the `index` passed is bigger than the total number of highlighted words
+      if (Math.max(...targetIndex) >= allHighlightWords.length) return;
+
+      const addClass = () => targetIndex.forEach((i) => allHighlightWords[i].classList.add('on'));
+      const removeClass = () =>
+        targetIndex.forEach((i) => allHighlightWords[i].classList.remove('on'));
+
+      trigger.addEventListener('mouseenter', addClass);
+      trigger.addEventListener('mouseleave', removeClass);
+
+      return () => {
+        trigger.removeEventListener('mouseenter', addClass);
+        trigger.removeEventListener('mouseleave', removeClass);
+      };
+    }, []);
+
+    return <code className={code({ css: { cursor: 'default' } })} ref={triggerRef} {...props} />;
   },
 };

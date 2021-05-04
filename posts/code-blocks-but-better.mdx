@@ -1,0 +1,248 @@
+---
+title: 'Code blocks, but better'
+publishedAt: '2021-05-02'
+---
+
+I've been exploring ways to improve the code blocks on the Stitches and Radix documentation sites.
+
+For an enhanced user experience, I wanted to be able to:
+
+- Syntax highlight
+- Highlight specific lines
+- Highlight specific words
+- Interact with the content
+- Make specific words link to other pages
+- Make it collapsible/expandable
+- Render a preview
+
+In terms of developer experience, the documentation sites are built using [Next.js]() and the content is authored with [MDX]().
+
+In this post, I'll show you how I made a custom code block with the features above.
+
+Ready? Let's get it.
+
+---
+
+## Demo
+
+I'll be using the code block of my own website as the demo, it looks like this:
+
+### Syntax highlight
+
+A minimal demo, showing the syntax highlighting:
+
+```jsx
+import React from 'react';
+
+export function Counter({ initialCount = 0 }) {
+  const [count, setCount] = React.useState(initialCount);
+  return (
+    <button type="button" onClick={() => setCount((prevCount) => prevCount + 1)}>
+      {count}
+    </button>
+  );
+}
+```
+
+### Highlight specific lines
+
+Drive attention to specific parts in the code:
+
+```jsx line=1,4
+import React from 'react';
+
+export function Counter({ initialCount = 0 }) {
+  const [count, setCount] = React.useState(initialCount);
+  return (
+    <button type="button" onClick={() => setCount((prevCount) => prevCount + 1)}>
+      {count}
+    </button>
+  );
+}
+```
+
+### Highlight specific words
+
+Drive attention to specific words in the code:
+
+```jsx
+import React from 'react';
+
+export function Counter({ __initialCount__ = 0 }) {
+  const [count, setCount] = React.useState(__initialCount__);
+  return (
+    <button type="button" onClick={() => setCount((prevCount) => prevCount + 1)}>
+      {count}
+    </button>
+  );
+}
+```
+
+### Interact with the content
+
+Create connections between the content and the code block.
+
+Try it yourself, <H id="demo1" index="1,2">hover me</H> and watch the code block:
+
+```jsx id=demo1
+import React from 'react';
+
+export function Counter({ initialCount = 0 }) {
+  const [count, __setCount__] = React.useState(initialCount);
+  return (
+    <button type="button" onClick={() => __setCount__((prevCount) => prevCount + 1)}>
+      {count}
+    </button>
+  );
+}
+```
+
+### Make specific words link to other pages
+
+Click a highlighted word to navigate to a different page:
+
+<RegisterLink id="demo2" index="1" href="https://reactjs.org/" />
+
+```jsx id=demo2
+import React from '__react__';
+
+export function Counter({ initialCount = 0 }) {
+  const [count, setCount] = React.useState(initialCount);
+  return (
+    <button type="button" onClick={() => setCount((prevCount) => prevCount + 1)}>
+      {count}
+    </button>
+  );
+}
+```
+
+### Render a preview
+
+{
+
+<Preview>
+  <DemoCounter initialvalue="{32}" />
+</Preview>
+}
+
+```html
+<Counter initialvalue="{32}" />
+```
+
+### Make it collapsible/expandable
+
+{
+
+<Preview>
+  <DemoCounter initialvalue="{32}" color="orange" />
+</Preview>
+}
+
+```jsx collapsible
+import React from 'react';
+
+export function Counter({ initialCount = 0 }) {
+  const [count, setCount] = React.useState(initialCount);
+  return (
+    <button type="button" onClick={() => setCount((prevCount) => prevCount + 1)}>
+      {count}
+    </button>
+  );
+}
+```
+
+---
+
+First, lets get the prerequisite out of the way.
+
+If you don't already have a Next.js project running, [set one up](https://nextjs.org/docs/getting-started).
+
+Make sure that it supports `.mdx` files and that you can configure the mapping of markdown elements to react components.
+
+I used `mdx-bundler`, but you can also use `next-mdx-remote` or `@next/mdx`.
+
+## Syntax highlight
+
+The most basic requirement is to be able to do syntax highlighting.
+
+For this, I created a rehype plugin using [refractor](https://github.com/wooorm/refractor) by [wooorm]().
+
+```js
+// rehype-highlight-code.js
+const visit = require('unist-util-visit');
+const nodeToString = require('hast-util-to-string');
+const refractor = require('refractor');
+
+module.exports = (options = {}) => {
+  return (tree) => {
+    visit(tree, 'element', visitor);
+  };
+
+  function visitor(node, index, parent) {
+    if (
+      !parent ||
+      parent.tagName !== 'pre' ||
+      node.tagName !== 'code' ||
+      !node.properties.className
+    ) {
+      return;
+    }
+
+    const [_, lang] = node.properties.className[0].split('-');
+    const codeString = nodeToString(node);
+    let result = refractor.highlight(codeString, lang);
+
+    node.children = result;
+  }
+};
+```
+
+This was inspired by [mdx-prism](https://github.com/j0lv3r4/mdx-prism).
+
+This plugin will wrap your the content of your code block in various `span` elements with different classes, such as `function`, `operator`, `keyword`, etc.
+
+For example, this code block:
+
+```html
+<h1>Hello world</h1>
+```
+
+renders this html:
+
+{<pre>
+&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span
+class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;h1&lt;/span&gt;&lt;span
+class=&quot;token punctuation&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;Hello world&lt;span
+class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span
+class=&quot;token punctuation&quot;&gt;&amp;lt;/&lt;/span&gt;h1&lt;/span&gt;&lt;span
+class=&quot;token punctuation&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;
+
+</pre>}
+
+### Adding the styles
+
+I was then able to target these classes and style them. To do this in a maintanable way, I used [Stitches]().
+
+Stitches allowed me to predefine a theme, so I was able to use its tokens to add syntax highlighting.
+
+```jsx
+import { createCss } from '@stitches/react';
+
+export const { styled } = createCss({
+  theme: {
+    colors: {
+      black: 'rgba(19, 19, 21, 1)',
+      white: 'rgba(255, 255, 255, 1)',
+      gray: 'rgba(128, 128, 128, 1)',
+      blue: 'rgba(3, 136, 252, 1)',
+      red: 'rgba(249, 16, 74, 1)',
+      yellow: 'rgba(255, 221, 0, 1)',
+      pink: 'rgba(232, 141, 163, 1)',
+      turq: 'rgba(0, 245, 196, 1)',
+      orange: 'rgba(255, 135, 31, 1)',
+    },
+  },
+});
+```
+
+If you don't want to create your own theme, you can use [Prism themes](https://github.com/PrismJS/prism-themes).
