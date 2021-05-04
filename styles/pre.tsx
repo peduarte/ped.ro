@@ -108,7 +108,7 @@ export const pre = css({
     },
 
     '&.on': {
-      $$bgAndShadow: '$$highlightedWordBgActive',
+      $$bgAndShadow: '$$highlightedWordBgActive' as any,
       transition: 'all 100ms ease',
       cursor: 'pointer',
     },
@@ -119,7 +119,7 @@ export const pre = css({
     color: '$$deletedWordText',
 
     '&.on': {
-      $$bgAndShadow: '$$deletedWordBgActive',
+      $$bgAndShadow: '$$deletedWordBgActive' as any,
     },
   },
 
@@ -128,7 +128,7 @@ export const pre = css({
     color: '$$addedWordText',
 
     '&.on': {
-      $$bgAndShadow: '$$addedWordBgActive',
+      $$bgAndShadow: '$$addedWordBgActive' as any,
     },
   },
 
