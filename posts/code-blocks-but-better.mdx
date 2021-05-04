@@ -8,11 +8,12 @@ I've been exploring ways to improve the code blocks on the Stitches and Radix do
 For an enhanced user experience, I wanted to be able to:
 
 - Syntax highlight
-- Multiple themes
+- Apply multiple themes
 - Highlight specific lines
 - Highlight specific words
 - Interact with the content
 - Make specific words link to other pages
+- Show line numbers
 - Make it collapsible/expandable
 - Render a preview
 
@@ -45,9 +46,9 @@ export function Counter({ initialCount = 0 }) {
 }
 ```
 
-### Multiple themes
+### Apply multiple themes
 
-Render the code block with differnt styles:
+Render the code block in different styles. Like this orange theme:
 
 ```jsx theme=orange
 import React from 'react';
@@ -62,6 +63,8 @@ export function Counter({ initialCount = 0 }) {
 }
 ```
 
+Or this pink theme:
+
 ```jsx theme=pink
 import React from 'react';
 
@@ -74,6 +77,8 @@ export function Counter({ initialCount = 0 }) {
   );
 }
 ```
+
+Or turquoise:
 
 ```jsx theme=turq
 import React from 'react';
@@ -160,6 +165,23 @@ export function Counter({ initialCount = 0 }) {
 }
 ```
 
+### Show line numbers
+
+Choose whether to display line numbers or not:
+
+```jsx showLineNumbers
+import React from 'react';
+
+export function Counter({ initialCount = 0 }) {
+  const [count, setCount] = React.useState(initialCount);
+  return (
+    <button type="button" onClick={() => setCount((prevCount) => prevCount + 1)}>
+      {count}
+    </button>
+  );
+}
+```
+
 ### Render a preview
 
 Render an interactive preview of what your code block is showing. Click the button!
@@ -201,13 +223,34 @@ export function Counter({ initialCount = 0 }) {
 
 ---
 
-First, lets get the prerequisite out of the way.
+## Implementation
 
-If you don't already have a Next.js project running, [set one up](https://nextjs.org/docs/getting-started).
+### Context
 
-Make sure that it supports `.mdx` files and that you can configure the mapping of markdown elements to react components.
+I've built this to work on Next.js projects. For `.mdx` support, I've used it with [mdx-bundler]() and [next-mdx-remote]().
 
-I used `mdx-bundler`, but you can also use `next-mdx-remote` or `@next/mdx`.
+However, any framework/library that supports rehype plugins should work fine.
+
+### Dependencies
+
+Next, these are the dependencies I rely on:
+
+```bash
+# for code block features
+yarn add unist-util-visit
+yarn add refractor
+yarn add hast-util-to-string
+yarn add hast-util-to-html
+yarn add unified
+yarn add rehype-parse
+yarn add parse-numeric-range
+
+# for styling:
+yarn add @stitches/react
+
+# For collapsible logic:
+yarn add @radix-ui/react-collapsible
+```
 
 ## Syntax highlight
 

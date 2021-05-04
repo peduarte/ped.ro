@@ -130,11 +130,12 @@ export const components = {
       {...props}
     />
   ),
-  pre: ({ children, theme, ...props }) => {
+  pre: ({ children, theme, showLineNumbers = false }) => {
     return (
       <pre
         className={pre({
           theme,
+          showLineNumbers: typeof showLineNumbers === 'string',
           css: {
             mx: '-$4',
             mt: '$3',
@@ -178,7 +179,7 @@ export const components = {
             },
           })}
         >
-          {isOpen ? 'Hide' : 'Show'}
+          {isOpen ? 'Hide' : 'Show'} code
         </Collapsible.Button>
         <Collapsible.Content>{content}</Collapsible.Content>
       </Collapsible.Root>

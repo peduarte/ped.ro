@@ -131,22 +131,6 @@ export const pre = css({
     },
   },
 
-  // Line numbers
-  '&[data-line-numbers=true]': {
-    '.highlight-line': {
-      position: 'relative',
-      paddingLeft: '$4',
-
-      '&::before': {
-        content: 'attr(data-line)',
-        position: 'absolute',
-        left: -5,
-        top: 0,
-        color: '$$lineNumbers',
-      },
-    },
-  },
-
   // Styles for highlighted lines
   '.highlight-line': {
     '&, *': {
@@ -160,6 +144,22 @@ export const pre = css({
   },
 
   variants: {
+    showLineNumbers: {
+      true: {
+        '.highlight-line': {
+          position: 'relative',
+          paddingLeft: '$4',
+
+          '&::before': {
+            content: 'attr(data-line)',
+            position: 'absolute',
+            left: -5,
+            top: 0,
+            color: '$$lineNumbers',
+          },
+        },
+      },
+    },
     theme: {
       orange: {
         $$background: 'rgb(255 135 31 / 10%)',
