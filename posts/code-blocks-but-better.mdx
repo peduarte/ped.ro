@@ -3,7 +3,7 @@ title: 'Code blocks, but better'
 publishedAt: '2021-05-02'
 ---
 
-I've been exploring ways to improve the code blocks on the [Stitches]() and [Radix]() documentation sites.
+I've been exploring ways to improve the code blocks on the [Stitches](https://stitches.dev) and [Radix](https://radix-ui.com) documentation sites.
 
 For an enhanced user experience, I wanted to be able to:
 
@@ -212,7 +212,7 @@ Option to have the code block collapsed:
 
 ## Context
 
-I've built this to work on Next.js projects. For `.mdx` support, I've used it with [mdx-bundler]() and [next-mdx-remote]().
+I've built this to work on Next.js projects. For `.mdx` support, I've used it with [mdx-bundler](https://github.com/kentcdodds/mdx-bundler) and [next-mdx-remote](https://github.com/hashicorp/next-mdx-remote).
 
 However, any framework/library that supports rehype plugins should work fine.
 
@@ -467,7 +467,7 @@ yarn add @radix-ui/react-collapsible
 
 The `rehype-highlight-code` plugin wraps the content of my code block in various `span` elements with different classes, such as `function`, `operator`, `keyword`, etc.
 
-I was then able to target these classes and style them. To do this in a maintainable way, I used [Stitches]().
+I was then able to target these classes and style them. To do this in a maintainable way, I used [Stitches](https://stitches.dev).
 
 With Stitches, I can create a theme and then use its tokens to later style the syntax highlight. But if you don't want to create your own, you can use [Prism themes](https://github.com/PrismJS/prism-themes).
 
@@ -606,7 +606,7 @@ export const Pre = styled('pre', {...});
 
 #### 2. Creating locally scoped tokens
 
-I took advantage of Stitches' [locally-scoped tokens]() to define some variables that I'll then use to highlight the syntax.
+I took advantage of Stitches' [locally-scoped tokens](https://stitches.dev/docs/api#locally-scoped-tokens) to define some variables that I'll then use to highlight the syntax.
 
 This came in super handy when creating additional themes. Keep reading...
 
@@ -722,7 +722,7 @@ export const Pre = styled('pre', {
 
 #### Creating multiple themes
 
-I relied on the Stitches Variant API to create multiple variations of the `Pre` component.
+I relied on the Stitches [Variant API](https://stitches.dev/docs/variants) to create multiple variations of the `Pre` component.
 
 Creating multiple themes was as simple as overriding the previously created locally-scoped tokens. Love it!
 
@@ -1084,6 +1084,8 @@ I then use CSS adjacent selectors to style them, so they look like one UI.
 ### Making it collapsible/expandable
 
 I can optionally make the code block collapsible by passing it as a meta property.
+
+This is powered by the [Radix Collapsible Primitive](https://radix-ui.com/primitives/docs/components/collapsible).
 
 ````html collapsible
 ```html collapsible
