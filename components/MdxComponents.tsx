@@ -38,7 +38,14 @@ export const components = {
     />
   ),
   h4: (props) => (
-    <h4 className={text({ size: '3', css: { mt: '$4', mb: '$3', mx: 'auto' } })} {...props} />
+    <h4
+      className={text({
+        size: '3',
+        weight: 'bold',
+        css: { textTransform: 'uppercase', mt: '$4', mb: '$3', mx: 'auto' },
+      })}
+      {...props}
+    />
   ),
   p: (props) => (
     <p
@@ -130,7 +137,7 @@ export const components = {
       {...props}
     />
   ),
-  pre: ({ children, theme, showLineNumbers = false }) => {
+  pre: ({ children, theme, showLineNumbers }) => {
     return (
       <pre
         className={pre({
