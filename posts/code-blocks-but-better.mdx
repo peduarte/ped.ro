@@ -794,7 +794,7 @@ export const Pre = styled('pre', {
 
 ### Preview component
 
-I created a `Preview` component, which was made available within MDX files. This will come in handy when combining a preview and a code block together, like this [this example]().
+I created a `Preview` component, which was made available within MDX files. This will come in handy when combining a preview and a code block together, like this [this example](./code-blocks-but-better#render-a-preview).
 
 ```jsx
 export function Preview(props) {
@@ -896,8 +896,8 @@ Let me explain a little bit what's going on here.
 - Meta properties are automatically passed in as props to both the `pre` and `code` functions, thanks to the `rehype-meta-attribute` rehype plugin
 - The `pre` element gets replaced with the `Pre` component
 - The `code` element is used both by inline code and code blocks
-- The `H` component is used to [interact with the content]()
-- The `RegisterLink` component is used to [make specific words link to other pages]()
+- The `H` component is used to [interact with the content](./code-blocks-but-better#interact-with-the-content)
+- The `RegisterLink` component is used to [make-specific-words-link-to-other-pages](./code-blocks-but-better#make-specific-words-link-to-other-pages)
 
 ## Part 4 - Usage
 

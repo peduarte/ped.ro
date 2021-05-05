@@ -54,14 +54,15 @@ export const components = {
     />
   ),
   a: ({ href = '', ...props }) => {
-    if (href.startsWith('/')) {
-      return (
-        <NextLink href={href} passHref>
-          <a className={link()} {...props} />
-        </NextLink>
-      );
+    if (href.startsWith('http')) {
+      return <a className={link()} target="_blank" rel="noopener" {...props} />;
     }
-    return <a className={link()} href={href} target="_blank" rel="noopener" {...props} />;
+
+    return (
+      <NextLink href={href} passHref>
+        <a className={link()} {...props} />
+      </NextLink>
+    );
   },
   hr: (props) => <hr className={divider({ size: '1', css: { my: '$5' } })} {...props} />,
   ul: (props) => <ul className={box({ mb: '$4' })} {...props} />,
