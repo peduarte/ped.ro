@@ -55,7 +55,7 @@ export const components = {
   ),
   a: ({ href = '', ...props }) => {
     if (href.startsWith('http')) {
-      return <a className={link()} target="_blank" rel="noopener" {...props} />;
+      return <a className={link()} href={href} target="_blank" rel="noopener" {...props} />;
     }
 
     return (
