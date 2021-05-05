@@ -21,11 +21,9 @@ In terms of developer experience, the documentation sites are built using [Next.
 
 In this post, I'll show you how I made a custom code block with the features above.
 
-Ready? Let's get it.
-
 ---
 
-## Demo
+## But first, demos
 
 I'll be using the code block of my own website as the demo, it looks like this:
 
@@ -214,46 +212,35 @@ Option to have the code block collpased:
 
 ---
 
-## Implementation
-
-### Context
+## Context
 
 I've built this to work on Next.js projects. For `.mdx` support, I've used it with [mdx-bundler]() and [next-mdx-remote]().
 
 However, any framework/library that supports rehype plugins should work fine.
 
+I've split the code in two parts: rehype and UI. I think it's easier to show the entire files at first, and how they work together. Then I'll breakdown some useful steps.
+
+## Part 1 - mdx and rehype
+
+This part is where the code block features happen. Syntax, line, word highlighting and MDX component substitution.
+
 ### Dependencies
 
-Next, these are the dependencies I rely on:
-
 ```bash
-# for code block features
-yarn add unist-util-visit
-yarn add refractor
-yarn add hast-util-to-string
-yarn add hast-util-to-html
-yarn add unified
-yarn add rehype-parse
-yarn add parse-numeric-range
-
-# for styling:
-yarn add @stitches/react
-
-# for collapsible logic:
-yarn add @radix-ui/react-collapsible
+yarn add unist-util-visit refractor hast-util-to-string hast-util-to-html unified rehype-parse parse-numeric-range
 ```
 
-## Syntax highlight
+### rehype-highlight-code
 
-The most basic requirement is to be able to do syntax highlighting.
-
-For this, I created a rehype plugin using [refractor](https://github.com/wooorm/refractor) by [wooorm]().
+This is the main rehype plugin. This is where we handle syntax, line and word highlighting. Inspired by [mdx-prism](https://github.com/j0lv3r4/mdx-prism).
 
 ```js
-// rehype-highlight-code.js
+const rangeParser = require('parse-numeric-range');
 const visit = require('unist-util-visit');
 const nodeToString = require('hast-util-to-string');
 const refractor = require('refractor');
+const highlightLine = require('./rehype-highlight-line');
+const highlightWord = require('./rehype-highlight-word');
 
 module.exports = (options = {}) => {
   return (tree) => {
@@ -261,10 +248,17 @@ module.exports = (options = {}) => {
   };
 
   function visitor(node, index, parentNode) {
-    if (parentNode.tagName === 'pre' || node.tagName === 'code') {
+    if (parentNode.tagName === 'pre' && node.tagName === 'code') {
       // syntax highlight
       const lang = node.properties.className ? node.properties.className[0].split('-')[1] : 'md';
       let result = refractor.highlight(nodeToString(node), lang);
+
+      // line highlight
+      const linesToHighlight = rangeParser(node.properties.line || '0');
+      result = highlightLine(result, linesToHighlight);
+
+      // word highlight
+      result = highlightWord(result);
 
       node.children = result;
     }
@@ -272,9 +266,208 @@ module.exports = (options = {}) => {
 };
 ```
 
-> Plugin inspired by [mdx-prism](https://github.com/j0lv3r4/mdx-prism).
+### rehype-highlight-line
 
-The rehype plugin wraps the content of my code block in various `span` elements with different classes, such as `function`, `operator`, `keyword`, etc.
+This is a rehype utility for highlighting lines.
+
+```js
+const hastToHtml = require('hast-util-to-html');
+const unified = require('unified');
+const parse = require('rehype-parse');
+
+const lineNumberify = function lineNumberify(ast, lineNum = 1) {
+  let lineNumber = lineNum;
+  return ast.reduce(
+    (result, node) => {
+      if (node.type === 'text') {
+        if (node.value.indexOf('\n') === -1) {
+          node.lineNumber = lineNumber;
+          result.nodes.push(node);
+          return result;
+        }
+
+        const lines = node.value.split('\n');
+        for (let i = 0; i < lines.length; i++) {
+          if (i !== 0) ++lineNumber;
+          if (i === lines.length - 1 && lines[i].length === 0) continue;
+          result.nodes.push({
+            type: 'text',
+            value: i === lines.length - 1 ? lines[i] : `${lines[i]}\n`,
+            lineNumber: lineNumber,
+          });
+        }
+
+        result.lineNumber = lineNumber;
+        return result;
+      }
+
+      if (node.children) {
+        node.lineNumber = lineNumber;
+        const processed = lineNumberify(node.children, lineNumber);
+        node.children = processed.nodes;
+        result.lineNumber = processed.lineNumber;
+        result.nodes.push(node);
+        return result;
+      }
+
+      result.nodes.push(node);
+      return result;
+    },
+    { nodes: [], lineNumber: lineNumber }
+  );
+};
+
+const wrapLines = function wrapLines(ast, linesToHighlight) {
+  const highlightAll = linesToHighlight.length === 1 && linesToHighlight[0] === 0;
+  const allLines = Array.from(new Set(ast.map((x) => x.lineNumber)));
+  let i = 0;
+  const wrapped = allLines.reduce((nodes, marker) => {
+    const line = marker;
+    const children = [];
+    for (; i < ast.length; i++) {
+      if (ast[i].lineNumber < line) {
+        nodes.push(ast[i]);
+        continue;
+      }
+
+      if (ast[i].lineNumber === line) {
+        children.push(ast[i]);
+        continue;
+      }
+
+      if (ast[i].lineNumber > line) {
+        break;
+      }
+    }
+
+    nodes.push({
+      type: 'element',
+      tagName: 'div',
+      properties: {
+        dataLine: line,
+        className: 'highlight-line',
+        dataHighlighted: linesToHighlight.includes(line) || highlightAll ? 'true' : 'false',
+      },
+      children: children,
+      lineNumber: line,
+    });
+
+    return nodes;
+  }, []);
+
+  return wrapped;
+};
+
+// https://github.com/gatsbyjs/gatsby/pull/26161/files
+const MULTILINE_TOKEN_SPAN = /<span class="token ([^"]+)">[^<]*\n[^<]*<\/span>/g;
+
+const applyMultilineFix = function (ast) {
+  // AST to HTML
+  let html = hastToHtml(ast);
+
+  // Fix JSX issue
+  html = html.replace(MULTILINE_TOKEN_SPAN, (match, token) =>
+    match.replace(/\n/g, `</span>\n<span class="token ${token}">`)
+  );
+
+  // HTML to AST
+  const hast = unified().use(parse, { emitParseErrors: true, fragment: true }).parse(html);
+
+  return hast.children;
+};
+
+module.exports = function (ast, lines) {
+  const formattedAst = applyMultilineFix(ast);
+  const numbered = lineNumberify(formattedAst).nodes;
+
+  return wrapLines(numbered, lines);
+};
+```
+
+### rehype-highlight-word
+
+This is a rehype utility for highlighting word.
+
+```js ignoreWordHighlight
+const visit = require('unist-util-visit');
+const hastToHtml = require('hast-util-to-html');
+const unified = require('unified');
+const parse = require('rehype-parse');
+
+const CALLOUT = /__(.*?)__/g;
+
+module.exports = (code) => {
+  const html = hastToHtml(code);
+  const result = html.replace(CALLOUT, (_, text) => `<span class="highlight-word">${text}</span>`);
+  const hast = unified().use(parse, { emitParseErrors: true, fragment: true }).parse(result);
+  return hast.children;
+};
+```
+
+### rehype-meta-attribute
+
+This plugin passes the `meta` as props when substituting components. More [info here](https://github.com/wooorm/xdm#syntax-highlighting-with-the-meta-field).
+
+```js
+const visit = require('unist-util-visit');
+
+var re = /\b([-\w]+)(?:=(?:"([^"]*)"|'([^']*)'|([^"'\s]+)))?/g;
+
+module.exports = (options = {}) => {
+  return (tree) => {
+    visit(tree, 'element', visitor);
+  };
+
+  function visitor(node, index, parentNode) {
+    var match;
+
+    if (node.tagName === 'code' && node.data && node.data.meta) {
+      re.lastIndex = 0; // Reset regex.
+
+      while ((match = re.exec(node.data.meta))) {
+        node.properties[match[1]] = match[2] || match[3] || match[4] || '';
+        parentNode.properties[match[1]] = match[2] || match[3] || match[4] || '';
+      }
+    }
+  }
+};
+```
+
+### mdx-bundler
+
+Now I need to tell mdx-bundler to use the `rehype-highlight-code` and the `rehype-meta-attribute` plugins. This is done via the [xmdOptions](https://github.com/kentcdodds/mdx-bundler#xdmoptions).
+
+```js
+import rehypeHighlightCode from './rehype-highlight-code';
+import rehypeMetaAttribute from './rehype-meta-attribute';
+
+bundleMDX(source, {
+  xdmOptions(input, options) {
+    options.rehypePlugins = [
+      ...(options.rehypePlugins ?? []),
+      rehypeMetaAttribute,
+      rehypeHighlightCode,
+    ];
+
+    return options;
+  },
+});
+```
+
+## Part 2 - UI
+
+Next, these are the dependencies I rely on:
+
+### Dependencies
+
+```bash
+yarn add @stitches/react
+yarn add @radix-ui/react-collapsible
+```
+
+### Pre component
+
+The `rehype-highlight-code` plugin wraps the content of my code block in various `span` elements with different classes, such as `function`, `operator`, `keyword`, etc.
 
 For example, this code block:
 
@@ -293,25 +486,6 @@ class=&quot;token punctuation&quot;&gt;&amp;lt;/&lt;/span&gt;h1&lt;/span&gt;&lt;
 class=&quot;token punctuation&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;
 
 </pre>}
-
-#### Usage
-
-I added it to [mdx-bundler options](), and then it's just writing markdown as normal.
-
-{
-
-<pre>
-  &#96;&#96;&#96;jsx <br />
-  code goes here
-  <br />
-  &#96;&#96;&#96;
-</pre>
-
-}
-
-I can tell it which language to use by adding it after the triple backticks, for example, if the code is in HTML, I'd do {<code>&#96;&#96;&#96;html</code>}.
-
-### Adding the styles
 
 I was then able to target these classes and style them. To do this in a maintanable way, I used [Stitches]().
 
@@ -440,7 +614,7 @@ export const Pre = styled('pre', {
 
 Let me go through it step-by-step.
 
-#### 1. Creating a component
+### 1. Creating a component
 
 I'm importing the `styled` function from `stitches.config.ts`. That's where we did the set up, to provide Stitches with our theme. Then I use the `styled` function to create a Stitches component.
 
@@ -450,7 +624,7 @@ import { styled } from './stitches.config';
 export const Pre = styled('pre', {...});
 ```
 
-#### 2. Creating locally scoped tokens
+### 2. Creating locally scoped tokens
 
 I took advantage of Stitches' [locally-scoped tokens]() to define some variables that I'll then use to highlight the syntax.
 
@@ -474,7 +648,7 @@ export const Pre = styled('pre', {
 });
 ```
 
-#### 3. Adding base styles
+### 3. Adding base styles
 
 Then I added the base styles for the `pre` and `code` elements.
 
@@ -500,7 +674,7 @@ export const Pre = styled('pre', {
 });
 ```
 
-#### 4. Adding syntax styles
+### 4. Adding syntax styles
 
 I could target the classes generated by the rehype plugin and add syntax highlighting. With Stitches, I was able to reference the locally-scoped tokens, by using `$$` (two dollar signs).
 
@@ -566,21 +740,6 @@ export const Pre = styled('pre', {
 });
 ```
 
-#### Usage
-
-I used XDM's [component substitution](https://github.com/kentcdodds/mdx-bundler#component-substitution) to replace the `pre` from the mdx files with the `Pre` Stitches component
-
-```jsx
-const components = {
-  pre: ({ children }) => {
-    return <Pre>{children}</Pre>;
-  },
-  code: ({ children, id }) => {
-    return <code children={children} id={id} />;
-  },
-};
-```
-
 ### Applying multiple themes
 
 I relied on the Stitches Variant API to create multiple variations of the `Pre` component.
@@ -621,175 +780,17 @@ export const Pre = styled('pre', {
 });
 ```
 
-### Highlight specific lines
+## Part 3 - Component substitution
 
-I created another rehype utility to add line highlighting support.
+I used XDM's [component substitution](https://github.com/kentcdodds/mdx-bundler#component-substitution) to replace the `pre` from the mdx files with the `Pre` Stitches component
 
-```js
-// rehype-highlght-line.js
-const hastToHtml = require('hast-util-to-html');
-const unified = require('unified');
-const parse = require('rehype-parse');
-
-const lineNumberify = function lineNumberify(ast, lineNum = 1) {
-  let lineNumber = lineNum;
-  return ast.reduce(
-    (result, node) => {
-      if (node.type === 'text') {
-        if (node.value.indexOf('\n') === -1) {
-          node.lineNumber = lineNumber;
-          result.nodes.push(node);
-          return result;
-        }
-
-        const lines = node.value.split('\n');
-        for (let i = 0; i < lines.length; i++) {
-          if (i !== 0) ++lineNumber;
-          if (i === lines.length - 1 && lines[i].length === 0) continue;
-          result.nodes.push({
-            type: 'text',
-            value: i === lines.length - 1 ? lines[i] : `${lines[i]}\n`,
-            lineNumber: lineNumber,
-          });
-        }
-
-        result.lineNumber = lineNumber;
-        return result;
-      }
-
-      if (node.children) {
-        node.lineNumber = lineNumber;
-        const processed = lineNumberify(node.children, lineNumber);
-        node.children = processed.nodes;
-        result.lineNumber = processed.lineNumber;
-        result.nodes.push(node);
-        return result;
-      }
-
-      result.nodes.push(node);
-      return result;
-    },
-    { nodes: [], lineNumber: lineNumber }
-  );
-};
-
-const wrapLines = function wrapLines(ast, linesToHighlight) {
-  const highlightAll = linesToHighlight.length === 1 && linesToHighlight[0] === 0;
-  const allLines = Array.from(new Set(ast.map((x) => x.lineNumber)));
-  let i = 0;
-  const wrapped = allLines.reduce((nodes, marker) => {
-    const line = marker;
-    const children = [];
-    for (; i < ast.length; i++) {
-      if (ast[i].lineNumber < line) {
-        nodes.push(ast[i]);
-        continue;
-      }
-
-      if (ast[i].lineNumber === line) {
-        children.push(ast[i]);
-        continue;
-      }
-
-      if (ast[i].lineNumber > line) {
-        break;
-      }
-    }
-
-    nodes.push({
-      type: 'element',
-      tagName: 'div',
-      properties: {
-        dataLine: line,
-        className: 'highlight-line',
-        dataHighlighted: linesToHighlight.includes(line) || highlightAll ? 'true' : 'false',
-      },
-      children: children,
-      lineNumber: line,
-    });
-
-    return nodes;
-  }, []);
-
-  return wrapped;
-};
-
-// https://github.com/gatsbyjs/gatsby/pull/26161/files
-const MULTILINE_TOKEN_SPAN = /<span class="token ([^"]+)">[^<]*\n[^<]*<\/span>/g;
-
-const applyMultilineFix = function (ast) {
-  // AST to HTML
-  let html = hastToHtml(ast);
-
-  // Fix JSX issue
-  html = html.replace(MULTILINE_TOKEN_SPAN, (match, token) =>
-    match.replace(/\n/g, `</span>\n<span class="token ${token}">`)
-  );
-
-  // HTML to AST
-  const hast = unified().use(parse, { emitParseErrors: true, fragment: true }).parse(html);
-
-  return hast.children;
-};
-
-module.exports = function (ast, lines) {
-  const formattedAst = applyMultilineFix(ast);
-  const numbered = lineNumberify(formattedAst).nodes;
-
-  return wrapLines(numbered, lines);
-};
-```
-
-> Inspired by https://github.com/j0lv3r4/mdx-prism
-
-Then, I imported this utility into the `rehype-highlight-code` plugin.
-
-```js line=6,19-21
-// rehype-highlight-code.js
-const rangeParser = require('parse-numeric-range');
-const visit = require('unist-util-visit');
-const nodeToString = require('hast-util-to-string');
-const refractor = require('refractor');
-const highlightLine = require('./rehype-highlight-line');
-
-module.exports = (options = {}) => {
-  return (tree) => {
-    visit(tree, 'element', visitor);
-  };
-
-  function visitor(node, index, parentNode) {
-    if (parentNode.tagName === 'pre' && node.tagName === 'code') {
-      // syntax highlight
-      const lang = node.properties.className ? node.properties.className[0].split('-')[1] : 'md';
-      let result = refractor.highlight(nodeToString(node), lang);
-
-      // line highlight
-      const linesToHighlight = rangeParser(node.properties.line || '0');
-      result = highlightLine(result, linesToHighlight);
-
-      node.children = result;
-    }
-  }
-};
-```
-
-### Highlight specific words
-
-I created another rehype utility to add word highlighting support.
-
-```js
-// rehype-word-highlight.js
-const visit = require('unist-util-visit');
-const hastToHtml = require('hast-util-to-html');
-const unified = require('unified');
-const parse = require('rehype-parse');
-
-const CALLOUT = /__(.*?)__/g;
-
-module.exports = (code) => {
-  const html = hastToHtml(code);
-  const result = html.replace(CALLOUT, (_, text) => `<span class="highlight-word">${text}</span>`);
-  const hast = unified().use(parse, { emitParseErrors: true, fragment: true }).parse(result);
-  return hast.children;
+```jsx
+const components = {
+  pre: ({ children }) => {
+    return <Pre>{children}</Pre>;
+  },
+  code: ({ children, id }) => {
+    return <code children={children} id={id} />;
+  },
 };
 ```
