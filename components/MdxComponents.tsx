@@ -137,7 +137,7 @@ export const components = {
       {...props}
     />
   ),
-  pre: ({ children, theme, showLineNumbers }) => {
+  pre: ({ children, theme, showLineNumbers = 'as' }) => {
     return (
       <pre
         className={pre({
