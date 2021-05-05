@@ -19,7 +19,9 @@ This was my wishlist:
 - Make it collapsible/expandable
 - Render a preview
 
-In this post, I'll show you how I built a custom code block component.
+In this post, I'll share with you how I built a custom code block component.
+
+Disclaimer: this is not a tutorial, but I hope you can discover something new.
 
 ---
 
@@ -235,6 +237,7 @@ yarn add unist-util-visit refractor hast-util-to-string hast-util-to-html unifie
 This is the main rehype plugin. This is where we handle syntax (thanks to [refractor](https://github.com/wooorm/refractor)), line and word highlighting. Inspired by [mdx-prism](https://github.com/j0lv3r4/mdx-prism).
 
 ```js
+// rehype-highlight-code.js
 const rangeParser = require('parse-numeric-range');
 const visit = require('unist-util-visit');
 const nodeToString = require('hast-util-to-string');
@@ -271,6 +274,7 @@ module.exports = (options = {}) => {
 This is a rehype utility for highlighting lines.
 
 ```js
+// rehype-highlight-line.js
 const hastToHtml = require('hast-util-to-html');
 const unified = require('unified');
 const parse = require('rehype-parse');
@@ -389,6 +393,7 @@ module.exports = function (ast, lines) {
 This is a rehype utility for highlighting a word.
 
 ```js ignoreWordHighlight
+// rehype-highlight-word.js
 const visit = require('unist-util-visit');
 const hastToHtml = require('hast-util-to-html');
 const unified = require('unified');
@@ -409,6 +414,7 @@ module.exports = (code) => {
 This plugin passes the `meta` as props when substituting components. More [info here](https://github.com/wooorm/xdm#syntax-highlighting-with-the-meta-field).
 
 ```js
+// rehype-meta-attribute.js
 const visit = require('unist-util-visit');
 
 var re = /\b([-\w]+)(?:=(?:"([^"]*)"|'([^']*)'|([^"'\s]+)))?/g;
