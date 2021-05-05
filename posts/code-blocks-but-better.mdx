@@ -189,12 +189,12 @@ Render an interactive preview of what your code block is showing. Click the butt
 {
 
 <Preview>
-  <DemoCounter initialvalue="{32}" />
+  <DemoCounter initialCount={32} />
 </Preview>
 }
 
-```html
-<Counter initialvalue="{32}" />
+```jsx
+<Counter initialCount={32} />
 ```
 
 ### Make it collapsible/expandable
@@ -204,21 +204,12 @@ Option to have the code block collpased:
 {
 
 <Preview>
-  <DemoCounter initialvalue="{32}" color="orange" />
+  <DemoCounter initialCount={99} color="orange" />
 </Preview>
 }
 
 ```jsx collapsible
-import React from 'react';
-
-export function Counter({ initialCount = 0 }) {
-  const [count, setCount] = React.useState(initialCount);
-  return (
-    <button type="button" onClick={() => setCount((prevCount) => prevCount + 1)}>
-      {count}
-    </button>
-  );
-}
+<DemoCounter initialCount={99} />
 ```
 
 ---
@@ -248,7 +239,7 @@ yarn add parse-numeric-range
 # for styling:
 yarn add @stitches/react
 
-# For collapsible logic:
+# for collapsible logic:
 yarn add @radix-ui/react-collapsible
 ```
 
@@ -269,28 +260,23 @@ module.exports = (options = {}) => {
     visit(tree, 'element', visitor);
   };
 
-  function visitor(node, index, parent) {
-    if (
-      !parent ||
-      parent.tagName !== 'pre' ||
-      node.tagName !== 'code' ||
-      !node.properties.className
-    ) {
-      return;
+  function visitor(node, index, parentNode) {
+    if (parentNode.tagName === 'pre' || node.tagName === 'code') {
+      // syntax highlight
+      const lang = node.properties.className ? node.properties.className[0].split('-')[1] : 'md';
+      let result = refractor.highlight(nodeToString(node), lang);
+
+      node.children = result;
     }
-
-    const [_, lang] = node.properties.className[0].split('-');
-    const codeString = nodeToString(node);
-    let result = refractor.highlight(codeString, lang);
-
-    node.children = result;
   }
 };
 ```
 
 This was inspired by [mdx-prism](https://github.com/j0lv3r4/mdx-prism).
 
-This plugin will wrap your the content of your code block in various `span` elements with different classes, such as `function`, `operator`, `keyword`, etc.
+### Adding the styles
+
+The rehype plugin wraps the content of my code block in various `span` elements with different classes, such as `function`, `operator`, `keyword`, etc.
 
 For example, this code block:
 
@@ -310,17 +296,23 @@ class=&quot;token punctuation&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;
 
 </pre>}
 
-### Adding the styles
-
 I was then able to target these classes and style them. To do this in a maintanable way, I used [Stitches]().
 
-Stitches allowed me to predefine a theme, so I was able to use its tokens to add syntax highlighting.
+With Stitches I am able to create a theme, and then use its tokens to later style the syntax highlight.
 
 ```jsx
+// stitches.config.ts
 import { createCss } from '@stitches/react';
 
 export const { styled } = createCss({
   theme: {
+    fonts: {
+      mono: 'Fira Mono, monospace',
+    },
+    fontSizes: {
+      1: '12px',
+      2: '14px',
+    },
     colors: {
       black: 'rgba(19, 19, 21, 1)',
       white: 'rgba(255, 255, 255, 1)',
@@ -332,6 +324,99 @@ export const { styled } = createCss({
       turq: 'rgba(0, 245, 196, 1)',
       orange: 'rgba(255, 135, 31, 1)',
     },
+    space: {
+      1: '4px',
+      2: '8px',
+      3: '16px',
+    },
+    radii: {
+      1: '2px',
+      2: '4px',
+    },
+  },
+});
+```
+
+Now that Stitches is set up, I could import the `styled` function and use it to style the `pre` element.
+
+```jsx
+import { styled } from './stitches.config';
+
+export const Pre = styled('pre', {
+  $$background: 'hsla(206 12% 89.5% / 5%)',
+  $$text: '$colors$white',
+  $$syntax1: '$colors$orange',
+  $$syntax2: '$colors$turq',
+  $$syntax3: '$colors$pink',
+  $$syntax4: '$colors$pink',
+  $$comment: '$colors$gray',
+  $$removed: '$colors$red',
+  $$added: '$colors$turq',
+
+  boxSizing: 'border-box',
+  padding: '$3',
+  overflow: 'auto',
+  fontFamily: '$mono',
+  fontSize: '$2',
+  lineHeight: '$3',
+  whiteSpace: 'pre',
+  backgroundColor: '$$background',
+  color: '$$text',
+
+  '& > code': { display: 'block' },
+
+  '.token.parameter': {
+    color: '$$text',
+  },
+
+  '.token.tag, .token.class-name, .token.selector, .token.selector .class, .token.function': {
+    color: '$$syntax1',
+  },
+
+  '.token.attr-value, .token.class, .token.string, .token.number, .token.unit, .token.color': {
+    color: '$$syntax2',
+  },
+
+  '.token.attr-name, .token.keyword, .token.rule, .token.operator, .token.pseudo-class, .token.important': {
+    color: '$$syntax3',
+  },
+
+  '.token.punctuation, .token.module, .token.property': {
+    color: '$$syntax4',
+  },
+
+  '.token.comment': {
+    color: '$$comment',
+  },
+
+  '.token.atapply .token:not(.rule):not(.important)': {
+    color: 'inherit',
+  },
+
+  '.language-shell .token:not(.comment)': {
+    color: 'inherit',
+  },
+
+  '.language-css .token.function': {
+    color: 'inherit',
+  },
+
+  '.token.deleted:not(.prefix), .token.inserted:not(.prefix)': {
+    display: 'block',
+    px: '$4',
+    mx: '-20px',
+  },
+
+  '.token.deleted:not(.prefix)': {
+    color: '$$removed',
+  },
+
+  '.token.inserted:not(.prefix)': {
+    color: '$$added',
+  },
+
+  '.token.deleted.prefix, .token.inserted.prefix': {
+    userSelect: 'none',
   },
 });
 ```
