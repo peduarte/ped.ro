@@ -64,8 +64,8 @@ export default function PostPage({ frontmatter, code }: Post) {
             css: { mt: '$1', mx: 'auto', fontFamily: '$mono', color: '$gray' },
           })}
         >
-          {format(parseISO(frontmatter.publishedAt), 'MMMM dd, yyyy')} —{' '}
-          {frontmatter.readingTime.text}
+          {format(parseISO(frontmatter.publishedAt), 'MMMM dd, yyyy')}
+          {/* —{' '}{frontmatter.readingTime.text} */}
         </time>
 
         <div className={box({ my: '$5' })}>

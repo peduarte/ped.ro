@@ -393,6 +393,22 @@
     "@radix-ui/react-polymorphic" "0.0.10"
     "@radix-ui/react-primitive" "0.0.11"
 
+"@radix-ui/react-collapsible@^0.0.14":
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-collapsible/-/react-collapsible-0.0.14.tgz#9a232961a98538ace58cb5cc26af00dbd71dc4e6"
+  integrity sha512-DxGdREqbeLUcPUNjoBJ1krOYyWPRx8Ktreo/qgbQ//Ui4FRlA4IyuOq6x1pR2kkllnJ/CvhFZTR1JeeZ0b0U3g==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@radix-ui/primitive" "0.0.5"
+    "@radix-ui/react-compose-refs" "0.0.5"
+    "@radix-ui/react-context" "0.0.5"
+    "@radix-ui/react-id" "0.0.6"
+    "@radix-ui/react-polymorphic" "0.0.11"
+    "@radix-ui/react-presence" "0.0.13"
+    "@radix-ui/react-primitive" "0.0.12"
+    "@radix-ui/react-use-controllable-state" "0.0.6"
+    "@radix-ui/react-use-layout-effect" "0.0.5"
+
 "@radix-ui/react-compose-refs@0.0.5":
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-compose-refs/-/react-compose-refs-0.0.5.tgz#0f71f0de1dec341f30cebd420b6bc3d12a3037dd"
@@ -458,10 +474,17 @@
   resolved "https://registry.yarnpkg.com/@radix-ui/react-icons/-/react-icons-1.0.3.tgz#4ef61f1234f44991f7a19e108f77ca37032b4be2"
   integrity sha512-YbPAUZwTsvF/2H7IU35txaLUB+JNSV8GIhnswlqiFODP/P32t5op5keYUvQWsSj9TA0VLF367J24buUjIprn0w==
 
-"@radix-ui/react-id@0.0.5", "@radix-ui/react-id@^0.0.5":
+"@radix-ui/react-id@0.0.5":
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-id/-/react-id-0.0.5.tgz#db2336f74e6b1b1cf48195c7d71a89eb80eb0dd9"
   integrity sha512-ho3Nti6qdlG6y6Ac+MzbaRfd1f601FpxOHfobT27mDClvlpX/c/TEK6bmSWRd0ZNdqEhbwC5s+JirutO06uBVw==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+
+"@radix-ui/react-id@0.0.6", "@radix-ui/react-id@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-id/-/react-id-0.0.6.tgz#c4b27d11861805e91ac296e7758ab47e3947b65c"
+  integrity sha512-PzmraF34fYggsYvTIZVJ5S68WMp3aKUN3HkSmGnz4zn9zpRjkAbbg7Xn3ueQI3FQsLWKgyUfnpsmWFDndpcqYg==
   dependencies:
     "@babel/runtime" "^7.13.10"
 
@@ -469,6 +492,13 @@
   version "0.0.10"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-polymorphic/-/react-polymorphic-0.0.10.tgz#b5f759463f93425776f116077fa705461c68358b"
   integrity sha512-kzvlPoFQS4q09ysg7nUieH74dmRIctZKmje3hUdKCHuISWnZu6K4qg2jei+nhCrZw4yRGLv/GybKsgvnBftvaA==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+
+"@radix-ui/react-polymorphic@0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-polymorphic/-/react-polymorphic-0.0.11.tgz#23f26b14e67a0e57cd981c37618d603b952af80d"
+  integrity sha512-CztM4962esOx3i1ls6GuY9RBYIY2Df1Bmp5emHRTxZi8owyCZwZYPctYaDuMO0qIGikPiKD8HBion/m7VWUyEA==
   dependencies:
     "@babel/runtime" "^7.13.10"
 
@@ -497,6 +527,14 @@
   dependencies:
     "@babel/runtime" "^7.13.10"
     "@radix-ui/react-polymorphic" "0.0.10"
+
+"@radix-ui/react-primitive@0.0.12":
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-primitive/-/react-primitive-0.0.12.tgz#b4bad44d95c415cf16aa3ac6cf83de7813d6f27f"
+  integrity sha512-qJz8Rb95MOD+w/y6NQnEhNp/Lm8XEDfiwAIF/HRwEVBGYZ82qV/vWjfWCAtnoWlMoN6MpI2YN1pdU5mu/qQyzA==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@radix-ui/react-polymorphic" "0.0.11"
 
 "@radix-ui/react-use-body-pointer-events@0.0.6":
   version "0.0.6"

@@ -21,9 +21,7 @@ export default function TitleAndMetaTags({
   const domain = `${url}${path}`;
 
   const screenshotUrl = 'https://i.microlink.io/';
-  const cardUrl = `https://cards.microlink.io/?preset=pedro&title=${encodeURIComponent(
-    description
-  )}&domain=${domain}`;
+  const cardUrl = `https://cards.microlink.io/?preset=pedro&title=${description}&domain=${domain}`;
   const image = `${screenshotUrl}${encodeURIComponent(cardUrl)}`;
 
   return (
