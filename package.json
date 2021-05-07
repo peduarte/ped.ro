@@ -18,6 +18,7 @@
     "@radix-ui/react-visually-hidden": "0.0.11",
     "@stitches/core": "0.1.9",
     "date-fns": "2.19.0",
+    "fathom-client": "^3.0.0",
     "glob": "^7.1.6",
     "gray-matter": "4.0.2",
     "hast-util-to-html": "^7.1.2",
