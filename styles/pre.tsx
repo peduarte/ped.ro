@@ -110,7 +110,6 @@ export const pre = css({
     '&:hover': {
       $$bgAndShadow: '$$highlightedWordBgActive' as any,
       transition: 'all 100ms ease',
-      cursor: 'pointer',
     },
   },
 
