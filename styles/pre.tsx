@@ -95,6 +95,7 @@ export const pre = css({
   '.highlight-word': {
     $$bgAndShadow: '$$highlightedWordBg',
     $$xOffset: '1px',
+    textDecoration: 'none',
     color: '$$highlightedWordText',
     backgroundColor: '$$bgAndShadow',
     display: 'inline-block',
@@ -106,7 +107,7 @@ export const pre = css({
       color: 'inherit',
     },
 
-    '&.on': {
+    '&:hover': {
       $$bgAndShadow: '$$highlightedWordBgActive' as any,
       transition: 'all 100ms ease',
       cursor: 'pointer',

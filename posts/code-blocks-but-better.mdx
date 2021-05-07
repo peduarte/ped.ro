@@ -849,19 +849,11 @@ const components = {
       const target = allHighlightWords[index - 1];
       if (!target) return;
 
-      const addClass = () => target.classList.add('on');
-      const removeClass = () => target.classList.remove('on');
-      const addClick = () => (isExternal ? window.location.assign(href) : NextRouter.push(href));
-
-      target.addEventListener('mouseenter', addClass);
-      target.addEventListener('mouseleave', removeClass);
-      target.addEventListener('click', addClick);
-
-      return () => {
-        target.removeEventListener('mouseenter', addClass);
-        target.removeEventListener('mouseleave', removeClass);
-        target.removeEventListener('click', addClick);
-      };
+      const link = document.createElement('a');
+      link.href = href;
+      link.innerHTML = target.innerHTML;
+      link.classList.add(target.className);
+      target.replaceWith(link);
     }, []);
 
     return null;
