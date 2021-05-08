@@ -214,8 +214,7 @@ export const components = {
           href,
           innerHTML: target.innerHTML,
           className: target.className,
-          target: '_blank',
-          rel: 'noopener',
+          ...(isExternal ? { target: '_blank', rel: 'noopener' } : {}),
         })
       );
     }, []);
