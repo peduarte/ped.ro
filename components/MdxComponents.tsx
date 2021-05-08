@@ -209,11 +209,15 @@ export const components = {
       const target = allHighlightWords[index - 1];
       if (!target) return;
 
-      const link = document.createElement('a');
-      link.href = href;
-      link.innerHTML = target.innerHTML;
-      link.classList.add(target.className);
-      target.replaceWith(link);
+      target.replaceWith(
+        Object.assign(document.createElement('a'), {
+          href,
+          innerHTML: target.innerHTML,
+          className: target.className,
+          target: '_blank',
+          rel: 'noopener',
+        })
+      );
     }, []);
 
     return null;
