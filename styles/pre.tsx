@@ -107,7 +107,7 @@ export const pre = css({
       color: 'inherit',
     },
 
-    '&:hover': {
+    '&:hover, &.on': {
       $$bgAndShadow: '$$highlightedWordBgActive' as any,
       transition: 'all 100ms ease',
     },
