@@ -1,0 +1,313 @@
+---
+title: 'Variant-driven Components'
+publishedAt: '2021-05-18'
+---
+
+Variants are an excellent way to express how a component could look. It allows us to separate our design concerns into isolated rules.
+
+Variants can be immutable, responsive, and composed. This enables a great deal of flexibility and power when building UIs.
+
+In this article, I'll demonstrate how you can build variant-driven components using [Stitches]().
+
+---
+
+## Context
+
+Since joining [Modulz](), almost three years ago, I've been exploring the idea of variant-driven components. The Modulz editor was designed with variants in mind, and so was the production-ready code output.
+
+At the time, we were creating faux variants on top of existing styling solutions. However the result wasn't ideal. We needed an interoperable solution, so both the designers and developers could work on the same source of truth.
+
+### Stitches
+
+[Stitches]() is a styling solution focusing on component architecture and developer experience.
+
+It introduces a first-class variant API, enabling design system authors to express their intent better. It's fully typed, catching potential mistakes and improving the scalability of design systems. It's lightweight, coming in at less than 5kb. And finally, it's a breeze to get up and running with it.
+
+### This article
+
+To highlight how variants can be created and consumed, I'm going to use a generic `Box` component.
+
+If you'd like to follow along, make sure you've installed Stitches:
+
+```bash
+# yarn
+yarn add @stitches/react
+
+# npm
+npm i @stitches/react
+```
+
+## Creating a component
+
+To create the `Box` component, first, import the `styled` function from Stitches:
+
+```jsx
+import { styled } from '@stitches/react';
+```
+
+Then use it to create a component:
+
+```jsx line=3-7
+import { styled } from '@stitches/react';
+
+const Box = styled('div', {
+  width: '100px',
+  height: '100px',
+  backgroundColor: 'pink',
+});
+```
+
+Finally, render it just like you would any React component:
+
+{
+
+<Preview>
+  <Box css={{ width: '100px', height: '100px', backgroundColor: '$pink' }} />
+</Preview>
+}
+
+```jsx line=5
+import { styled } from '@stitches/react';
+
+const Box = styled('div', {…});
+
+const App = () => <Box />
+```
+
+This is how you create and style components with Stitches. To learn more about, go have a look at the [documentation site]().
+
+## Creating a variant
+
+Stitches offers a first-class API for creating variants. Becuase of this, they're automatically typed.
+
+Let's add a `color` variant to the `Box`.
+
+```jsx line=8-14
+import { styled } from '@stitches/react';
+
+const Box = styled('div', {
+  width: '100px',
+  height: '100px',
+  backgroundColor: 'pink',
+
+  variants: {
+    color: {
+      turquoise: {
+        backgroundColor: 'turquoise',
+      },
+    },
+  },
+});
+```
+
+We can render it at that specific variant, by passig it as a prop.
+
+{
+
+<Preview>
+  <Box css={{ width: '100px', height: '100px', backgroundColor: '$turq' }} />
+</Preview>
+}
+
+```jsx line=5
+import { styled } from '@stitches/react';
+
+const Box = styled('div', {…});
+
+const App = () => <Box __color__="turquoise" />
+```
+
+Nice. We can go further and add a couple more variants: `size` and `shape`:
+
+```jsx line=9-22
+
+import { styled } from '@stitches/react';
+
+const Box = styled('div', {
+  width: '100px',
+  height: '100px',
+  backgroundColor: 'pink',
+
+  variants: {
+    color: {…},
+    size: {
+      large: {
+        width: '200px',
+        height: '200px',
+      }
+    },
+    shape: {
+      round: {
+        borderRadius: '100%'
+      }
+    }
+  },
+});
+```
+
+Now, we can apply these variants as props:
+
+{
+
+<Preview>
+  <Box css={{ width: '200px', height: '200px', backgroundColor: '$turq', borderRadius: '100%' }} />
+</Preview>
+}
+
+```jsx line=5
+import { styled } from '@stitches/react';
+
+const Box = styled('div', {…});
+
+const App = () => <Box __color__="turquoise" __size__="large" __shape__="round" />
+```
+
+### Separating concerns
+
+Let's take a step back and review our code so far.
+
+```jsx
+const Box = styled('div', {
+  width: '100px',
+  height: '100px',
+  backgroundColor: 'pink',
+
+  variants: {
+    color: {
+      turquoise: {
+        backgroundColor: 'turquoise',
+      },
+    },
+    size: {
+      large: {
+        width: '200px',
+        height: '200px',
+      },
+    },
+    shape: {
+      round: {
+        borderRadius: '100%',
+      },
+    },
+  },
+});
+```
+
+Notice how currently there are some base styles and some variant styles. This creates some _implicit_ variants. Let me explain...
+
+The `Box` can be either pink or turquoise. One of these is an implicit variant and the other is explicit. To apply the `turquoise` variant you must pass it as a prop. But the same isn't true for `pink`, because there's no such variant.
+
+The same logic can be applied to the `size` and `shape` variants.
+
+For example, imagine we want to apply the `size` variant based based on a condition.
+
+```jsx
+const App = (props) => (
+  <>
+    <Box size={props.active ? 'large' : undefined} />
+  </>
+);
+```
+
+This would work, but we can do better—by being explicit:
+
+```jsx
+const App = (props) => (
+  <>
+    <Box size={props.active ? 'large' : 'small'} />
+  </>
+);
+```
+
+We can achieve this by separating stylistic concerns into variants.
+
+```diff
+const Box = styled('div', {
+- width: '100px',
+- height: '100px',
+- backgroundColor: 'pink',
+
+  variants: {
+    color: {
++     pink: {
++       backgroundColor: 'pink',
++     },
+      turquoise: {
+        backgroundColor: 'turquoise',
+      },
+    },
+    size: {
++     small: {
++       width: '100px',
++       height: '100px',
++     },
+      large: {
+        width: '200px',
+        height: '200px',
+      },
+    },
+    shape: {
++     square: {
++       borderRadius: 0
++     },
+      round: {
+        borderRadius: '100%',
+      },
+    },
+  },
+});
+```
+
+### Variant composition
+
+Now that we have a few variants, we can mix and match (compose) them. This is when things start to get interesting!
+
+{
+
+<Preview>
+  <Box css={{ display: 'flex', flexWrap: 'wrap', alignItems:'center' ,gap: '$3' }}>
+    <Box css={{ width: '100px', height: '100px', backgroundColor: '$pink' }} />
+    <Box css={{ width: '100px', height: '100px', backgroundColor: '$turq' }} />
+    <Box css={{ width: '200px', height: '200px', backgroundColor: '$pink' }} />
+    <Box css={{ width: '200px', height: '200px', backgroundColor: '$turq' }} />
+      <Box
+      css={{ width: '100px', height: '100px', backgroundColor: '$pink', borderRadius: '100%' }}
+    />
+    <Box
+      css={{ width: '100px', height: '100px', backgroundColor: '$turq', borderRadius: '100%' }}
+    />
+      <Box css={{ width: '200px', height: '200px', backgroundColor: '$pink', borderRadius: '100%' }} />
+      <Box
+      css={{ width: '200px', height: '200px', backgroundColor: '$turq', borderRadius: '100%' }}
+    />
+
+  </Box>
+</Preview>
+}
+
+```jsx line=6-13
+import { styled } from '@stitches/react';
+
+const Box = styled('div', {…});
+
+const App = () => <>
+  <Box />
+  <Box color="turquoise"  />
+  <Box size="large" />
+  <Box color="turquoise" size="large" />
+  <Box shape="round" />
+  <Box shape="round" color="turquoise"  />
+  <Box shape="round" size="large" />
+  <Box shape="round" color="turquoise" size="large" />
+</>
+```
+
+## Defining a default variant
+
+## Immutable variants
+
+## Responsive variants
+
+## Compound variants
+
+## Conclusion

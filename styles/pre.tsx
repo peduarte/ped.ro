@@ -89,6 +89,8 @@ export const pre = css({
 
   '.token.deleted.prefix, .token.inserted.prefix': {
     userSelect: 'none',
+    position: 'absolute',
+    left: 0,
   },
 
   // Styles for highlighted word
@@ -107,7 +109,7 @@ export const pre = css({
       color: 'inherit',
     },
 
-    '&:hover, &.on': {
+    '&:is(a):hover, &.on': {
       $$bgAndShadow: '$$highlightedWordBgActive' as any,
       transition: 'all 100ms ease',
     },
