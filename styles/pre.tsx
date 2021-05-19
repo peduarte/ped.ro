@@ -90,7 +90,7 @@ export const pre = css({
   '.token.deleted.prefix, .token.inserted.prefix': {
     userSelect: 'none',
     position: 'absolute',
-    left: 0,
+    left: '$3',
   },
 
   // Styles for highlighted word
