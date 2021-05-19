@@ -339,7 +339,47 @@ We can do better. With immutable variants.
 
 ## Immutable variants
 
-The idea behind immutable variants is simple. Its styles should be the same across all media queries.
+The idea behind immutable variants is simple. Styles should be the same across all media queries. As demonstrated above, when you add responsive logic inside your component styles, you're making a definite decision of how your component should behave.
+
+Another approach would be to convert all the available sizes that the `Box` can exist in to variants.
+
+We'll do that by creating a `size` variant.
+
+```jsx line=7-17
+import { styled } from '@stitches/react';
+
+const Box = styled('div', {
+  variants: {
+    color: {…},
+    shape: {…},
+    size: {
+      small: {
+        width: '100px',
+        height: '100px',
+      },
+      large: {
+        width: '200px',
+        height: '200px',
+      }
+    }
+  },
+});
+```
+
+Notice how the `@media` rule is gone. This component is no longer in charge of when to change from `small` to `large`. It just knows that it can be rendered in either one.
+
+So how do we add the responsive behaviour back in?
+
+Via props! This happens are the consumption layer, rather than the authoring layer. It looks like this:
+
+```jsx
+<Box
+  size={{
+    '@initial': 'small',
+    '@media (min-width: 480px)': 'large',
+  }}
+/>
+```
 
 ## Compound variants
 
