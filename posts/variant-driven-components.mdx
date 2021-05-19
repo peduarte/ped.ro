@@ -117,7 +117,7 @@ const Box = styled('div', {…});
 const App = () => <Box __color__="turquoise" />
 ```
 
-Nice. We can go further and add a couple more variants: `size` and `shape`:
+Nice. We can go further and add a `shape` variant:
 
 ```jsx line=9-22
 
@@ -130,12 +130,6 @@ const Box = styled('div', {
 
   variants: {
     color: {…},
-    size: {
-      large: {
-        width: '200px',
-        height: '200px',
-      }
-    },
     shape: {
       round: {
         borderRadius: '100%'
@@ -150,7 +144,7 @@ Now, we can apply these variants as props:
 {
 
 <Preview>
-  <Box css={{ width: '200px', height: '200px', backgroundColor: '$turq', borderRadius: '100%' }} />
+  <Box css={{ width: '100px', height: '100px', backgroundColor: '$turq', borderRadius: '100%' }} />
 </Preview>
 }
 
@@ -159,14 +153,16 @@ import { styled } from '@stitches/react';
 
 const Box = styled('div', {…});
 
-const App = () => <Box __color__="turquoise" __size__="large" __shape__="round" />
+const App = () => <Box __color__="turquoise" __shape__="round" />
 ```
 
-### Separating concerns
+## Separating concerns
 
 Let's take a step back and review our code so far.
 
 ```jsx
+import { styled } from '@stitches/react';
+
 const Box = styled('div', {
   width: '100px',
   height: '100px',
@@ -176,12 +172,6 @@ const Box = styled('div', {
     color: {
       turquoise: {
         backgroundColor: 'turquoise',
-      },
-    },
-    size: {
-      large: {
-        width: '200px',
-        height: '200px',
       },
     },
     shape: {
@@ -195,36 +185,28 @@ const Box = styled('div', {
 
 Notice how currently there are some base styles and some variant styles. This creates some _implicit_ variants. Let me explain...
 
-The `Box` can be either pink or turquoise. One of these is an implicit variant and the other is explicit. To apply the `turquoise` variant you must pass it as a prop. But the same isn't true for `pink`, because there's no such variant.
+To make it turquoise you must _explicitly_ pass it as a `color` prop. But the same isn't true for pink, because there's no such variant.
 
-The same logic can be applied to the `size` and `shape` variants.
-
-For example, imagine we want to apply the `size` variant based based on a condition.
+For example, imagine we want to apply the `color` variant based based on a condition.
 
 ```jsx
-const App = (props) => (
-  <>
-    <Box size={props.active ? 'large' : undefined} />
-  </>
-);
+const App = ({ active }) => <Box color={active ? 'turquoise' : undefined} />;
 ```
 
 This would work, but we can do better—by being explicit:
 
 ```jsx
-const App = (props) => (
-  <>
-    <Box size={props.active ? 'large' : 'small'} />
-  </>
-);
+const App = ({ active }) => <Box color={active ? 'turquoise' : 'pink'} />;
 ```
 
 We can achieve this by separating stylistic concerns into variants.
 
 ```diff
+import { styled } from '@stitches/react';
+
 const Box = styled('div', {
-- width: '100px',
-- height: '100px',
+  width: '100px',
+  height: '100px',
 - backgroundColor: 'pink',
 
   variants: {
@@ -234,16 +216,6 @@ const Box = styled('div', {
 +     },
       turquoise: {
         backgroundColor: 'turquoise',
-      },
-    },
-    size: {
-+     small: {
-+       width: '100px',
-+       height: '100px',
-+     },
-      large: {
-        width: '200px',
-        height: '200px',
       },
     },
     shape: {
@@ -265,48 +237,109 @@ Now that we have a few variants, we can mix and match (compose) them. This is wh
 {
 
 <Preview>
-  <Box css={{ display: 'flex', flexWrap: 'wrap', alignItems:'center' ,gap: '$3' }}>
+  <Box css={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '$4' }}>
     <Box css={{ width: '100px', height: '100px', backgroundColor: '$pink' }} />
     <Box css={{ width: '100px', height: '100px', backgroundColor: '$turq' }} />
-    <Box css={{ width: '200px', height: '200px', backgroundColor: '$pink' }} />
-    <Box css={{ width: '200px', height: '200px', backgroundColor: '$turq' }} />
-      <Box
+    <Box
       css={{ width: '100px', height: '100px', backgroundColor: '$pink', borderRadius: '100%' }}
     />
     <Box
       css={{ width: '100px', height: '100px', backgroundColor: '$turq', borderRadius: '100%' }}
     />
-      <Box css={{ width: '200px', height: '200px', backgroundColor: '$pink', borderRadius: '100%' }} />
-      <Box
-      css={{ width: '200px', height: '200px', backgroundColor: '$turq', borderRadius: '100%' }}
-    />
-
   </Box>
 </Preview>
 }
 
-```jsx line=6-13
-import { styled } from '@stitches/react';
-
-const Box = styled('div', {…});
-
-const App = () => <>
-  <Box />
-  <Box color="turquoise"  />
-  <Box size="large" />
-  <Box color="turquoise" size="large" />
-  <Box shape="round" />
-  <Box shape="round" color="turquoise"  />
-  <Box shape="round" size="large" />
-  <Box shape="round" color="turquoise" size="large" />
-</>
+```jsx
+<Box color="pink" />
+<Box color="turquoise"  />
+<Box color="pink" shape="round" />
+<Box color="turquoise" shape="round" />
 ```
 
 ## Defining a default variant
 
+When you separate your stylistic concerns into variants you need to explicitly tell your component which variant to use.
+
+```html
+<Box color="pink" shape="square" />
+```
+
+But you can define default variants, essentially mimicking the base styles behaviour—without compromises.
+
+```jsx line=18-21
+import { styled } from '@stitches/react';
+
+const Box = styled('div', {
+  width: '100px',
+  height: '100px',
+
+  variants: {
+    color: {
+      pink: {…},
+      turquoise: {…}
+    },
+    shape: {
+      square: {…},
+      round: {…},
+    },
+  },
+
+  defaultVariants: {
+    color: 'pink',
+    shape: 'square'
+  }
+});
+```
+
+Then, use it
+
+{
+
+<Preview>
+  <Box css={{ width: '100px', height: '100px', backgroundColor: '$pink' }} />
+</Preview>
+}
+
+```html
+<Box />
+```
+
+## Responsive styles
+
+Currently our `Box` is 100px. But let's say we'd like to make it responsive, by increasing its size to 200px when the viewport is wider than 480px.
+
+A common approach to this is adding media queries in the styles:
+
+```jsx line=4-10
+import { styled } from '@stitches/react';
+
+const Box = styled('div', {
+  width: '100px',
+  height: '100px',
+
+  '@media (min-width: 480px)': {
+    width: '200px',
+    height: '200px',
+  },
+
+  variants: {…},
+
+  defaultVariants: {…}
+});
+```
+
+This fulfils our initial requirement. The box gets bigger when it needs to.
+
+But hang on. What if now we'd like to be able to render the `Box` at 200px on mobile? And what if it needs to be 100px on larger viewports?
+
+You see where this is heading, right?
+
+We can do better. With immutable variants.
+
 ## Immutable variants
 
-## Responsive variants
+The idea behind immutable variants is simple. Its styles should be the same across all media queries.
 
 ## Compound variants
 
