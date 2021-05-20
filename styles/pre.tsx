@@ -8,7 +8,7 @@ export const pre = css({
   $$syntax3: '$colors$pink',
   $$syntax4: '$colors$pink',
   $$comment: '$colors$gray',
-  $$removed: '$colors$red',
+  $$removed: '$colors$pink',
   $$added: '$colors$turq',
   $$lineNumbers: '$colors$gray',
   $$fadedLines: '$colors$gray',
@@ -18,9 +18,9 @@ export const pre = css({
   $$deletedWordBg: '$colors$red',
   $$deletedWordBgActive: 'hsl(206deg 22% 64% / 30%)',
   $$deletedWordText: '$colors$black',
-  $$addedWordBg: '$colors$turq',
+  $$addedWordBg: 'rgba(0, 245, 196, 0.1)',
   $$addedWordBgActive: 'hsl(206deg 22% 64% / 30%)',
-  $$addedWordText: '$colors$black',
+  $$addedWordText: '$colors$turq',
 
   boxSizing: 'border-box',
   padding: '$3',
@@ -35,6 +35,10 @@ export const pre = css({
 
   '& > code': {
     display: 'block',
+  },
+
+  '.language-diff': {
+    color: '$$comment',
   },
 
   '.token.parameter': {
@@ -89,6 +93,8 @@ export const pre = css({
 
   '.token.deleted.prefix, .token.inserted.prefix': {
     userSelect: 'none',
+    position: 'absolute',
+    left: '$3',
   },
 
   // Styles for highlighted word
@@ -107,7 +113,7 @@ export const pre = css({
       color: 'inherit',
     },
 
-    '&:hover, &.on': {
+    '&:is(a):hover, &.on': {
       $$bgAndShadow: '$$highlightedWordBgActive' as any,
       transition: 'all 100ms ease',
     },
