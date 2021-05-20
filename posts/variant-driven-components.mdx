@@ -5,17 +5,17 @@ publishedAt: '2021-05-18'
 
 Variants are an excellent way to express how a component could look. It allows us to separate our design concerns into isolated rules.
 
-Variants can be immutable, responsive, and composed. This enables a great deal of flexibility and power when building UIs.
+Variants can be immutable, responsive, and composed. It enables a great deal of flexibility and power when building UIs.
 
-In this article, I'll demonstrate how you can build variant-driven components using [Stitches](https://stitches.dev).
+This article will demonstrate how you can build variant-driven components using [Stitches](https://stitches.dev).
 
 ---
 
 ## Context
 
-Since joining [Modulz](https://modulz.app), almost three years ago, I've been exploring the idea of variant-driven components. The Modulz editor was designed with variants in mind, and so was the production-ready code output.
+Since joining [Modulz](https://modulz.app) almost three years ago, I've been exploring the idea of variant-driven components. The Modulz editor was designed with variants in mind, and so was the production-ready code output.
 
-At the time, we were creating faux variants on top of existing styling solutions. However the result wasn't ideal. We needed an interoperable solution, so both designers and developers could work on the same source of truth.
+At the time, we were creating faux variants on top of existing styling solutions. However, the result wasn't ideal. We needed an interoperable solution, so both designers and developers could work on the same source of truth.
 
 ### Stitches
 
@@ -25,7 +25,7 @@ It introduces a first-class variant API, enabling design system authors to expre
 
 ### This article
 
-To highlight how variants can be created and consumed, I'm going to use a generic `Box` component.
+To highlight how variants can be created and consumed, I'll use a generic `Box` component.
 
 If you'd like to follow along, make sure you've installed Stitches:
 
@@ -70,11 +70,11 @@ Finally, render it just like you would any React component:
 <Box />
 ```
 
-This is how you create and style components with Stitches. To learn more about, go have a look at the [documentation site](https://stitches.dev).
+This is how you create and style components with Stitches. To learn more about it, go have a look at the [documentation site](https://stitches.dev).
 
 ## Creating a variant
 
-Stitches offers a first-class API for creating variants. Becuase of this, they're automatically typed.
+Stitches offers a first-class API for creating variants. Because of this, they're automatically typed.
 
 Let's add a `color` variant to the `Box`.
 
@@ -96,7 +96,7 @@ const Box = styled('div', {
 });
 ```
 
-We can render it at that specific variant, by passig it as a prop.
+We can render it at that specific variant by passing it as a prop.
 
 {
 
@@ -173,9 +173,9 @@ const Box = styled('div', {
 
 Notice how currently there are some base styles and some variant styles. This creates some _implicit_ variants. Let me explain...
 
-To make it turquoise you must _explicitly_ pass it as a `color` prop. But the same isn't true for pink, because there's no such variant.
+To make it turquoise, you must _explicitly_ pass it as a `color` prop. But the same isn't true for pink, because there's no such variant.
 
-For example, imagine we want to apply the `color` variant based based on a condition.
+For example, imagine we want to apply the `color` variant based on a condition.
 
 ```jsx
 const App = ({ active }) => <Box color={active ? 'turquoise' : undefined} />;
@@ -243,7 +243,7 @@ Now that we have a few variants, we can mix and match (compose) them. This is wh
 
 ## Defining a default variant
 
-When you separate your stylistic concerns into variants you need to explicitly tell your component which variant to use.
+When you separate your stylistic concerns into variants, you need to explicitly tell your component which variant to use.
 
 ```html
 <Box color="pink" shape="square" />
@@ -291,7 +291,7 @@ Then, use it
 
 ## Responsive styles
 
-Currently our `Box` is 100px. But let's say we'd like to make it responsive, by increasing its size to 200px when the viewport is wider than 1000px.
+Currently our `Box` is 100px. But let's say we'd like to make it responsive by increasing its size to 200px when the viewport is wider than 1000px.
 
 A common approach to this is adding media queries in the styles:
 
@@ -325,7 +325,7 @@ We can do better. With immutable variants.
 
 The idea behind immutable variants is simple. Styles should be the same across all media queries. As demonstrated above, when you add responsive logic inside your component styles, you're making a definite decision of how your component should behave.
 
-Another approach would be to convert all the available sizes that the `Box` can exist in to variants.
+Another approach would be to convert all the available sizes that the `Box` can exist into variants.
 
 We'll do that by creating a `size` variant.
 
@@ -364,7 +364,7 @@ Notice how the `@media` rule is gone. This component is no longer in charge of w
 
 So how do we add the responsive behaviour back in?
 
-Via props! This happens are the consumption layer, rather than the authoring layer. It looks like this:
+Via props! This happens at the consumption layer rather than the authoring layer. It looks like this:
 
 {
 
@@ -458,7 +458,7 @@ You can change as many variants as you need:
 
 Let's say that we want to add a glow effect. But we want it to match `color` variant.
 
-In order for us to achieve this, we need to set styles based on a specific combinbation of variants. And we can do that with the compound variant API.
+In order for us to achieve this, we need to set styles based on a specific combination of variants. And we can do that with the compound variant API.
 
 First, let's create a `isGlowing` boolean variant:
 
@@ -558,13 +558,13 @@ Let's render it:
 <Box color="turquoise" shape="round" __isGlowing__ />
 ```
 
-That's pretty cool, right? This is a powerful pattern, and opens up a whole world of opportunities.
+That's pretty cool, right? This is a powerful pattern and opens up a whole world of opportunities.
 
 #### Tidying up
 
 Let's take 2 minutes to review and refactor the code a little.
 
-Since there are no `boxShadow` shorthands to change just its color, we're having to re-define the whole shadow config twice.
+Since there are no `boxShadow` shorthands to change just its color, we have to re-define the whole shadow config twice.
 
 We can take advantage of Stitches' [locally-scoped tokens](https://stitches.dev/docs/api#locally-scoped-tokens) to make our code more DRY.
 
@@ -673,57 +673,59 @@ const Box = styled('div', {
 });
 ```
 
-And here are all the possble variantions.
+And here are all the possible variations.
 
 {
 
 <Preview>
-	<Box css={{ display: 'flex', flexDirection: 'column', gap: '$4' }}>
-		<Box css={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '$4' }}>
-			<DemoBox />
-			<DemoBox shape="round" />
-			<DemoBox isGlowing />
-			<DemoBox isGlowing shape="round" />
-		</Box>
+  <Box css={{ display: 'flex', flexDirection: 'column', gap: '$4' }}>
+    <Box css={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '$4' }}>
+      <DemoBox />
+      <DemoBox shape="round" />
+      <DemoBox isGlowing />
+      <DemoBox isGlowing shape="round" />
+    </Box>
 
     <Box css={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '$4' }}>
 
-  		<DemoBox color="turquoise" />
-  		<DemoBox color="turquoise" shape="round" />
-  		<DemoBox color="turquoise" isGlowing />
-  		<DemoBox color="turquoise" isGlowing shape="round" />
-		</Box>
+      <DemoBox color="turquoise" />
+      <DemoBox color="turquoise" shape="round" />
+      <DemoBox color="turquoise" isGlowing />
+      <DemoBox color="turquoise" isGlowing shape="round" />
+    </Box>
 
     <Box css={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '$4' }}>
 
-  	<DemoBox size="large" />
-  	<DemoBox size="large" shape="round" />
-  	<DemoBox size="large" isGlowing />
-  	<DemoBox size="large" isGlowing shape="round" />
-	</Box>
+    <DemoBox size="large" />
+    <DemoBox size="large" shape="round" />
+    <DemoBox size="large" isGlowing />
+    <DemoBox size="large" isGlowing shape="round" />
+
+  </Box>
 
     <Box css={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '$4' }}>
 
-  	<DemoBox size="large" color="turquoise" />
-  	<DemoBox size="large" color="turquoise" shape="round" />
-  	<DemoBox size="large" color="turquoise" isGlowing />
-  	<DemoBox size="large" color="turquoise" isGlowing shape="round" />
-	</Box>
+    <DemoBox size="large" color="turquoise" />
+    <DemoBox size="large" color="turquoise" shape="round" />
+    <DemoBox size="large" color="turquoise" isGlowing />
+    <DemoBox size="large" color="turquoise" isGlowing shape="round" />
+
+  </Box>
 </Box>
 </Preview>
 }
 
 ## Conclusion
 
-Thinking about variant-driven components can have a tremdedous positive effect on your product. Not just it enforces a more maintainable codebase, it can even improve the communication across your team.
+Thinking about variant-driven components can have a tremendous positive effect on your product. Not just it enforces a more maintainable codebase, it can even improve communication across your team.
 
-By organising your styles in variants, you're separating its stylistic concerns. This results in less unwanted side effects.
+By organising your styles in variants, you're separating its stylistic concerns. This results in fewer unwanted side effects.
 
-When you combine variants together, you embrace composition. This allows for powerful UI variations.
+When you combine variants, you embrace composition. This allows for powerful UI variations.
 
 And whenever you need a special rule for a given composition, the compound variants functionality is there to help.
 
-As you may be able to tell, I'm very passionate about this topic. I'm glad to have spent so long thinking about variants! Some of my early exploration has contributed to the [Styled System](https://styled-system.com/)/[Theme UI](https://theme-ui.com/home) variant API. And Stitches has inspired other libraries such as [Twind](https://github.com/tw-in-js/twind) and [vanilla-extract](https://github.com/seek-oss/vanilla-extract) to follow suit.
+As you may be able to tell, I'm very passionate about this topic. I'm glad to have spent so long thinking about variants! Some of my early explorations have contributed to the [Styled System](https://styled-system.com/)/[Theme UI](https://theme-ui.com/home) variant API. And Stitches has inspired other libraries such as [Twind](https://github.com/tw-in-js/twind) and [vanilla-extract](https://github.com/seek-oss/vanilla-extract) to follow suit.
 
 To learn more about building variant-driven components with Stitches, [check out the docs](https://stitches.dev).
 
