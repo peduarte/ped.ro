@@ -51,8 +51,8 @@ Then use it to create a component:
 import { styled } from '@stitches/react';
 
 const Box = styled('div', {
-  width: '100px',
-  height: '100px',
+  width: '70px',
+  height: '70px',
   backgroundColor: 'pink',
 });
 ```
@@ -82,8 +82,8 @@ Let's add a `color` variant to the `Box`.
 import { styled } from '@stitches/react';
 
 const Box = styled('div', {
-  width: '100px',
-  height: '100px',
+  width: '70px',
+  height: '70px',
   backgroundColor: 'pink',
 
   variants: {
@@ -116,8 +116,8 @@ Nice. We can go further and add a `shape` variant:
 import { styled } from '@stitches/react';
 
 const Box = styled('div', {
-  width: '100px',
-  height: '100px',
+  width: '70px',
+  height: '70px',
   backgroundColor: 'pink',
 
   variants: {
@@ -152,8 +152,8 @@ Let's take a step back and review our code so far.
 import { styled } from '@stitches/react';
 
 const Box = styled('div', {
-  width: '100px',
-  height: '100px',
+  width: '70px',
+  height: '70px',
   backgroundColor: 'pink',
 
   variants: {
@@ -193,8 +193,8 @@ We can achieve this by separating stylistic concerns into variants.
 import { styled } from '@stitches/react';
 
 const Box = styled('div', {
-  width: '100px',
-  height: '100px',
+  width: '70px',
+  height: '70px',
 - backgroundColor: 'pink',
 
   variants: {
@@ -255,8 +255,8 @@ But you can define default variants, essentially mimicking the base styles behav
 import { styled } from '@stitches/react';
 
 const Box = styled('div', {
-  width: '100px',
-  height: '100px',
+  width: '70px',
+  height: '70px',
 
   variants: {
     color: {
@@ -291,7 +291,7 @@ Then, use it
 
 ## Responsive styles
 
-Currently our `Box` is 100px. But let's say we'd like to make it responsive by increasing its size to 200px when the viewport is wider than 1000px.
+Currently our `Box` is 70px. But let's say we'd like to make it responsive by increasing its size to 140px when the viewport is wider than 1000px.
 
 A common approach to this is adding media queries in the styles:
 
@@ -299,12 +299,12 @@ A common approach to this is adding media queries in the styles:
 import { styled } from '@stitches/react';
 
 const Box = styled('div', {
-  width: '100px',
-  height: '100px',
+  width: '70px',
+  height: '70px',
 
   '@media (min-width: 1000px)': {
-    width: '200px',
-    height: '200px',
+    width: '140px',
+    height: '140px',
   },
 
   variants: {…},
@@ -315,7 +315,7 @@ const Box = styled('div', {
 
 This fulfils our initial requirement. The box gets bigger when it needs to.
 
-But hang on. What if now we'd like to be able to render the `Box` at 200px on mobile? And what if it needs to be 100px on larger viewports?
+But hang on. What if now we'd like to be able to render the `Box` at 140px on mobile? And what if it needs to be 70px on larger viewports?
 
 You see where this is heading, right?
 
@@ -333,12 +333,12 @@ We'll do that by creating a `size` variant.
 import { styled } from '@stitches/react';
 
 const Box = styled('div', {
-- width: '100px',
-- height: '100px',
+- width: '70px',
+- height: '70px',
 
 - '@media (min-width: 1000px)': {
--   width: '200px',
--   height: '200px',
+-   width: '140px',
+-   height: '140px',
 - },
 
   variants: {
@@ -346,12 +346,12 @@ const Box = styled('div', {
     shape: {…},
 +   size: {
 +     small: {
-+       width: '100px',
-+       height: '100px',
++       width: '70px',
++       height: '70px',
 +     },
 +     large: {
-+       width: '200px',
-+       height: '200px',
++       width: '140px',
++       height: '140px',
 +     }
 +   }
   },
@@ -632,12 +632,12 @@ const Box = styled('div', {
     },
     size: {
       small: {
-        width: '100px',
-        height: '100px',
+        width: '70px',
+        height: '70px',
       },
       large: {
-        width: '200px',
-        height: '200px',
+        width: '140px',
+        height: '140px',
       },
     },
     isGlowing: {
