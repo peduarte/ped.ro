@@ -62,16 +62,12 @@ Finally, render it just like you would any React component:
 {
 
 <Preview>
-  <Box css={{ width: '100px', height: '100px', backgroundColor: '$pink' }} />
+  <DemoBox />
 </Preview>
 }
 
-```jsx line=5
-import { styled } from '@stitches/react';
-
-const Box = styled('div', {…});
-
-const App = () => <Box />
+```jsx
+<Box />
 ```
 
 This is how you create and style components with Stitches. To learn more about, go have a look at the [documentation site]().
@@ -105,16 +101,12 @@ We can render it at that specific variant, by passig it as a prop.
 {
 
 <Preview>
-  <Box css={{ width: '100px', height: '100px', backgroundColor: '$turq' }} />
+  <DemoBox color="turquoise" />
 </Preview>
 }
 
-```jsx line=5
-import { styled } from '@stitches/react';
-
-const Box = styled('div', {…});
-
-const App = () => <Box __color__="turquoise" />
+```jsx
+<Box __color__="turquoise" />
 ```
 
 Nice. We can go further and add a `shape` variant:
@@ -144,16 +136,12 @@ Now, we can apply these variants as props:
 {
 
 <Preview>
-  <Box css={{ width: '100px', height: '100px', backgroundColor: '$turq', borderRadius: '100%' }} />
+  <DemoBox color="turquoise" shape="round" />
 </Preview>
 }
 
-```jsx line=5
-import { styled } from '@stitches/react';
-
-const Box = styled('div', {…});
-
-const App = () => <Box __color__="turquoise" __shape__="round" />
+```jsx
+<Box __color__="turquoise" __shape__="round" />
 ```
 
 ## Separating concerns
@@ -238,14 +226,10 @@ Now that we have a few variants, we can mix and match (compose) them. This is wh
 
 <Preview>
   <Box css={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '$4' }}>
-    <Box css={{ width: '100px', height: '100px', backgroundColor: '$pink' }} />
-    <Box css={{ width: '100px', height: '100px', backgroundColor: '$turq' }} />
-    <Box
-      css={{ width: '100px', height: '100px', backgroundColor: '$pink', borderRadius: '100%' }}
-    />
-    <Box
-      css={{ width: '100px', height: '100px', backgroundColor: '$turq', borderRadius: '100%' }}
-    />
+    <DemoBox color="pink" />
+    <DemoBox color="turquoise" />
+    <DemoBox color="pink" shape="round" />
+    <DemoBox color="turquoise" shape="round" />
   </Box>
 </Preview>
 }
@@ -297,7 +281,7 @@ Then, use it
 {
 
 <Preview>
-  <Box css={{ width: '100px', height: '100px', backgroundColor: '$pink' }} />
+  <DemoBox />
 </Preview>
 }
 
@@ -307,7 +291,7 @@ Then, use it
 
 ## Responsive styles
 
-Currently our `Box` is 100px. But let's say we'd like to make it responsive, by increasing its size to 200px when the viewport is wider than 480px.
+Currently our `Box` is 100px. But let's say we'd like to make it responsive, by increasing its size to 200px when the viewport is wider than 1000px.
 
 A common approach to this is adding media queries in the styles:
 
@@ -318,7 +302,7 @@ const Box = styled('div', {
   width: '100px',
   height: '100px',
 
-  '@media (min-width: 480px)': {
+  '@media (min-width: 1000px)': {
     width: '200px',
     height: '200px',
   },
@@ -345,24 +329,34 @@ Another approach would be to convert all the available sizes that the `Box` can 
 
 We'll do that by creating a `size` variant.
 
-```jsx line=7-17
+```diff
 import { styled } from '@stitches/react';
 
 const Box = styled('div', {
+- width: '100px',
+- height: '100px',
+
+- '@media (min-width: 1000px)': {
+-   width: '200px',
+-   height: '200px',
+- },
+
   variants: {
     color: {…},
     shape: {…},
-    size: {
-      small: {
-        width: '100px',
-        height: '100px',
-      },
-      large: {
-        width: '200px',
-        height: '200px',
-      }
-    }
++   size: {
++     small: {
++       width: '100px',
++       height: '100px',
++     },
++     large: {
++       width: '200px',
++       height: '200px',
++     }
++   }
   },
+
+  defaultVariants: {…}
 });
 ```
 
@@ -372,15 +366,349 @@ So how do we add the responsive behaviour back in?
 
 Via props! This happens are the consumption layer, rather than the authoring layer. It looks like this:
 
+{
+
+<Preview>
+  <DemoBox
+    size={{
+      '@initial': 'small',
+      '@media (min-width: 1000px)': 'large',
+    }}
+  />
+</Preview>
+}
+
 ```jsx
 <Box
   size={{
     '@initial': 'small',
-    '@media (min-width: 480px)': 'large',
+    '@media (min-width: 1000px)': 'large',
+  }}
+/>
+```
+
+With this pattern, you're in control over when to use a specific variant.
+
+Want to start with `large` and then switch to `small`? No problem.
+
+{
+
+<Preview>
+  <DemoBox
+    size="large"
+    css={{
+      '@bp3': {
+        width: '70px',
+        height: '70px',
+      },
+    }}
+  />
+</Preview>
+}
+
+```jsx
+<Box
+  size={{
+    '@initial': 'large',
+    '@media (min-width: 1000px)': 'small',
+  }}
+/>
+```
+
+You can change as many variants as you need:
+
+{
+
+<Preview>
+  <DemoBox
+    size={{
+      '@initial': 'small',
+      '@bp3': 'large',
+    }}
+    color={{
+      '@initial': 'pink',
+      '@bp3': 'turquoise',
+    }}
+    shape={{
+      '@initial': 'square',
+      '@bp3': 'round',
+    }}
+  />
+</Preview>
+}
+
+```jsx
+<Box
+  size={{
+    '@initial': 'small',
+    '@media (min-width: 1000px)': 'large',
+  }}
+  color={{
+    '@initial': 'pink',
+    '@media (min-width: 1000px)': 'turquoise',
+  }}
+  shape={{
+    '@initial': 'square',
+    '@media (min-width: 1000px)': 'round',
   }}
 />
 ```
 
 ## Compound variants
+
+Let's say that we want to add a glow effect. But we want it to match `color` variant.
+
+In order for us to achieve this, we need to set styles based on a specific combinbation of variants. And we can do that with the compound variant API.
+
+First, let's create a `isGlowing` boolean variant:
+
+```jsx line=8-13
+import { styled } from '@stitches/react';
+
+const Box = styled('div', {
+  variants: {
+    color: {…},
+    shape: {…},
+    size: {…},
+    isGlowing: {
+      true: {
+        boxShadow: '0 0 20px black'
+      }
+    }
+  },
+
+  defaultVariants: {…}
+});
+```
+
+It can be applied like this:
+
+{
+
+<Preview>
+  <Box css={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '$4' }}>
+    <DemoBox css={{ $$shadowColor: 'black' }} isGlowing />
+    <DemoBox css={{ $$shadowColor: 'black' }} color="turquoise" isGlowing />
+    <DemoBox css={{ $$shadowColor: 'black' }} isGlowing shape="round" />
+    <DemoBox css={{ $$shadowColor: 'black' }} color="turquoise" shape="round" isGlowing />
+  </Box>
+</Preview>
+}
+
+```jsx
+<Box __isGlowing__ />
+<Box color="turquoise" __isGlowing__ />
+<Box __isGlowing__ shape="round" />
+<Box color="turquoise" shape="round" __isGlowing__ />
+```
+
+Now we can change the glow's color based on the `color` variant.
+
+```jsx line=17-29
+import { styled } from '@stitches/react';
+
+const Box = styled('div', {
+  variants: {
+    color: {…},
+    shape: {…},
+    size: {…},
+    isGlowing: {
+      true: {
+        boxShadow: '0 0 30px black'
+      }
+    }
+  },
+
+  defaultVariants: {…},
+
+  compoundVariants: [{
+    color: 'pink',
+    isGlowing: true,
+    css: {
+      boxShadow: '0 0 30px pink'
+    }
+  }, {
+    color: 'turquoise',
+    isGlowing: true,
+    css: {
+      boxShadow: '0 0 30px turquoise'
+    }
+  }]
+});
+```
+
+Let's render it:
+
+{
+
+<Preview>
+  <Box css={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '$4' }}>
+    <DemoBox isGlowing />
+    <DemoBox color="turquoise" isGlowing />
+    <DemoBox isGlowing shape="round" />
+    <DemoBox color="turquoise" shape="round" isGlowing />
+  </Box>
+</Preview>
+}
+
+```jsx
+<Box __isGlowing__ />
+<Box color="turquoise" __isGlowing__ />
+<Box __isGlowing__ shape="round" />
+<Box color="turquoise" shape="round" __isGlowing__ />
+```
+
+That's pretty cool, right? This is a powerful pattern, and opens up a whole world of opportunities.
+
+#### Tidying up
+
+Let's take 2 minutes to review and refactor the code a little.
+
+Since there are no `boxShadow` shorthands to change just its color, we're having to re-define the whole shadow config twice.
+
+We can take advantage of Stitches' [locally-scoped tokens]() to make our code more DRY.
+
+```diff
+import { styled } from '@stitches/react';
+
+const Box = styled('div', {
+  variants: {
+    color: {…},
+    shape: {…},
+    size: {…},
+    isGlowing: {
+      true: {
++       __$$shadowColor__: 'transparent',
+-       boxShadow: '0 0 30px black'
++       boxShadow: '0 0 30px __$$shadowColor__'
+      }
+    }
+  },
+
+  defaultVariants: {…},
+
+  compoundVariants: [{
+    color: 'pink',
+    isGlowing: true,
+    css: {
+-     boxShadow: '0 0 30px pink'
++     __$$shadowColor__: 'pink'
+    }
+  }, {
+    color: 'turquoise',
+    isGlowing: true,
+    css: {
+-     boxShadow: '0 0 30px turquoise'
++     __$$shadowColor__: 'turquoise'
+    }
+  }]
+});
+```
+
+### All together now
+
+And finally, here's the final code followed by all the possble variantions.
+
+```jsx
+import { styled } from '@stitches/react';
+
+const Box = styled('div', {
+  variants: {
+    color: {
+      pink: {
+        backgroundColor: 'pink',
+      },
+      turquoise: {
+        backgroundColor: 'turquoise',
+      },
+    },
+    shape: {
+      square: {
+        borderRadius: 0,
+      },
+      round: {
+        borderRadius: '100%',
+      },
+    },
+    size: {
+      small: {
+        width: '100px',
+        height: '100px',
+      },
+      large: {
+        width: '200px',
+        height: '200px',
+      },
+    },
+    isGlowing: {
+      true: {
+        $$shadowColor: 'transparent',
+        boxShadow: '0 0 30px $$shadowColor',
+      },
+    },
+  },
+
+  defaultVariants: {
+    color: 'pink',
+    shape: 'square',
+    size: 'small',
+  },
+
+  compoundVariants: [
+    {
+      color: 'pink',
+      isGlowing: true,
+      css: {
+        $$shadowColor: 'pink',
+      },
+    },
+    {
+      color: 'turquoise',
+      isGlowing: true,
+      css: {
+        $$shadowColor: 'turquoise',
+      },
+    },
+  ],
+});
+```
+
+{
+
+<Preview>
+	<Box css={{ display: 'flex', flexDirection: 'column', gap: '$4' }}>
+		<Box css={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '$4' }}>
+			<DemoBox />
+			<DemoBox shape="round" />
+			<DemoBox isGlowing />
+			<DemoBox isGlowing shape="round" />
+		</Box>
+
+    <Box css={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '$4' }}>
+
+  		<DemoBox color="turquoise" />
+  		<DemoBox color="turquoise" shape="round" />
+  		<DemoBox color="turquoise" isGlowing />
+  		<DemoBox color="turquoise" isGlowing shape="round" />
+		</Box>
+
+    <Box css={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '$4' }}>
+
+  	<DemoBox size="large" />
+  	<DemoBox size="large" shape="round" />
+  	<DemoBox size="large" isGlowing />
+  	<DemoBox size="large" isGlowing shape="round" />
+	</Box>
+
+    <Box css={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '$4' }}>
+
+  	<DemoBox size="large" color="turquoise" />
+  	<DemoBox size="large" color="turquoise" shape="round" />
+  	<DemoBox size="large" color="turquoise" isGlowing />
+  	<DemoBox size="large" color="turquoise" isGlowing shape="round" />
+	</Box>
+</Box>
+</Preview>
+}
 
 ## Conclusion

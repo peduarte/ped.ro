@@ -15,6 +15,7 @@ import { Preview } from '@components/Preview';
 import { DemoButton } from '@components/demos/DemoButton';
 import { DemoDialog } from '@components/demos/DemoDialog';
 import { DemoCounter } from '@components/demos/DemoCounter';
+import { DemoBox } from '@components/demos/DemoBox';
 import { button } from '@styles/button';
 
 export const components = {
@@ -22,6 +23,7 @@ export const components = {
   DemoButton,
   DemoDialog,
   DemoCounter,
+  DemoBox,
   CardPlayground,
   Preview,
   h1: (props) => <h1 className={text({ size: '7', css: { mb: '$5' } })} {...props} />,
@@ -141,7 +143,8 @@ export const components = {
       {...props}
     />
   ),
-  pre: ({ children, theme, showLineNumbers = '' }) => {
+  pre: ({ children, theme, showLineNumbers = '', ...props }) => {
+    // console.log(props);
     return (
       <pre
         className={pre({
@@ -169,11 +172,13 @@ export const components = {
       </pre>
     );
   },
-  code: ({ children, id, collapsible }) => {
+  code: ({ children, id, collapsible, className }) => {
     const isCollapsible = typeof collapsible !== 'undefined';
     const [isOpen, setIsOpen] = React.useState(!isCollapsible);
     const isInline = typeof children === 'string';
-    const content = <code className={isInline ? code() : ''} children={children} id={id} />;
+    const content = (
+      <code className={`${className} ${isInline ? code() : ''}`} children={children} id={id} />
+    );
     return isCollapsible ? (
       <Collapsible.Root defaultOpen={isOpen} onOpenChange={(newOpen) => setIsOpen(newOpen)}>
         <Collapsible.Button
