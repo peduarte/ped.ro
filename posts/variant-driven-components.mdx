@@ -7,19 +7,19 @@ Variants are an excellent way to express how a component could look. It allows u
 
 Variants can be immutable, responsive, and composed. This enables a great deal of flexibility and power when building UIs.
 
-In this article, I'll demonstrate how you can build variant-driven components using [Stitches]().
+In this article, I'll demonstrate how you can build variant-driven components using [Stitches](https://stitches.dev).
 
 ---
 
 ## Context
 
-Since joining [Modulz](), almost three years ago, I've been exploring the idea of variant-driven components. The Modulz editor was designed with variants in mind, and so was the production-ready code output.
+Since joining [Modulz](https://modulz.app), almost three years ago, I've been exploring the idea of variant-driven components. The Modulz editor was designed with variants in mind, and so was the production-ready code output.
 
-At the time, we were creating faux variants on top of existing styling solutions. However the result wasn't ideal. We needed an interoperable solution, so both the designers and developers could work on the same source of truth.
+At the time, we were creating faux variants on top of existing styling solutions. However the result wasn't ideal. We needed an interoperable solution, so both designers and developers could work on the same source of truth.
 
 ### Stitches
 
-[Stitches]() is a styling solution focusing on component architecture and developer experience.
+[Stitches](https://stitches.dev) is a styling solution focusing on component architecture and developer experience.
 
 It introduces a first-class variant API, enabling design system authors to express their intent better. It's fully typed, catching potential mistakes and improving the scalability of design systems. It's lightweight, coming in at less than 5kb. And finally, it's a breeze to get up and running with it.
 
@@ -70,7 +70,7 @@ Finally, render it just like you would any React component:
 <Box />
 ```
 
-This is how you create and style components with Stitches. To learn more about, go have a look at the [documentation site]().
+This is how you create and style components with Stitches. To learn more about, go have a look at the [documentation site](https://stitches.dev).
 
 ## Creating a variant
 
@@ -566,7 +566,7 @@ Let's take 2 minutes to review and refactor the code a little.
 
 Since there are no `boxShadow` shorthands to change just its color, we're having to re-define the whole shadow config twice.
 
-We can take advantage of Stitches' [locally-scoped tokens]() to make our code more DRY.
+We can take advantage of Stitches' [locally-scoped tokens](https://stitches.dev/docs/api#locally-scoped-tokens) to make our code more DRY.
 
 ```diff
 import { styled } from '@stitches/react';
@@ -714,3 +714,17 @@ And here are all the possble variantions.
 }
 
 ## Conclusion
+
+Thinking about variant-driven components can have a tremdedous positive effect on your product. Not just it enforces a more maintainable codebase, it can even improve the communication across your team.
+
+By organising your styles in variants, you're separating its stylistic concerns. This results in less unwanted side effects.
+
+When you combine variants together, you embrace composition. This allows for powerful UI variations.
+
+And whenever you need a special rule for a given composition, the compound variants functionality is there to help.
+
+As you may be able to tell, I'm very passionate about this topic. I'm glad to have spent so long thinking about variants! Some of my early exploration has contributed to the [Styled System](https://styled-system.com/)/[Theme UI](https://theme-ui.com/home) variant API. And Stitches has inspired other libraries such as [Twind](https://github.com/tw-in-js/twind) and [vanilla-extract](https://github.com/seek-oss/vanilla-extract) to follow suit.
+
+To learn more about building variant-driven components with Stitches, [check out the docs](https://stitches.dev).
+
+✌️ Thanks for reading.
