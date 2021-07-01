@@ -187,5 +187,8 @@ const GithubIcon = (props) => {
 };
 
 export function getStaticProps() {
-  return { props: { posts: allPosts } };
+  const sortedPosts = allPosts.sort(
+    (a, b) => Number(new Date(b.publishedAt)) - Number(new Date(a.publishedAt))
+  );
+  return { props: { posts: sortedPosts } };
 }

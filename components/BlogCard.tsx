@@ -10,7 +10,7 @@ import { badge } from '@styles/badge';
 export const BlogCard: FC<{ post: Post }> = ({ post }) => {
   return (
     <div className={box({ mt: '$4' })}>
-      <NextLink href={`blog/${post.slug}`} passHref>
+      <NextLink href={`/blog/${post.slug}`} passHref>
         <a
           className={link({
             variant: 'ghost',
