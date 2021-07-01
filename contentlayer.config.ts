@@ -1,6 +1,7 @@
 import rehypeHighlightCode from '@lib/rehype-highlight-code';
 import rehypeMetaAttribute from '@lib/rehype-meta-attribute';
 import { defineDocument, fromLocalContent } from 'contentlayer/source-local';
+import readingTime from 'reading-time';
 import remarkSlug from 'remark-slug';
 
 export const Post = defineDocument(() => ({
@@ -23,6 +24,10 @@ export const Post = defineDocument(() => ({
   },
   computedFields: {
     slug: { type: 'string', resolve: (_) => _._raw.flattenedPath },
+    readingTime: {
+      type: 'json',
+      resolve: (_) => readingTime(_.content.code, { wordsPerMinute: 300 }),
+    },
   },
 }));
 
