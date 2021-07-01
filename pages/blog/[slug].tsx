@@ -1,11 +1,9 @@
 import React from 'react';
 import NextLink from 'next/link';
 import { getMDXComponent } from 'mdx-bundler/client';
-import { getAllFrontmatter, getMdxBySlug } from '@lib/mdx';
 import { parseISO, format } from 'date-fns';
 import TitleAndMetaTags from '@components/TitleAndMetaTags';
 import { components } from '@components/MdxComponents';
-import type { Post } from 'types/post';
 import { text } from '@styles/text';
 import { box } from '@styles/box';
 import { container } from '@styles/container';
@@ -13,18 +11,21 @@ import { link } from '@styles/link';
 import { badge } from '@styles/badge';
 import { divider } from '@styles/divider';
 
-export default function PostPage({ frontmatter, code }: Post) {
-  const Component = React.useMemo(() => getMDXComponent(code), [code]);
+import type { Post } from '.contentlayer/types';
+import { allPosts } from '.contentlayer/data';
+
+export default function PostPage({ post }: { post: Post }) {
+  const Component = React.useMemo(() => getMDXComponent(post.content.code), [post.content.code]);
 
   const twitterShare = `
 	https://twitter.com/intent/tweet?
-	text="${frontmatter.title}" by @peduarte
-	&url=https://ped.ro/blog/${frontmatter.slug}
+	text="${post.title}" by @peduarte
+	&url=https://ped.ro/blog/${post.slug}
 	`;
 
   return (
     <div className={box({ bc: '$black', color: '$white' })}>
-      <TitleAndMetaTags description={frontmatter.title} />
+      <TitleAndMetaTags description={post.title} />
 
       <div
         className={container({
@@ -52,8 +53,8 @@ export default function PostPage({ frontmatter, code }: Post) {
         </div>
 
         <h1 className={text({ size: '5', css: { display: 'flex', alignItems: 'center' } })}>
-          {frontmatter.title}{' '}
-          {frontmatter.draft && (
+          {post.title}{' '}
+          {post.draft && (
             <span className={badge({ variant: 'white', css: { ml: '$2' } })}>Draft</span>
           )}
         </h1>
@@ -64,8 +65,8 @@ export default function PostPage({ frontmatter, code }: Post) {
             css: { mt: '$1', mx: 'auto', fontFamily: '$mono', color: '$gray' },
           })}
         >
-          {format(parseISO(frontmatter.publishedAt), 'MMMM dd, yyyy')}
-          {/* —{' '}{frontmatter.readingTime.text} */}
+          {format(parseISO(post.publishedAt), 'MMMM dd, yyyy')}
+          {/* —{' '}{post.readingTime.text} */}
         </time>
 
         <div className={box({ my: '$5' })}>
@@ -93,16 +94,14 @@ export default function PostPage({ frontmatter, code }: Post) {
 }
 
 export async function getStaticPaths() {
-  const frontmatters = getAllFrontmatter();
-
   return {
-    paths: frontmatters.map(({ slug }) => ({ params: { slug } })),
+    paths: allPosts.map(({ slug }) => ({ params: { slug } })),
     fallback: false,
   };
 }
 
 export async function getStaticProps(context) {
-  const { frontmatter, code } = await getMdxBySlug(context.params.slug);
+  const post = allPosts.find((_) => _.slug === context.params.slug);
 
-  return { props: { frontmatter, code } };
+  return { props: { post } };
 }

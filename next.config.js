@@ -1,4 +1,5 @@
 const withVideos = require('next-videos');
+const { withContentlayer } = require('next-contentlayer');
 
 const nextConfig = {
   webpack: (config, options) => {
@@ -25,4 +26,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withVideos(nextConfig);
+module.exports = withContentlayer()(withVideos(nextConfig));
