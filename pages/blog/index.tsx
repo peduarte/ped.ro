@@ -2,15 +2,15 @@ import React from 'react';
 import NextLink from 'next/link';
 import TitleAndMetaTags from '@components/TitleAndMetaTags';
 import { BlogCard } from '@components/BlogCard';
-import { getAllFrontmatter } from '@lib/mdx';
 import { text } from '@styles/text';
 import { box } from '@styles/box';
 import { container } from '@styles/container';
 import { link } from '@styles/link';
 
-import type { Frontmatter } from 'types/post';
+import type { Post } from '.contentlayer/types';
+import { allPosts } from '.contentlayer/data';
 
-export default function Blog({ posts }: { posts: Frontmatter[] }) {
+export default function Blog({ posts }: { posts: Post[] }) {
   return (
     <div>
       <TitleAndMetaTags description="Blog articles about design systems, jamstack and design–dev collaboration." />
@@ -49,8 +49,8 @@ export default function Blog({ posts }: { posts: Frontmatter[] }) {
 
         <h1 className={text({ size: '5', css: { mb: '$5', mx: 'auto' } })}>Blog</h1>
 
-        {posts.map((frontmatter) => (
-          <BlogCard key={frontmatter.title} frontmatter={frontmatter} />
+        {posts.map((post) => (
+          <BlogCard key={post.title} post={post} />
         ))}
       </div>
     </div>
@@ -58,6 +58,5 @@ export default function Blog({ posts }: { posts: Frontmatter[] }) {
 }
 
 export function getStaticProps() {
-  const posts = getAllFrontmatter();
-  return { props: { posts } };
+  return { props: { posts: allPosts } };
 }

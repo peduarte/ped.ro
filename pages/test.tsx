@@ -4,7 +4,6 @@ import TitleAndMetaTags from '@components/TitleAndMetaTags';
 import { BlogCard } from '@components/BlogCard';
 import { CodeBlock } from '@components/CodeBlock';
 import { box } from '@styles/box';
-import { getAllPosts } from '@lib/mdx';
 import { text } from '@styles/text';
 import { container } from '@styles/container';
 import { link } from '@styles/link';

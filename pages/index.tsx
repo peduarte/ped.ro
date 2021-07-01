@@ -3,14 +3,14 @@ import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import TitleAndMetaTags from '@components/TitleAndMetaTags';
 import { BlogCard } from '@components/BlogCard';
 import { box } from '@styles/box';
-import { getAllFrontmatter } from '@lib/mdx';
 import { text } from '@styles/text';
 import { container } from '@styles/container';
 import { link } from '@styles/link';
 
-import type { Frontmatter } from 'types/post';
+import type { Post } from '.contentlayer/types';
+import { allPosts } from '.contentlayer/data';
 
-export default function Home({ posts }: { posts: Frontmatter[] }) {
+export default function Home({ posts }: { posts: Post[] }) {
   return (
     <>
       <TitleAndMetaTags />
@@ -155,9 +155,9 @@ export default function Home({ posts }: { posts: Frontmatter[] }) {
           <h3 className={text({ size: '3', css: { mb: '$5', mx: 'auto' } })}>Writing</h3>
 
           <ul className={box({ listStyle: 'none', pl: 0 })}>
-            {posts.map((frontmatter) => (
-              <li key={frontmatter.title}>
-                <BlogCard frontmatter={frontmatter} />
+            {posts.map((post) => (
+              <li key={post.title}>
+                <BlogCard post={post} />
               </li>
             ))}
           </ul>
@@ -187,7 +187,5 @@ const GithubIcon = (props) => {
 };
 
 export function getStaticProps() {
-  const posts = getAllFrontmatter();
-
-  return { props: { posts } };
+  return { props: { posts: allPosts } };
 }

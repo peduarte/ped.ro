@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { FC } from 'react';
 import NextLink from 'next/link';
 import { parseISO, format } from 'date-fns';
-import type { Post } from 'types/post';
+import type { Post } from '.contentlayer/types';
 import { text } from '@styles/text';
 import { box } from '@styles/box';
 import { link } from '@styles/link';
 import { badge } from '@styles/badge';
 
-export const BlogCard = ({ frontmatter, ...props }: Post) => {
+export const BlogCard: FC<{ post: Post }> = ({ post }) => {
   return (
-    <div className={box({ mt: '$4' })} {...props}>
-      <NextLink href={`blog/${frontmatter.slug}`} passHref>
+    <div className={box({ mt: '$4' })}>
+      <NextLink href={`blog/${post.slug}`} passHref>
         <a
           className={link({
             variant: 'ghost',
@@ -19,11 +19,11 @@ export const BlogCard = ({ frontmatter, ...props }: Post) => {
               lineHeight: '$3',
             },
           })}
-          aria-label={`Read ${frontmatter.title}`}
+          aria-label={`Read ${post.title}`}
         >
           <span className={text({ size: '4', css: { display: 'flex', alignItems: 'center' } })}>
-            {frontmatter.title}{' '}
-            {frontmatter.draft && (
+            {post.title}{' '}
+            {post.draft && (
               <span className={badge({ variant: 'white', css: { ml: '$2' } })}>Draft</span>
             )}
           </span>
@@ -37,7 +37,7 @@ export const BlogCard = ({ frontmatter, ...props }: Post) => {
               },
             })}
           >
-            {format(parseISO(frontmatter.publishedAt), 'MMMM dd, yyyy')}
+            {format(parseISO(post.publishedAt), 'MMMM dd, yyyy')}
           </time>
         </a>
       </NextLink>
