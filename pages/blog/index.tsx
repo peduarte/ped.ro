@@ -58,5 +58,8 @@ export default function Blog({ posts }: { posts: Post[] }) {
 }
 
 export function getStaticProps() {
-  return { props: { posts: allPosts } };
+  const sortedPosts = allPosts.sort(
+    (a, b) => Number(new Date(b.publishedAt)) - Number(new Date(a.publishedAt))
+  );
+  return { props: { posts: sortedPosts } };
 }
