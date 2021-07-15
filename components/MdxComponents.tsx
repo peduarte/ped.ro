@@ -143,8 +143,7 @@ export const components = {
       {...props}
     />
   ),
-  pre: ({ children, theme, showLineNumbers = '', ...props }) => {
-    // console.log(props);
+  pre: ({ children, theme, showLineNumbers, ...props }) => {
     return (
       <pre
         className={pre({
